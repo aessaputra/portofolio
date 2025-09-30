@@ -29,8 +29,8 @@ const Details = ({ position, company, companyLink, time, address, work = [] }: D
           {time} | {address}
         </span>
         <ul className="list-disc list-inside">
-          {work.map((item) => (
-            <li key={item}>{item}</li>
+          {work.map((item, index) => (
+            <li key={`${item}-${index}`}>{item}</li>
           ))}
         </ul>
       </motion.div>
