@@ -1,0 +1,64 @@
+import type { Metadata } from "next";
+import Image from "next/image";
+import AnimatedText from "@/components/AnimatedText";
+import Education from "@/components/Education";
+import Experience from "@/components/Experience";
+import Layout from "@/components/Layout";
+import Skills from "@/components/Skills";
+import TransitionEffect from "@/components/TransitionEffect";
+import profilePic from "@/../public/images/profile/developer-pic-2.jpg";
+import AboutCounters from "@/components/about/AboutCounters";
+
+export const metadata: Metadata = {
+  title: "Aes Saputra | About Page",
+  description: "Learn more about Aes Saputra, a web developer and UI/UX designer.",
+};
+
+export default function AboutPage() {
+  return (
+    <>
+      <TransitionEffect />
+      <main className="flex w-full flex-col items-center justify-center dark:text-light">
+        <Layout className="pt-16">
+          <AnimatedText
+            text="Lorem Ipsum Dolor Sit Amet!"
+            className="mb-16 lg:text-7xl! sm:mb-8 sm:text-6xl! xs:text-4xl!"
+          />
+          <div className="grid w-full grid-cols-8 gap-16 sm:gap-8">
+            <div className="col-span-3 flex flex-col items-start justify-start xl:col-span-4 md:order-2 md:col-span-8">
+              <h2 className="mb-4 text-lg font-bold uppercase text-dark/75 dark:text-light/75">
+                About Me
+              </h2>
+              <p className="font-medium">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </p>
+              <p className="my-4 font-medium">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </p>
+              <p className="font-medium">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </p>
+            </div>
+
+            <div className="relative col-span-3 h-max rounded-2xl border-2 border-solid border-dark bg-light p-8 dark:border-light dark:bg-dark xl:col-span-4 md:order-1 md:col-span-8">
+              <div className="absolute top-0 -right-3 -z-10 h-[103%] w-[102%] rounded-4xl bg-dark dark:bg-light" />
+              <Image
+                src={profilePic}
+                alt="Aes"
+                className="h-auto w-full rounded-2xl"
+                priority
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
+              />
+            </div>
+            <AboutCounters />
+          </div>
+
+          <Skills />
+
+          <Experience />
+          <Education />
+        </Layout>
+      </main>
+    </>
+  );
+}
