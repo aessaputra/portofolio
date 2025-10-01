@@ -19,7 +19,7 @@ const navItems: NavItem[] = [
   {
     icon: GridIcon.src,
     name: "Dashboard",
-    path: "/admin",
+    path: "/admin/dashboard",
   },
   {
     icon: PageIcon.src,

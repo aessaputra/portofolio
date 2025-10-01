@@ -94,7 +94,7 @@ export default function OTPSignIn() {
         await setActive?.({
           session: signInAttempt.createdSessionId,
         });
-        router.push("/admin");
+        router.push("/admin/dashboard");
       } else {
         setError("Verification failed. Please try again.");
       }

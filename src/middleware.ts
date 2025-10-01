@@ -2,7 +2,7 @@ import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
 const isAdminRoute = createRouteMatcher(['/admin(.*)']);
-const isAuthRoute = createRouteMatcher(['/sign-in(.*)', '/sign-up(.*)']);
+const isAuthRoute = createRouteMatcher(['/sign-in(.*)', '/sign-up(.*)', '/sign-in/[[...sign-in]]', '/admin/sign-in', '/admin/login', '/admin/access-denied', '/sign-in']);
 
 export default clerkMiddleware(async (auth, req) => {
   // Allow auth routes to proceed to avoid redirect loops
@@ -10,9 +10,11 @@ export default clerkMiddleware(async (auth, req) => {
     return;
   }
 
-  // Require authentication for /admin, but do not perform admin role checks here
+  // Require authentication for /admin
   if (isAdminRoute(req)) {
     const { userId } = await auth();
+    
+    // If user is not authenticated, redirect to sign-in page
     if (!userId) {
       const signInUrl = new URL('/sign-in', req.url);
       signInUrl.searchParams.set('redirect_url', req.url);

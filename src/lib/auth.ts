@@ -35,3 +35,15 @@ export async function getCurrentUserForServer(): Promise<MinimalClerkUser | null
   if (!userId) return null;
   return (await currentUser()) as unknown as MinimalClerkUser | null;
 }
+
+/**
+ * Helper: check if the current user is logged in and is an admin.
+ * Returns true if the user is authenticated and has admin privileges.
+ */
+export async function isLoggedInAdmin(): Promise<boolean> {
+  const { userId } = await auth();
+  if (!userId) return false;
+  
+  const user = (await currentUser()) as unknown as MinimalClerkUser | null;
+  return checkAdmin(user);
+}

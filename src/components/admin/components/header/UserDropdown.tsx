@@ -20,10 +20,33 @@ export default function UserDropdown() {
     setIsOpen(false);
   }
 
-  const handleSignOut = () => {
-    signOut(() => {
-      window.location.href = "/";
-    });
+  const handleSignOut = async () => {
+    try {
+      // Call the logout API route first
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to logout via API");
+      }
+
+      // Then use Clerk's signOut with redirect
+      await signOut({ redirectUrl: "/" });
+    } catch (error) {
+      console.error("Error during sign out:", error);
+      // Fallback to direct signOut and redirect
+      try {
+        await signOut({ redirectUrl: "/" });
+      } catch (fallbackError) {
+        console.error("Fallback signOut failed:", fallbackError);
+        // Ultimate fallback: manual redirect
+        window.location.href = "/";
+      }
+    }
   };
 
   const userImage = user?.imageUrl || "/images/user/owner.jpg";
