@@ -1,11 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useTheme } from "next-themes";
 
 export const ThemeToggleButton: React.FC = () => {
   const { theme, setTheme } = useTheme();
 
+  useEffect(() => {
+    // Listen for theme changes from other components
+    const handleThemeChange = (event: CustomEvent) => {
+      if (event.detail?.mode) {
+        setTheme(event.detail.mode);
+      }
+    };
+    
+    window.addEventListener('themeChange' as any, handleThemeChange);
+    
+    return () => {
+      window.removeEventListener('themeChange' as any, handleThemeChange);
+    };
+  }, [setTheme]);
+
   const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    
+    // Dispatch custom event for other components to react to theme changes
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent('themeChange', { detail: { mode: newTheme } }));
+    }
   };
 
   return (

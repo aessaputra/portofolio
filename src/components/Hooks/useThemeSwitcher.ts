@@ -27,8 +27,19 @@ function applyTheme(mode: ThemeMode) {
     return;
   }
 
-  document.documentElement.classList.toggle("dark", mode === "dark");
+  // Apply theme to html element for consistent styling
+  const htmlElement = document.documentElement;
+  if (mode === "dark") {
+    htmlElement.classList.add("dark");
+  } else {
+    htmlElement.classList.remove("dark");
+  }
+  
+  // Store preference
   window.localStorage.setItem(STORAGE_KEY, mode);
+  
+  // Dispatch custom event for other components to react to theme changes
+  window.dispatchEvent(new CustomEvent('themeChange', { detail: { mode } }));
 }
 
 export default function useThemeSwitcher(): UseThemeSwitcherReturn {

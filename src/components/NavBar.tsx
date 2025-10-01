@@ -19,7 +19,24 @@ type ThemeToggleButtonProps = {
 function ThemeToggleButton({ className }: ThemeToggleButtonProps) {
   const { theme, setTheme, systemTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  
+  useEffect(() => {
+    setMounted(true);
+    
+    // Listen for theme changes from other components
+    const handleThemeChange = (event: CustomEvent) => {
+      if (event.detail?.mode) {
+        setTheme(event.detail.mode);
+      }
+    };
+    
+    window.addEventListener('themeChange' as any, handleThemeChange);
+    
+    return () => {
+      window.removeEventListener('themeChange' as any, handleThemeChange);
+    };
+  }, [setTheme]);
+  
   const effective = theme === "system" ? systemTheme : theme;
   const isDark = effective === "dark";
   const baseToggle =
@@ -34,11 +51,22 @@ function ThemeToggleButton({ className }: ThemeToggleButtonProps) {
     : isDark
     ? "Enable light theme"
     : "Enable dark theme";
+    
+  const toggleTheme = () => {
+    const newTheme = isDark ? "light" : "dark";
+    setTheme(newTheme);
+    
+    // Dispatch custom event for other components to react to theme changes
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent('themeChange', { detail: { mode: newTheme } }));
+    }
+  };
+  
   return (
     <button
       type="button"
       aria-label={label}
-      onClick={() => setTheme(isDark ? "light" : "dark")}
+      onClick={toggleTheme}
       className={cn(baseToggle, themeCls, className)}
     >
       {!mounted ? (
@@ -135,7 +163,7 @@ export default function NavBar() {
   };
 
   return (
-    <header className="w-full px-32 py-8 font-medium flex items-center justify-between dark:text-light relative z-10 lg:px-16 md:px-12 sm:px-8">
+    <header className="w-full px-32 py-8 font-medium flex items-center justify-between dark:text-light relative z-20 lg:px-16 md:px-12 sm:px-8">
       <button
         type="button"
         className="flex-col justify-center items-center hidden lg:flex"

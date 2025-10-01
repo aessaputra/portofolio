@@ -6,15 +6,15 @@ export const runtime = "nodejs"; // Clerk server SDK
 
 export async function GET(request: Request) {
   const base = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  const { userId } = auth();
+  const { userId } = await auth();
   const user = await currentUser();
   const email = user?.primaryEmailAddress?.emailAddress
     ?? user?.emailAddresses?.[0]?.emailAddress
     ?? null;
 
-  // If not logged in or not admin → send home (cannot access /admin/** anyway)
+  // If not logged in or not admin → send to not authorized page
   if (!userId || !isAdminEmail(email)) {
-    return NextResponse.redirect(new URL("/", base));
+    return NextResponse.redirect(new URL("/not-authorized", base));
   }
 
   // Admin OK → go to dashboard

@@ -21,11 +21,9 @@ export default function RootLayout({
   children: ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${montserrat.variable} font-mont bg-light dark:bg-dark w-full min-h-screen`}
-      >
-        <ClerkProvider>
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning className={montserrat.variable}>
+        <body className="font-mont bg-light dark:bg-dark w-full min-h-screen">
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -34,8 +32,8 @@ export default function RootLayout({
           >
             {children}
           </ThemeProvider>
-        </ClerkProvider>
-      </body>
-    </html>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
