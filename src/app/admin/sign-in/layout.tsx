@@ -10,9 +10,7 @@ export default function AdminSignInLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      {children}
-    </div>
-  );
+  // This layout is intentionally minimal to avoid inheriting admin layout components
+  // The page itself will handle all styling and layout
+  return <>{children}</>;
 }

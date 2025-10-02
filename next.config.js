@@ -8,7 +8,31 @@ const nextConfig = {
     },
   },
   images: {
-    domains: ['img.clerk.com'],
+    // Configure device sizes for responsive images
+    deviceSizes: [320, 420, 640, 750, 828, 1024, 1080, 1200, 1920, 2048, 3840],
+    // Configure image sizes for non-full-screen images
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384, 512, 768],
+    // Configure acceptable image quality values
+    qualities: [75, 85, 90],
+    // Use WebP and AVIF formats for optimization
+    formats: ['image/webp', 'image/avif'],
+    // Configure remote patterns for external images
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'img.clerk.com',
+        port: '',
+        pathname: '/**',
+        search: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'pub-849bf017d6de432ab0c1b15fd92009b0.r2.dev',
+        port: '',
+        pathname: '/**',
+        search: '',
+      },
+    ],
   },
   webpack(config) {
     // Grab the existing rule that handles SVG imports

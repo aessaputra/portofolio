@@ -58,7 +58,7 @@ NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 
 # Admin Role-Based Access Control
 # Comma-separated list of email addresses allowed to access the admin panel
-ALLOWED_ADMIN_EMAILS=admin@example.com,anotheradmin@example.com
+NEXT_PUBLIC_ADMIN_EMAILS=admin@example.com,anotheradmin@example.com
 ```
 
 ### How to Get Clerk Keys:
@@ -96,7 +96,7 @@ The middleware has been updated to:
 - Consider using a reliable NTP server like `time.nist.gov`
 
 ### Admin Access Issues:
-- Verify `ALLOWED_ADMIN_EMAILS` is correctly set in `.env.local`
+- Verify `NEXT_PUBLIC_ADMIN_EMAILS` is correctly set in `.env.local`
 - Ensure the email addresses are in lowercase
 - Check that the user is signed in with the correct email address
 
@@ -149,7 +149,7 @@ Since sign-up is disabled, you'll need to add users manually through the Clerk D
 
 ### Important Notes:
 
-- Make sure all admin users are added to the `ALLOWED_ADMIN_EMAILS` environment variable
+- Make sure all admin users are added to the `NEXT_PUBLIC_ADMIN_EMAILS` environment variable
 - Users added manually will need to use the OTP-based sign-in flow we've implemented
 - Test with your admin users to ensure they can successfully authenticate
 

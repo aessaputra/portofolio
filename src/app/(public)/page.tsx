@@ -50,18 +50,36 @@ export default async function HomePage() {
       <main className="flex min-h-screen w-full items-center text-dark dark:text-light">
         <Layout className="pt-0 md:p-16 sm:pt-8">
           <div className="flex w-full items-center justify-between lg:flex-col">
-            <div className="w-1/2 md:w-full">
-              <Image
-                src={content.profileImagePath}
-                alt="AES"
-                className="h-auto w-full lg:hidden md:inline-block md:w-full"
-                priority
-                width={500} 
-                height={500}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
-              />
+            <div className="w-1/2 md:w-full lg:mb-8 lg:flex lg:justify-center">
+              <div className="relative w-full max-w-lg aspect-square lg:max-w-md md:max-w-md sm:max-w-sm">
+                {content.profileImagePath.endsWith('.png') ? (
+                  <img
+                    src={content.profileImagePath}
+                    alt="AES"
+                    className="w-full h-full object-contain rounded-full"
+                    style={{
+                      backgroundColor: 'transparent',
+                      background: 'transparent',
+                      backgroundImage: 'none',
+                      backgroundClip: 'padding-box',
+                      maxWidth: '100%',
+                      height: 'auto',
+                    }}
+                  />
+                ) : (
+                  <Image
+                    src={content.profileImagePath}
+                    alt="AES"
+                    fill
+                    className="object-contain rounded-full"
+                    priority
+                    sizes="(max-width: 640px) 80vw, (max-width: 768px) 60vw, (max-width: 1024px) 50vw, 40vw"
+                    quality={90}
+                  />
+                )}
+              </div>
             </div>
-            <div className="flex w-1/2 flex-col items-center self-center lg:w-full lg:text-center">
+            <div className="flex w-1/2 flex-col items-center self-center lg:w-full lg:text-center lg:mt-8">
               <AnimatedText
                 text={content.headline}
                 className="text-6xl! text-left! xl:text-5xl! lg:text-center! lg:text-6xl! md:text-5xl! sm:text-3xl! sm:pt-2"

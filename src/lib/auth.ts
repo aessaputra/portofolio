@@ -14,16 +14,16 @@ export async function requireAuth(): Promise<void> {
 
 /**
  * Require an admin user. Uses robust server-side check against ADMIN_EMAILS.
- * Redirects to /admin/access-denied for non-admins.
+ * Redirects to home page for non-admins.
  */
 export async function requireAdmin(): Promise<void> {
   const { userId } = await auth();
   if (!userId) {
-    redirect("/sign-in");
+    redirect("/admin/sign-in");
   }
   const user = (await currentUser()) as unknown as MinimalClerkUser | null;
   if (!checkAdmin(user)) {
-    redirect("/admin/access-denied");
+    redirect("/");
   }
 }
 

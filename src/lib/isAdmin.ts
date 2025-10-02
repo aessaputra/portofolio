@@ -4,6 +4,8 @@
  * Do not import this into client components.
  */
 
+import { logAdminCheckDetails } from "./debugAdminCheck";
+
 export type MinimalClerkEmail = {
   emailAddress: string | null;
   verification?: {
@@ -79,7 +81,11 @@ function collectUserEmails(user: MinimalClerkUser | null | undefined): string[] 
 }
 
 export function isAdmin(user: MinimalClerkUser | null | undefined): boolean {
-  if (!user) return false;
+  if (!user) {
+    console.log("[isAdmin] No user provided");
+    return false;
+  }
+  
   if (ADMIN_SET.size === 0) {
     // eslint-disable-next-line no-console
     console.log("[isAdmin] No admin emails configured in NEXT_PUBLIC_ADMIN_EMAILS");
@@ -89,7 +95,7 @@ export function isAdmin(user: MinimalClerkUser | null | undefined): boolean {
   const emails = collectUserEmails(user);
   if (emails.length === 0) {
     // eslint-disable-next-line no-console
-    console.log("[isAdmin] No emails found for user:", user.id);
+    console.log("[isAdmin] No emails found for user:", user.id, "User object:", JSON.stringify(user, null, 2));
     return false;
   }
   
@@ -104,7 +110,12 @@ export function isAdmin(user: MinimalClerkUser | null | undefined): boolean {
     }
   }
   
+  // Log detailed debug information for the first email if no match found
+  if (emails.length > 0 && process.env.NODE_ENV !== "production") {
+    logAdminCheckDetails(emails[0], "isAdmin function");
+  }
+  
   // eslint-disable-next-line no-console
-  console.log("[isAdmin] User is not admin. Emails checked:", emails);
+  console.log("[isAdmin] User is not admin. Emails checked:", emails, "User ID:", user.id);
   return false;
 }

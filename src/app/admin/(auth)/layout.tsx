@@ -21,9 +21,9 @@ export default async function AdminAuthLayout({
   // Check if user is an admin
   const adminStatus = isAdmin(user);
   
-  // If user is not an admin, redirect to access-denied
+  // If user is not an admin, redirect to home page
   if (!adminStatus) {
-    redirect("/admin/access-denied");
+    redirect("/");
   }
 
   return <>{children}</>;

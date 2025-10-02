@@ -29,7 +29,7 @@ export default async function PostSignInPage({
     console.log("[PostSignIn] User is admin, redirecting to:", redirect_url);
     redirect(redirect_url);
   } else {
-    console.log("[PostSignIn] User is not admin, redirecting to access denied");
-    redirect("/admin/access-denied");
+    console.log("[PostSignIn] User is not admin, redirecting to home page");
+    redirect("/");
   }
 }
