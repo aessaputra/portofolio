@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth";
-import { uploadImageToR2, generateUniqueFilename } from "@/lib/r2";
+import { streamFileToR2, generateUniqueFilename } from "@/lib/r2";
 import { db } from "@/db/client";
 import { homeContent } from "@/db/schema";
 import { eq } from "drizzle-orm";
@@ -44,8 +44,8 @@ export async function POST(request: NextRequest) {
     // Generate unique filename
     const objectKey = generateUniqueFilename(file.name);
     
-    // Upload to R2
-    const publicUrl = await uploadImageToR2(buffer, file.type, objectKey);
+    // Upload to R2 with streaming to preserve original file
+    const publicUrl = await streamFileToR2(buffer, file.type, objectKey, file.name);
     
     // Get current home content
     const currentContent = await db.query.homeContent.findFirst({

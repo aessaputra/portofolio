@@ -92,41 +92,23 @@ export default function AdminHome() {
     }
   };
 
-  const handleImageUpload = async (croppedImageUrl: string) => {
+  const handleImageUpload = async (imageUrl: string) => {
     if (!content) return;
 
     try {
       setImageUploading(true);
       
-      // Convert data URL to blob
-      const response = await fetch(croppedImageUrl);
-      const blob = await response.blob();
-      
-      // Create form data
-      const formData = new FormData();
-      formData.append('image', blob, 'profile-image.jpg');
-      
-      // Upload to R2
-      const uploadResponse = await fetch('/api/admin/profile-image/upload', {
-        method: 'POST',
-        body: formData,
+      // The ProfileImageEditor component now handles the upload directly
+      // and returns the URL of the uploaded image
+      setContent({
+        ...content,
+        profileImagePath: imageUrl,
       });
-      
-      if (uploadResponse.ok) {
-        const data = await uploadResponse.json();
-        setContent({
-          ...content,
-          profileImagePath: data.url,
-        });
-        showNotification('Profile image updated successfully!', 'success');
-        setShowImageEditor(false);
-      } else {
-        const errorData = await uploadResponse.json();
-        showNotification(errorData.error || 'Failed to upload image', 'error');
-      }
+      showNotification('Profile image updated successfully!', 'success');
+      setShowImageEditor(false);
     } catch (error) {
-      console.error('Error uploading image:', error);
-      showNotification('Error uploading image', 'error');
+      console.error('Error updating profile image:', error);
+      showNotification('Error updating profile image', 'error');
     } finally {
       setImageUploading(false);
     }
@@ -439,17 +421,11 @@ export default function AdminHome() {
 
       {/* Profile Image Editor Modal */}
       {showImageEditor && content && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <ProfileImageEditor
-                currentImageUrl={content.profileImagePath}
-                onImageSave={handleImageUpload}
-                onCancel={() => setShowImageEditor(false)}
-              />
-            </div>
-          </div>
-        </div>
+        <ProfileImageEditor
+          currentImageUrl={content.profileImagePath}
+          onImageSave={handleImageUpload}
+          onCancel={() => setShowImageEditor(false)}
+        />
       )}
 
       {/* Delete Confirmation Dialog */}

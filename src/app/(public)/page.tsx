@@ -75,6 +75,7 @@ export default async function HomePage() {
                     priority
                     sizes="(max-width: 640px) 80vw, (max-width: 768px) 60vw, (max-width: 1024px) 50vw, 40vw"
                     quality={90}
+                    unoptimized
                   />
                 )}
               </div>

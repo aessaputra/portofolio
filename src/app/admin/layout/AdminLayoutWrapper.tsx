@@ -19,7 +19,7 @@ const AdminLayoutWrapper: React.FC<{ children: React.ReactNode }> = ({
     : "lg:ml-[90px]";
 
   return (
-    <div className="min-h-screen xl:flex">
+    <div className="min-h-screen flex">
       {/* Sidebar and Backdrop */}
       <AppSidebar />
       <Backdrop />
@@ -28,7 +28,9 @@ const AdminLayoutWrapper: React.FC<{ children: React.ReactNode }> = ({
         {/* Header */}
         <AppHeader />
         {/* Page Content */}
-        <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">{children}</div>
+        <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6 lg:p-8 xl:p-10">
+          {children}
+        </div>
       </div>
     </div>
   );

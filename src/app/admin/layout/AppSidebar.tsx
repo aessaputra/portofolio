@@ -42,7 +42,7 @@ const AppSidebar: React.FC = () => {
 
   return (
     <aside
-      className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
+      className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 shadow-lg lg:shadow-none
         ${
           isExpanded || isMobileOpen
             ? "w-[290px]"
@@ -121,21 +121,28 @@ const AppSidebar: React.FC = () => {
                   <li key={nav.name}>
                     <Link
                       href={nav.path}
-                      className={`menu-item group ${
-                        isActive(nav.path) ? "menu-item-active" : "menu-item-inactive"
+                      className={`menu-item group flex items-center w-full px-4 py-3 text-left rounded-lg transition-all duration-200 ${
+                        isActive(nav.path)
+                          ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+                          : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
                       }`}
                     >
                       <span
-                        className={`${
+                        className={`flex-shrink-0 ${
                           isActive(nav.path)
-                            ? "menu-item-icon-active"
-                            : "menu-item-icon-inactive"
+                            ? "text-blue-600 dark:text-blue-400"
+                            : "text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300"
                         }`}
                       >
                         {nav.icon}
                       </span>
                       {(isExpanded || isHovered || isMobileOpen) && (
-                        <span className={`menu-item-text`}>{nav.name}</span>
+                        <span className={`ml-4 text-sm font-medium transition-all duration-200 ${
+                          isActive(nav.path) ? "text-blue-700 dark:text-blue-300" : "text-gray-700 dark:text-gray-300"
+                        }`}>{nav.name}</span>
+                      )}
+                      {isActive(nav.path) && (
+                        <span className="ml-auto w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400"></span>
                       )}
                     </Link>
                   </li>

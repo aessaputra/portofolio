@@ -45,6 +45,35 @@ export async function uploadImageToR2(
   }
 }
 
+// Stream a file to R2 with original content type and no transformations
+export async function streamFileToR2(
+  file: Buffer | Uint8Array | ReadableStream,
+  contentType: string,
+  objectKey: string,
+  originalFilename?: string
+): Promise<string> {
+  try {
+    const command = new PutObjectCommand({
+      Bucket: process.env.CLOUDFLARE_R2_BUCKET_NAME || '',
+      Key: objectKey,
+      Body: file,
+      ContentType: contentType,
+      // Disable automatic server-side transformations
+      Metadata: {
+        'original-filename': originalFilename || objectKey,
+        'content-type': contentType,
+        'no-transform': 'true'
+      }
+    });
+
+    await r2Client.send(command);
+    return getPublicUrl(objectKey);
+  } catch (error) {
+    console.error('Error streaming file to R2:', error);
+    throw new Error('Failed to upload file to storage');
+  }
+}
+
 // Delete an image from R2
 export async function deleteImageFromR2(objectKey: string): Promise<void> {
   try {
