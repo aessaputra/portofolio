@@ -8,6 +8,14 @@ interface SkillProps {
   y: string;
 }
 
+interface SkillsData {
+  skills: Array<{
+    name: string;
+    x: string;
+    y: string;
+  }>;
+}
+
 const Skill = ({ name, x, y }: SkillProps) => {
   return (
     <motion.div
@@ -23,7 +31,24 @@ const Skill = ({ name, x, y }: SkillProps) => {
   );
 };
 
-export default function Skills() {
+export default function Skills({ data }: { data?: SkillsData }) {
+  // Fallback skills if data is not provided
+  const fallbackSkills = [
+    { name: "HTML", x: "-21vw", y: "2vw" },
+    { name: "CSS", x: "-6vw", y: "-9vw" },
+    { name: "JavaScript", x: "19vw", y: "6vw" },
+    { name: "React", x: "0vw", y: "10vw" },
+    { name: "D3.js", x: "-21vw", y: "-15vw" },
+    { name: "THREEJS", x: "19vw", y: "-12vw" },
+    { name: "NextJS", x: "31vw", y: "-5vw" },
+    { name: "Python", x: "19vw", y: "-20vw" },
+    { name: "Tailwind CSS", x: "0vw", y: "-20vw" },
+    { name: "Figma", x: "-24vw", y: "18vw" },
+    { name: "Blender", x: "17vw", y: "17vw" },
+  ];
+
+  const skills = data?.skills || fallbackSkills;
+
   return (
     <>
       <h2 className="font-bold text-8xl mt-60 w-full text-center mb-8 pb-4 lg:pb-2 md:text-6xl md:mt-32">
@@ -43,17 +68,9 @@ export default function Skills() {
           web
         </motion.div>
 
-        <Skill name="HTML" x="-21vw" y="2vw" />
-        <Skill name="CSS" x="-6vw" y="-9vw" />
-        <Skill name="JavaScript" x="19vw" y="6vw" />
-        <Skill name="React" x="0vw" y="10vw" />
-        <Skill name="D3.js" x="-21vw" y="-15vw" />
-        <Skill name="THREEJS" x="19vw" y="-12vw" />
-        <Skill name="NextJS" x="31vw" y="-5vw" />
-        <Skill name="Python" x="19vw" y="-20vw" />
-        <Skill name="Tailwind CSS" x="0vw" y="-20vw" />
-        <Skill name="Figma" x="-24vw" y="18vw" />
-        <Skill name="Blender" x="17vw" y="17vw" />
+        {skills.map((skill, index) => (
+          <Skill key={`${skill.name}-${index}`} name={skill.name} x={skill.x} y={skill.y} />
+        ))}
       </div>
     </>
   );

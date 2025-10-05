@@ -1,28 +1,32 @@
 "use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
-import { useClerk, useUser } from "@clerk/nextjs";
+import { useState, type MouseEvent } from "react";
+import { signOut, useSession } from "next-auth/react";
+
 import { Dropdown } from "@/components/admin/components/ui/dropdown/Dropdown";
 import { DropdownItem } from "@/components/admin/components/ui/dropdown/DropdownItem";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
-  const { signOut } = useClerk();
-  const { user } = useUser();
+  const { data: session } = useSession();
 
-  function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-    e.stopPropagation();
+  const userImage = session?.user?.image || "/admin/images/user/owner.jpg";
+  const userName = session?.user?.name || "Admin User";
+  const userEmail = session?.user?.email || "admin@example.com";
+
+  const toggleDropdown = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
     setIsOpen((prev) => !prev);
-  }
+  };
 
-  function closeDropdown() {
+  const closeDropdown = () => {
     setIsOpen(false);
-  }
+  };
 
   const handleSignOut = async () => {
     try {
-      // Call the logout API route first
       const response = await fetch("/api/auth/logout", {
         method: "POST",
         headers: {
@@ -34,24 +38,17 @@ export default function UserDropdown() {
         throw new Error("Failed to logout via API");
       }
 
-      // Then use Clerk's signOut with redirect
-      await signOut({ redirectUrl: "/" });
+      await signOut({ callbackUrl: "/" });
     } catch (error) {
       console.error("Error during sign out:", error);
-      // Fallback to direct signOut and redirect
       try {
-        await signOut({ redirectUrl: "/" });
+        await signOut({ callbackUrl: "/" });
       } catch (fallbackError) {
         console.error("Fallback signOut failed:", fallbackError);
-        // Ultimate fallback: manual redirect
         window.location.href = "/";
       }
     }
   };
-
-  const userImage = user?.imageUrl || "/images/user/owner.jpg";
-  const userName = user?.fullName || "Admin User";
-  const userEmail = user?.primaryEmailAddress?.emailAddress || "admin@example.com";
 
   return (
     <div className="relative">
@@ -60,17 +57,9 @@ export default function UserDropdown() {
         className="flex items-center text-gray-700 dark:text-gray-400 dropdown-toggle"
       >
         <span className="mr-3 overflow-hidden rounded-full h-11 w-11">
-          <Image
-            width={44}
-            height={44}
-            src={userImage}
-            alt="User"
-            className="object-cover"
-          />
+          <Image width={44} height={44} src={userImage} alt="User" className="object-cover" />
         </span>
-
         <span className="block mr-1 font-medium text-theme-sm">{userName}</span>
-
         <svg
           className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${
             isOpen ? "rotate-180" : ""
@@ -110,7 +99,7 @@ export default function UserDropdown() {
             <DropdownItem
               onItemClick={closeDropdown}
               tag="a"
-              href="/profile"
+              href="/admin/profile"
               className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               <svg
@@ -135,7 +124,7 @@ export default function UserDropdown() {
             <DropdownItem
               onItemClick={closeDropdown}
               tag="a"
-              href="/profile"
+              href="/admin/settings"
               className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               <svg
@@ -156,32 +145,8 @@ export default function UserDropdown() {
               Account settings
             </DropdownItem>
           </li>
-          <li>
-            <DropdownItem
-              onItemClick={closeDropdown}
-              tag="a"
-              href="/profile"
-              className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-            >
-              <svg
-                className="fill-gray-500 group-hover:fill-gray-700 dark:fill-gray-400 dark:group-hover:fill-gray-300"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M3.5 12C3.5 7.30558 7.30558 3.5 12 3.5C16.6944 3.5 20.5 7.30558 20.5 12C20.5 16.6944 16.6944 20.5 12 20.5C7.30558 20.5 3.5 16.6944 3.5 12ZM12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM11.0991 7.52507C11.0991 8.02213 11.5021 8.42507 11.9991 8.42507H12.0001C12.4972 8.42507 12.9001 8.02213 12.9001 7.52507C12.9001 7.02802 12.4972 6.62507 12.0001 6.62507H11.9991C11.5021 6.62507 11.0991 7.02802 11.0991 7.52507ZM12.0001 17.3714C11.5859 17.3714 11.2501 17.0356 11.2501 16.6214V10.9449C11.2501 10.5307 11.5859 10.1949 12.0001 10.1949C12.4143 10.1949 12.7501 10.5307 12.7501 10.9449V16.6214C12.7501 17.0356 12.4143 17.3714 12.0001 17.3714Z"
-                  fill=""
-                />
-              </svg>
-              Support
-            </DropdownItem>
-          </li>
         </ul>
+
         <button
           onClick={handleSignOut}
           className="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300 w-full text-left"
@@ -203,6 +168,14 @@ export default function UserDropdown() {
           </svg>
           Sign out
         </button>
+
+        <Link
+          href="/"
+          onClick={closeDropdown}
+          className="mt-3 inline-flex items-center justify-center rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-800 dark:text-gray-400 dark:hover:bg-white/5"
+        >
+          Return to site
+        </Link>
       </Dropdown>
     </div>
   );

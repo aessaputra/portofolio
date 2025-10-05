@@ -1,11 +1,10 @@
 "use client";
 
-import { useClerk } from "@clerk/nextjs";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function SignOutButton() {
-  const { signOut } = useClerk();
   const router = useRouter();
   const [isSigningOut, setIsSigningOut] = useState(false);
 
@@ -24,13 +23,13 @@ export default function SignOutButton() {
         throw new Error("Failed to logout via API");
       }
 
-      // Then use Clerk's signOut with redirect
-      await signOut({ redirectUrl: "/" });
+      // Then use NextAuth's signOut with redirect
+      await signOut({ callbackUrl: "/" });
     } catch (error) {
       console.error("Error during sign out:", error);
       // Fallback to direct signOut and redirect
       try {
-        await signOut({ redirectUrl: "/" });
+        await signOut({ callbackUrl: "/" });
       } catch (fallbackError) {
         console.error("Fallback signOut failed:", fallbackError);
         // Ultimate fallback: manual redirect

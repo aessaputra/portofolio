@@ -1,22 +1,16 @@
 import { NextResponse } from "next/server";
-import { auth, currentUser } from "@clerk/nextjs/server";
-import { isAdminEmail } from "@/lib/auth";
 
-export const runtime = "nodejs"; // Clerk server SDK
+import { auth } from "@/lib/auth";
+import { isAllowedAdminEmail } from "@/lib/adminAuthConfig";
 
 export async function GET(request: Request) {
-  const base = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  const { userId } = await auth();
-  const user = await currentUser();
-  const email = user?.primaryEmailAddress?.emailAddress
-    ?? user?.emailAddresses?.[0]?.emailAddress
-    ?? null;
+  const session = await auth();
+  const email = session?.user?.email;
+  const { origin } = new URL(request.url);
 
-  // If not logged in or not admin → send to not authorized page
-  if (!userId || !isAdminEmail(email)) {
-    return NextResponse.redirect(new URL("/not-authorized", base));
+  if (!session || !email || !isAllowedAdminEmail(email)) {
+    return NextResponse.redirect(new URL("/not-authorized", origin));
   }
 
-  // Admin OK → go to dashboard
-  return NextResponse.redirect(new URL("/admin", base));
+  return NextResponse.redirect(new URL("/admin", origin));
 }

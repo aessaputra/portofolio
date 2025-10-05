@@ -13,7 +13,7 @@ export default function ArticlesPage() {
     <>
       <TransitionEffect />
       <main className="mb-16 flex w-full flex-col items-center justify-center overflow-hidden">
-        <Layout underConstruction className="pt-16 ">
+        <Layout className="pt-16">
           <ArticlesContent />
         </Layout>
       </main>

@@ -13,6 +13,17 @@ interface DetailsProps {
   work?: string[];
 }
 
+interface ExperienceData {
+  experiences: Array<{
+    position: string;
+    company: string;
+    companyLink: string;
+    time: string;
+    address: string;
+    work: string[];
+  }>;
+}
+
 const Details = ({ position, company, companyLink, time, address, work = [] }: DetailsProps) => {
   const ref = useRef<HTMLLIElement>(null);
   return (
@@ -28,41 +39,64 @@ const Details = ({ position, company, companyLink, time, address, work = [] }: D
         <span className="capitalize font-medium text-dark/75 dark:text-light/75 xs:text-sm">
           {time} | {address}
         </span>
-        <ul className="list-disc list-inside">
+        <div className="space-y-2">
           {work.map((item, index) => (
-            <li key={`${item}-${index}`}>{item}</li>
+            <p key={`${item}-${index}`} className="text-justify">{item}</p>
           ))}
-        </ul>
+        </div>
       </motion.div>
     </li>
   );
 };
 
-export default function Experience() {
+export default function Experience({ data }: { data?: ExperienceData }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "center start"],
   });
 
-  const workRikerWeb: string[] = [
-    "Specialize in full-stack web development using HTML/CSS, JavaScript, and Tailwind CSS",
-    "Follow design mockups and wireframes for precise implementation",
-    "Collaborate closely with backend developers for seamless integration",
-    "Leverage Tailwind CSS utilities to create custom layouts and styles",
-    "Delivered projects for various industries, increasing online leads by 25% for an HVAC company",
-    "Boosted user engagement by 30% and reduced load times by 15% for a food delivery service",
-    "Contributed to a 20% increase in overall project delivery efficiency",
+  // Fallback experiences if data is not provided
+  const fallbackExperiences = [
+    {
+      position: "Lorem Ipsum",
+      company: "Lorem Ipsum",
+      companyLink: "/",
+      time: "2022-Present",
+      address: "Lorem, Ipsum",
+      work: [
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      ]
+    },
+    {
+      position: "Lorem Ipsum",
+      company: "Lorem Ipsum",
+      companyLink: "/",
+      time: "2022-Present",
+      address: "Lorem, Ipsum",
+      work: [
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      ]
+    },
+    {
+      position: "Lorem Ipsum",
+      company: "Lorem Ipsum",
+      companyLink: "/",
+      time: "2022-Present",
+      address: "Lorem, Ipsum",
+      work: [
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      ]
+    }
   ];
 
-  const workCodingForHermitCrabs: string[] = [
-    "Developed and maintained websites for small businesses using HTML, CSS, and JavaScript",
-    "Optimized websites for mobile responsiveness and cross-browser compatibility",
-    "Implemented SEO best practices to improve search engine rankings",
-    "Collaborated with clients to understand their needs and deliver custom solutions",
-    "Helped write articles introducing underpriveledged teens to careers in tech",
-    "Provided ongoing support and maintenance to ensure optimal performance",
-  ];
+  const experiences = data?.experiences || fallbackExperiences;
 
   return (
     <div className="my-64">
@@ -76,30 +110,17 @@ export default function Experience() {
           className="absolute left-9 top-0 w-[4px] h-full bg-dark origin-top dark:bg-light md:w-[2px] md:left-[30px] xs:left-[20px]"
         />
         <ul className="w-full flex flex-col items-start justify-between ml-4 xs:ml-2 ">
-          <Details
-            position="Lorem Ipsum"
-            company="Lorem Ipsum"
-            companyLink="/"
-            time="2022-Present"
-            address="Lorem, Ipsum"
-            work={["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."]}
-          />
-          <Details
-            position="Lorem Ipsum"
-            company="Lorem Ipsum"
-            companyLink="/"
-            time="2022-Present"
-            address="Lorem, Ipsum"
-            work={["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."]}
-          />
-          <Details
-            position="Lorem Ipsum"
-            company="Lorem Ipsum"
-            companyLink="/"
-            time="2022-Present"
-            address="Lorem, Ipsum"
-            work={["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."]}
-          />
+          {experiences.map((experience, index) => (
+            <Details
+              key={`${experience.position}-${index}`}
+              position={experience.position}
+              company={experience.company}
+              companyLink={experience.companyLink}
+              time={experience.time}
+              address={experience.address}
+              work={experience.work}
+            />
+          ))}
         </ul>
       </div>
     </div>

@@ -12,18 +12,18 @@ export function debugAdminEmailCheck(email: string): {
   adminSet: Set<string>;
   envVarValue: string;
 } {
-  const adminEmails = process.env.NEXT_PUBLIC_ADMIN_EMAILS || "";
+  const adminEmails = process.env.ADMIN_EMAIL_ALLOWLIST || "";
   const normalizedEmail = email.trim().toLowerCase();
-  
+
   const adminSet = new Set(
     adminEmails
       .split(",")
       .map((s) => s.trim().toLowerCase())
       .filter(Boolean)
   );
-  
+
   const isAdmin = adminSet.has(normalizedEmail);
-  
+
   return {
     email,
     normalizedEmail,
@@ -48,13 +48,13 @@ export function logAdminCheckDetails(email: string, source: string): void {
   
   if (!debugInfo.isAdmin && debugInfo.adminSet.size > 0) {
     console.log(`[${source}] - Email not found in admin set. Possible issues:`);
-    console.log(`[${source}]   1. Email not added to NEXT_PUBLIC_ADMIN_EMAILS environment variable`);
+    console.log(`[${source}]   1. Email not added to ADMIN_EMAIL_ALLOWLIST environment variable`);
     console.log(`[${source}]   2. Typo in email address`);
     console.log(`[${source}]   3. Case sensitivity issue (should be normalized)`);
     console.log(`[${source}]   4. Extra spaces in environment variable`);
   }
   
   if (debugInfo.adminSet.size === 0) {
-    console.log(`[${source}] - No admin emails configured in NEXT_PUBLIC_ADMIN_EMAILS`);
+    console.log(`[${source}] - No admin emails configured in ADMIN_EMAIL_ALLOWLIST`);
   }
 }

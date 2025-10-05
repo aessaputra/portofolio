@@ -9,7 +9,7 @@ This guide provides steps to diagnose and resolve issues with admin email verifi
 **Symptom**: Error message "User is not admin. Emails checked: ['your-email@example.com']"
 
 **Possible Causes**:
-- Email not added to `NEXT_PUBLIC_ADMIN_EMAILS` environment variable
+- Email not added to `ADMIN_EMAIL_ALLOWLIST` environment variable
 - Typo in email address
 - Case sensitivity issue
 - Extra spaces in environment variable
@@ -17,9 +17,9 @@ This guide provides steps to diagnose and resolve issues with admin email verifi
 **Troubleshooting Steps**:
 
 1. **Check Environment Variable Configuration**:
-   - Verify that `NEXT_PUBLIC_ADMIN_EMAILS` is set in your `.env.local` file
+   - Verify that `ADMIN_EMAIL_ALLOWLIST` is set in your `.env.local` file
    - Ensure the email is included in the comma-separated list
-   - Example: `NEXT_PUBLIC_ADMIN_EMAILS=admin@example.com,another-admin@example.com`
+   - Example: `ADMIN_EMAIL_ALLOWLIST=admin@example.com,another-admin@example.com`
 
 2. **Verify Email Format**:
    - No spaces around commas: `admin1@example.com,admin2@example.com` ✓
@@ -38,19 +38,19 @@ This guide provides steps to diagnose and resolve issues with admin email verifi
 **Symptom**: Admin verification fails after logging in with a different email address
 
 **Possible Causes**:
-- Clerk session from a previous login with a non-admin email
+- A previous session stored for a non-admin email address
 - Browser caching old session data
-- Multiple Clerk accounts with different emails
+- Multiple accounts with different emails
 
 **Troubleshooting Steps**:
 
 1. **Clear Browser Data**:
    - Clear browser cookies and local storage
-   - Specifically look for Clerk-related data
+   - This removes any stale session tokens
 
 2. **Sign Out Completely**:
    - Use the sign-out functionality to clear the current session
-   - Verify that all Clerk cookies are removed
+   - Verify that NextAuth cookies are removed (`next-auth.session-token`)
 
 3. **Check Browser Console**:
    - Look for detailed logging information that shows which email is being checked
@@ -58,7 +58,7 @@ This guide provides steps to diagnose and resolve issues with admin email verifi
 
 ### 3. Environment Variable Not Loading
 
-**Symptom**: "No admin emails configured in NEXT_PUBLIC_ADMIN_EMAILS" error
+**Symptom**: "No admin emails configured in ADMIN_EMAIL_ALLOWLIST" error
 
 **Possible Causes**:
 - Environment variable not set correctly
@@ -68,8 +68,7 @@ This guide provides steps to diagnose and resolve issues with admin email verifi
 **Troubleshooting Steps**:
 
 1. **Verify Variable Name**:
-   - Ensure the variable is named exactly `NEXT_PUBLIC_ADMIN_EMAILS`
-   - Note that client-side accessible variables must start with `NEXT_PUBLIC_`
+   - Ensure the variable is named exactly `ADMIN_EMAIL_ALLOWLIST`
 
 2. **Restart Development Server**:
    - After changing environment variables, restart the development server
@@ -88,7 +87,7 @@ The system now includes comprehensive debug logging to help identify issues:
    - These logs show the admin verification process on the client side
 
 2. **Server-Side Logging**:
-   - Check the server console for logs prefixed with `[isAdmin]` and `[check-admin-email API]`
+   - Check the server console for logs prefixed with `[check-admin-email API]`
    - These logs show the admin verification process on the server side
 
 3. **Detailed Debug Information**:
@@ -107,7 +106,7 @@ To test if an email is properly configured as an admin:
    - This function returns detailed information about why an email may or may not be recognized as an admin
 
 2. **Manual Verification**:
-   - Check the `NEXT_PUBLIC_ADMIN_EMAILS` environment variable
+   - Check the `ADMIN_EMAIL_ALLOWLIST` environment variable
    - Normalize the email (trim and convert to lowercase)
    - Verify it exists in the comma-separated list
 
@@ -116,6 +115,6 @@ To test if an email is properly configured as an admin:
 If you continue to experience issues after following these troubleshooting steps:
 
 1. Check the browser and server console logs for detailed error information
-2. Verify that the email is correctly added to the `NEXT_PUBLIC_ADMIN_EMAILS` environment variable
+2. Verify that the email is correctly added to the `ADMIN_EMAIL_ALLOWLIST` environment variable
 3. Ensure there are no typos or formatting issues in the environment variable
 4. Try clearing browser data and signing out completely before attempting to sign in again

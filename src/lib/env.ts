@@ -3,42 +3,46 @@
  * This file validates critical environment variables at startup.
  */
 
-// Validate NEXT_PUBLIC_ADMIN_EMAILS
-function validateAdminEmails(): void {
-  const adminEmails = process.env.NEXT_PUBLIC_ADMIN_EMAILS;
-  
-  if (!adminEmails || adminEmails.trim() === "") {
-    throw new Error(
-      "NEXT_PUBLIC_ADMIN_EMAILS environment variable is required. " +
-      "Please set it to a comma-separated list of admin email addresses."
-    );
+import { getAdminEmailAllowlist } from "@/lib/adminAuthConfig";
+
+function ensureEnvVar(name: string): void {
+  const value = process.env[name];
+
+  if (!value || value.trim() === "") {
+    throw new Error(`${name} environment variable is required.`);
   }
-  
-  // Parse and validate email format
-  const emails = adminEmails
-    .split(",")
-    .map(email => email.trim().toLowerCase())
-    .filter(email => email.length > 0);
-  
-  if (emails.length === 0) {
-    throw new Error(
-      "NEXT_PUBLIC_ADMIN_EMAILS must contain at least one valid email address."
-    );
+}
+
+function validateAdminAccessConfiguration(): void {
+  const allowlist = getAdminEmailAllowlist();
+
+  if (allowlist.length === 0) {
+    throw new Error("ADMIN_EMAIL_ALLOWLIST must include at least one administrator email.");
   }
-  
-  // Basic email format validation
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const invalidEmails = emails.filter(email => !emailRegex.test(email));
-  
-  if (invalidEmails.length > 0) {
-    throw new Error(
-      `Invalid email format in NEXT_PUBLIC_ADMIN_EMAILS: ${invalidEmails.join(", ")}`
-    );
-  }
-  
-  // Log the loaded admin emails for verification (server-side only)
+
   if (process.env.NODE_ENV !== "production") {
-    console.log("[Environment Validation] Admin emails loaded:", emails);
+    console.log(
+      `[Environment Validation] Loaded ${allowlist.length} admin email(s).`
+    );
+  }
+}
+
+function validateNextAuthSecrets(): void {
+  ensureEnvVar("NEXTAUTH_SECRET");
+  ensureEnvVar("AUTH_GOOGLE_ID");
+  ensureEnvVar("AUTH_GOOGLE_SECRET");
+}
+
+function validateEmailProviderConfiguration(): void {
+  ensureEnvVar("EMAIL_SERVER_HOST");
+  ensureEnvVar("EMAIL_SERVER_PORT");
+  ensureEnvVar("EMAIL_SERVER_USER");
+  ensureEnvVar("EMAIL_SERVER_PASSWORD");
+  ensureEnvVar("EMAIL_FROM");
+
+  const port = Number(process.env.EMAIL_SERVER_PORT);
+  if (Number.isNaN(port) || port <= 0) {
+    throw new Error("EMAIL_SERVER_PORT must be a positive integer.");
   }
 }
 
@@ -69,7 +73,9 @@ function validateR2Credentials(): void {
 // Validate all environment variables
 export function validateEnvironment(): void {
   try {
-    validateAdminEmails();
+    validateAdminAccessConfiguration();
+    validateNextAuthSecrets();
+    validateEmailProviderConfiguration();
     validateR2Credentials();
     console.log("[Environment Validation] All environment variables are valid.");
   } catch (error) {

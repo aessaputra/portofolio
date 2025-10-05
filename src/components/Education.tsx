@@ -11,6 +11,15 @@ interface EducationDetailsProps {
   info: string;
 }
 
+interface EducationData {
+  education: Array<{
+    type: string;
+    time: string;
+    place: string;
+    info: string;
+  }>;
+}
+
 const Details = ({ type, time, place, info }: EducationDetailsProps) => {
   const ref = useRef<HTMLLIElement>(null);
   return (
@@ -27,12 +36,36 @@ const Details = ({ type, time, place, info }: EducationDetailsProps) => {
   );
 };
 
-export default function Education() {
+export default function Education({ data }: { data?: EducationData }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "center start"],
   });
+
+  // Fallback education if data is not provided
+  const fallbackEducation = [
+    {
+      type: "Lorem Ipsum",
+      time: "2022-2026",
+      place: "Lorem Ipsum Dolor Sit Amet",
+      info: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+      type: "Lorem Ipsum",
+      time: "2022-2026",
+      place: "Lorem Ipsum Dolor Sit Amet",
+      info: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+      type: "Lorem Ipsum",
+      time: "2022-2026",
+      place: "Lorem Ipsum Dolor Sit Amet",
+      info: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    }
+  ];
+
+  const education = data?.education || fallbackEducation;
 
   return (
     <div className="my-64">
@@ -44,24 +77,15 @@ export default function Education() {
           className="absolute left-9 top-0 w-[4px] h-full bg-dark origin-top dark:bg-light md:w-[2px] md:left-[30px] xs:left-[20px]"
         />
         <ul className="w-full flex flex-col items-start justify-between ml-4 xs:ml-2">
-          <Details
-            type="Lorem Ipsum"
-            time="2022-2026"
-            place="Lorem Ipsum Dolor Sit Amet"
-            info="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-          />
-          <Details
-            type="Lorem Ipsum"
-            time="2022-2026"
-            place="Lorem Ipsum Dolor Sit Amet"
-            info="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-          />
-          <Details
-            type="Lorem Ipsum"
-            time="2022-2026"
-            place="Lorem Ipsum Dolor Sit Amet"
-            info="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-          />
+          {education.map((edu, index) => (
+            <Details
+              key={`${edu.type}-${index}`}
+              type={edu.type}
+              time={edu.time}
+              place={edu.place}
+              info={edu.info}
+            />
+          ))}
         </ul>
       </div>
     </div>

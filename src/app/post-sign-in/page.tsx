@@ -1,35 +1,25 @@
-import { auth, currentUser } from "@clerk/nextjs/server";
-import { redirect, useSearchParams } from "next/navigation";
-import { isAdmin } from "@/lib/isAdmin";
+import { redirect } from "next/navigation";
 
-export default async function PostSignInPage({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
-  const { userId } = await auth();
-  const redirect_url = searchParams.redirect_url as string || "/admin/dashboard";
-  
-  // If user is not authenticated, redirect to sign-in
-  if (!userId) {
-    console.log("[PostSignIn] User not authenticated, redirecting to sign-in");
-    redirect("/sign-in");
+import { auth } from "@/lib/auth";
+import { isAllowedAdminEmail } from "@/lib/adminAuthConfig";
+
+type SearchParams = { [key: string]: string | string[] | undefined };
+
+export default async function PostSignInPage({ searchParams }: { searchParams: SearchParams }) {
+  const redirectUrl =
+    (Array.isArray(searchParams.redirect_url)
+      ? searchParams.redirect_url[0]
+      : searchParams.redirect_url) || "/admin/dashboard";
+
+  const session = await auth();
+
+  if (!session?.user?.email) {
+    redirect(`/sign-in?redirect_url=${encodeURIComponent(redirectUrl)}`);
   }
 
-  // Get user information
-  const user = await currentUser();
-  console.log("[PostSignIn] User authenticated:", user?.id, user?.primaryEmailAddress?.emailAddress);
-  
-  // Check if user is an admin
-  const adminStatus = isAdmin(user);
-  console.log("[PostSignIn] Admin status:", adminStatus);
-  
-  // If user is an admin, redirect to the specified URL or admin dashboard
-  if (adminStatus) {
-    console.log("[PostSignIn] User is admin, redirecting to:", redirect_url);
-    redirect(redirect_url);
-  } else {
-    console.log("[PostSignIn] User is not admin, redirecting to home page");
-    redirect("/");
+  if (isAllowedAdminEmail(session.user.email)) {
+    redirect(redirectUrl);
   }
+
+  redirect("/");
 }

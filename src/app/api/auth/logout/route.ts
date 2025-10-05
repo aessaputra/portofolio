@@ -1,23 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
+
+import { auth } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
   try {
-    const { userId } = await auth();
+    const session = await auth();
     
-    if (!userId) {
+    if (!session) {
       return NextResponse.json({ error: "No authenticated user found" }, { status: 401 });
     }
 
-    // Get the origin for proper redirect
-    const origin = req.headers.get("origin") || "";
-    
-    // Create response and clear cookies
     const response = NextResponse.json({ success: true, message: "Logged out successfully" });
-    
-    // Clear Clerk cookies
-    response.cookies.delete("__session");
-    response.cookies.delete("__client");
+
+    const cookiesToClear = [
+      "next-auth.session-token",
+      "__Secure-next-auth.session-token",
+      "next-auth.csrf-token",
+      "__Host-next-auth.csrf-token",
+    ];
+
+    for (const name of cookiesToClear) {
+      response.cookies.delete(name);
+    }
     
     return response;
   } catch (error) {

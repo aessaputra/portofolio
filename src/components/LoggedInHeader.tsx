@@ -1,17 +1,16 @@
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { auth } from "@/lib/auth";
 import SignOutButton from "./SignOutButton";
 import Link from "next/link";
 
 export default async function LoggedInHeader() {
-  const { userId } = await auth();
+  const session = await auth();
   
-  if (!userId) {
+  if (!session?.user) {
     return null;
   }
 
-  // Get user email from server-side auth
-  const user = await currentUser();
-  const email = user?.emailAddresses?.[0]?.emailAddress || "Admin";
+  // Get user email from session
+  const email = session.user.email || "Admin";
 
   return (
     <header className="bg-white shadow-sm border-b border-gray-200">
