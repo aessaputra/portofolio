@@ -1,10 +1,15 @@
 import type { ReactNode } from "react";
+
+import { getHomeContent } from "@/entities/home";
+
 import PublicShell from "./PublicShell";
 
-export default function PublicLayout({
+export default async function PublicLayout({
   children,
 }: {
   children: ReactNode;
 }) {
-  return <PublicShell>{children}</PublicShell>;
+  const homeContent = await getHomeContent();
+
+  return <PublicShell homeContent={homeContent}>{children}</PublicShell>;
 }

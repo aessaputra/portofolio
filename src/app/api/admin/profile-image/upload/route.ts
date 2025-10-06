@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/auth";
-import { streamFileToR2, generateUniqueFilename } from "@/lib/r2";
+import { requireAdmin } from "@/features/auth/server/nextAuth";
+import { streamFileToR2, generateUniqueFilename } from "@/shared/lib/storage";
 import { db } from "@/db/client";
 import { homeContent } from "@/db/schema";
 import { eq } from "drizzle-orm";

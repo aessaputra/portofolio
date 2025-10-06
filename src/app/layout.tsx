@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import type { ReactNode } from "react";
-import { ThemeProvider } from "@/components/ui/ThemeProvider";
-import { validateEnvironment } from "@/lib/env";
-import { Providers } from "@/components/Providers";
+import { ThemeProvider } from "@/shared/ui/theme-provider";
+import { validateEnvironment } from "@/shared/lib/env";
+import { Providers } from "@/shared/providers/session-provider";
 import "../styles/globals.css";
 
 // Validate environment variables at startup

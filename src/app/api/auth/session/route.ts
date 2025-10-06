@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth"
+import { auth } from "@/features/auth/server/nextAuth"
 import { NextResponse } from "next/server"
 
 export async function GET() {

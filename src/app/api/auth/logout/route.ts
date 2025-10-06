@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { auth } from "@/lib/auth";
+import { auth } from "@/features/auth/server/nextAuth";
 
 export async function POST(req: NextRequest) {
   try {

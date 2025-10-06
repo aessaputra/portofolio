@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { signIn } from "@/lib/auth";
-import { sanitizeRedirectPath } from "@/lib/magicLink";
+import { signIn } from "@/features/auth/server/nextAuth";
+import { sanitizeRedirectPath } from "@/features/auth/server/magicLink";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);

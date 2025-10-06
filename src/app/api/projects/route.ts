@@ -1,70 +1,12 @@
 import { NextResponse } from "next/server";
-import { db } from "@/db/client";
-import { projects } from "@/db/schema";
-import { asc, desc, eq, sql } from "drizzle-orm";
-import { requireAdmin } from "@/lib/auth";
+
+import { getProjects, createProject } from "@/entities/projects";
+import { requireAdmin } from "@/features/auth/server/nextAuth";
 
 export async function GET() {
   try {
-    // Test database connection first with a simpler query
-    try {
-      const connectionResult = await db.select({ now: sql`NOW()` });
-      
-      if (!connectionResult) {
-        return NextResponse.json(
-          {
-            error: "Database connection test failed",
-            details: "Unable to establish connection to the database"
-          },
-          { status: 500 }
-        );
-      }
-    } catch (dbError) {
-      console.error("Database connection error:", dbError);
-      return NextResponse.json(
-        {
-          error: "Database connection failed",
-          details: dbError instanceof Error ? dbError.message : "Unknown error"
-        },
-        { status: 500 }
-      );
-    }
-    
-    // Fetch all projects, ordered by display order and then by creation date
-    try {
-      // Use a simpler query approach to avoid the table name duplication issue
-      const allProjects = await db.select({
-        id: projects.id,
-        title: projects.title,
-        type: projects.type,
-        summary: projects.summary,
-        description: projects.description,
-        editableText: projects.editableText,
-        imageUrl: projects.imageUrl,
-        imageAlt: projects.imageAlt,
-        link: projects.link,
-        github: projects.github,
-        tags: projects.tags,
-        featured: projects.featured,
-        technologies: projects.technologies,
-        displayOrder: projects.displayOrder,
-        createdAt: projects.createdAt,
-        updatedAt: projects.updatedAt
-      })
-      .from(projects)
-      .orderBy(asc(projects.displayOrder), desc(projects.createdAt));
-
-      return NextResponse.json(allProjects);
-    } catch (queryError) {
-      console.error("Query execution error:", queryError);
-      return NextResponse.json(
-        {
-          error: "Failed to execute projects query",
-          details: queryError instanceof Error ? queryError.message : "Unknown error"
-        },
-        { status: 500 }
-      );
-    }
+    const allProjects = await getProjects();
+    return NextResponse.json(allProjects);
   } catch (error) {
     console.error("Unexpected error fetching projects:", error);
     return NextResponse.json(
@@ -77,55 +19,66 @@ export async function GET() {
   }
 }
 
+function validateProjectPayload(body: any) {
+  const errors: Record<string, string> = {};
+
+  if (!body?.title) errors.title = "Title is required";
+  if (!body?.imageUrl) errors.imageUrl = "Image URL is required";
+  if (!body?.imageAlt) errors.imageAlt = "Image alt text is required";
+  if (!body?.link) errors.link = "Link is required";
+  if (!body?.github) errors.github = "GitHub URL is required";
+
+  if (body?.link) {
+    try {
+      new URL(body.link);
+    } catch {
+      errors.link = "Invalid project link";
+    }
+  }
+
+  if (body?.github) {
+    try {
+      new URL(body.github);
+    } catch {
+      errors.github = "Invalid GitHub URL";
+    }
+  }
+
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors,
+  };
+}
+
 export async function POST(request: Request) {
   try {
     // Check if user is admin for POST requests
     await requireAdmin();
     
     const body = await request.json();
-    
-    // Extract project data from request body
-    const {
-      title,
-      type = "Project",
-      summary,
-      description,
-      imageUrl,
-      imageAlt,
-      link,
-      github,
-      tags = [],
-      featured = false,
-      technologies = [],
-      displayOrder = 0
-    } = body;
 
-    // Validate required fields
-    if (!title || !imageUrl || !imageAlt || !link || !github) {
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
-      );
+    const { isValid, errors } = validateProjectPayload(body);
+    if (!isValid) {
+      return NextResponse.json({ error: "Validation failed", details: errors }, { status: 400 });
     }
 
-    // Insert new project into database
-    const newProject = await db.insert(projects).values({
-      title,
-      type,
-      summary,
-      description,
-      editableText: "Innovation Meets Usability!",
-      imageUrl,
-      imageAlt,
-      link,
-      github,
-      tags,
-      featured,
-      technologies,
-      displayOrder
-    }).returning();
+    const project = await createProject({
+      title: body.title,
+      type: body.type ?? "Project",
+      summary: body.summary ?? null,
+      description: body.description ?? null,
+      editableText: body.editableText ?? null,
+      imageUrl: body.imageUrl,
+      imageAlt: body.imageAlt,
+      link: body.link,
+      github: body.github,
+      tags: Array.isArray(body.tags) ? body.tags : [],
+      featured: Boolean(body.featured),
+      technologies: Array.isArray(body.technologies) ? body.technologies : [],
+      displayOrder: typeof body.displayOrder === "number" ? body.displayOrder : 0,
+    });
 
-    return NextResponse.json(newProject[0], { status: 201 });
+    return NextResponse.json(project, { status: 201 });
   } catch (error) {
     console.error("Error creating project:", error);
     

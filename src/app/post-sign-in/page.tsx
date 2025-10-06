@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
-import { auth } from "@/lib/auth";
-import { isAllowedAdminEmail } from "@/lib/adminAuthConfig";
+import { auth } from "@/features/auth/server/nextAuth";
+import { isAllowedAdminEmail } from "@/shared/lib/adminAllowlist";
 
 type SearchParams = { [key: string]: string | string[] | undefined };
 

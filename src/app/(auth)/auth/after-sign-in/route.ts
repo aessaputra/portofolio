@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { auth } from "@/lib/auth";
-import { isAllowedAdminEmail } from "@/lib/adminAuthConfig";
+import { auth } from "@/features/auth/server/nextAuth";
+import { isAllowedAdminEmail } from "@/shared/lib/adminAllowlist";
 
 export async function GET(request: Request) {
   const session = await auth();

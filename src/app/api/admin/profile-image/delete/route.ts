@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/auth";
-import { deleteImageFromR2 } from "@/lib/r2";
+import { requireAdmin } from "@/features/auth/server/nextAuth";
+import { deleteImageFromR2 } from "@/shared/lib/storage";
 import { db } from "@/db/client";
 import { homeContent } from "@/db/schema";
 import { eq } from "drizzle-orm";

@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
-import { db } from "@/db/client";
-import { projects } from "@/db/schema";
-import { eq } from "drizzle-orm";
-import { requireAdmin } from "@/lib/auth";
+
+import {
+  deleteProject as deleteProjectRecord,
+  getProjectById,
+  updateProject as updateProjectRecord,
+} from "@/entities/projects";
+import { requireAdmin } from "@/features/auth/server/nextAuth";
 
 export async function GET(
   request: Request,
@@ -19,11 +22,7 @@ export async function GET(
       );
     }
 
-    // Fetch project by ID
-    const project = await db.query.projects.findFirst({
-      where: eq(projects.id, projectId)
-    });
-
+    const project = await getProjectById(projectId);
     if (!project) {
       return NextResponse.json(
         { error: "Project not found" },
@@ -60,58 +59,33 @@ export async function PUT(
     }
 
     const body = await request.json();
-    
-    // Extract project data from request body
-    const {
-      title,
-      type,
-      summary,
-      description,
-      editableText,
-      imageUrl,
-      imageAlt,
-      link,
-      github,
-      tags,
-      featured,
-      technologies,
-      displayOrder
-    } = body;
 
-    // Check if project exists
-    const existingProject = await db.query.projects.findFirst({
-      where: eq(projects.id, projectId)
-    });
-
-    if (!existingProject) {
-      return NextResponse.json(
-        { error: "Project not found" },
-        { status: 404 }
-      );
+    const { isValid, errors } = validateProjectPayload(body);
+    if (!isValid) {
+      return NextResponse.json({ error: "Validation failed", details: errors }, { status: 400 });
     }
 
-    // Update project in database
-    const updatedProject = await db.update(projects)
-      .set({
-        title,
-        type,
-        summary,
-        description,
-        editableText,
-        imageUrl,
-        imageAlt,
-        link,
-        github,
-        tags,
-        featured,
-        technologies,
-        displayOrder,
-        updatedAt: new Date()
-      })
-      .where(eq(projects.id, projectId))
-      .returning();
+    const updatedProject = await updateProjectRecord(projectId, {
+      title: body.title,
+      type: body.type ?? "Project",
+      summary: body.summary ?? null,
+      description: body.description ?? null,
+      editableText: body.editableText ?? null,
+      imageUrl: body.imageUrl,
+      imageAlt: body.imageAlt,
+      link: body.link,
+      github: body.github,
+      tags: Array.isArray(body.tags) ? body.tags : [],
+      featured: Boolean(body.featured),
+      technologies: Array.isArray(body.technologies) ? body.technologies : [],
+      displayOrder: typeof body.displayOrder === "number" ? body.displayOrder : 0,
+    });
 
-    return NextResponse.json(updatedProject[0]);
+    if (!updatedProject) {
+      return NextResponse.json({ error: "Project not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(updatedProject);
   } catch (error) {
     console.error("Error updating project:", error);
     
@@ -148,20 +122,10 @@ export async function DELETE(
       );
     }
 
-    // Check if project exists
-    const existingProject = await db.query.projects.findFirst({
-      where: eq(projects.id, projectId)
-    });
-
-    if (!existingProject) {
-      return NextResponse.json(
-        { error: "Project not found" },
-        { status: 404 }
-      );
+    const deleted = await deleteProjectRecord(projectId);
+    if (!deleted) {
+      return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
-
-    // Delete project from database
-    await db.delete(projects).where(eq(projects.id, projectId));
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -180,4 +144,35 @@ export async function DELETE(
       { status: 500 }
     );
   }
+}
+
+function validateProjectPayload(body: any) {
+  const errors: Record<string, string> = {};
+
+  if (!body?.title) errors.title = "Title is required";
+  if (!body?.imageUrl) errors.imageUrl = "Image URL is required";
+  if (!body?.imageAlt) errors.imageAlt = "Image alt text is required";
+  if (!body?.link) errors.link = "Link is required";
+  if (!body?.github) errors.github = "GitHub URL is required";
+
+  if (body?.link) {
+    try {
+      new URL(body.link);
+    } catch {
+      errors.link = "Invalid project link";
+    }
+  }
+
+  if (body?.github) {
+    try {
+      new URL(body.github);
+    } catch {
+      errors.github = "Invalid GitHub URL";
+    }
+  }
+
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors,
+  };
 }

@@ -1,23 +1,39 @@
 "use client";
 
 import type { PropsWithChildren } from "react";
-import { AnimatePresence } from "@/components/motion/Motion";
-import { usePathname } from "next/navigation";
-import Footer from "@/components/Footer";
-import NavBar from "@/components/NavBar";
 
-export default function PublicShell({ children }: PropsWithChildren) {
+import { usePathname } from "next/navigation";
+
+import type { HomeContent } from "@/entities/home";
+import { deriveNameFromEmail } from "@/shared/lib/contact";
+import { AnimatePresence } from "@/shared/ui/motion";
+import Footer from "@/features/site/public/components/Footer";
+import NavBar from "@/features/site/public/components/NavBar";
+
+type PublicShellProps = PropsWithChildren<{
+  homeContent: HomeContent;
+}>;
+
+export default function PublicShell({ children, homeContent }: PublicShellProps) {
   const pathname = usePathname();
+  const ownerName = deriveNameFromEmail(homeContent.contactEmail);
 
   return (
     <main className="flex min-h-screen w-full flex-col">
-      <NavBar />
+      <NavBar
+        socialLinks={{
+          github: homeContent.githubUrl,
+          linkedin: homeContent.linkedinUrl,
+          x: homeContent.xUrl,
+        }}
+        brandName={ownerName}
+      />
       <AnimatePresence mode="wait" initial={false}>
         <div key={pathname} className="flex-1">
           {children}
         </div>
       </AnimatePresence>
-      <Footer />
+      <Footer homeContent={homeContent} />
     </main>
   );
 }

@@ -31,6 +31,14 @@ In the project directory, you can run:
 - `npm run start`: Starts the production server.
 - `npm run lint`: Runs the linter.
 
+## Architecture Overview
+
+- `src/app/(public)`: Server-rendered routes for the public site, composed from feature modules and shared UI primitives.
+- `src/app/(admin)`: Protected admin experience that manages the content surfaced on the public site.
+- `src/entities`: Typed data mappers and repositories that talk to the database.
+- `src/features`: Feature-based modules split into `public` and `admin` subdirectories.
+- `src/shared`: Cross-cutting utilities, providers, and design system primitives consumed by multiple features.
+
 ## Dependencies
 
 - [next](https://nextjs.org/): ^15.5.4

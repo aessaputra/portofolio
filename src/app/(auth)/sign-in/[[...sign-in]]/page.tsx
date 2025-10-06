@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 
-import AdminSignInWithCheck from "@/components/AdminSignInWithCheck";
-import { auth } from "@/lib/auth";
-import { isAllowedAdminEmail } from "@/lib/adminAuthConfig";
+import AdminSignInWithCheck from "@/features/auth/components/AdminSignInWithCheck";
+import { auth } from "@/features/auth/server/nextAuth";
+import { isAllowedAdminEmail } from "@/shared/lib/adminAllowlist";
 
 export default async function SignInPage({
   searchParams,

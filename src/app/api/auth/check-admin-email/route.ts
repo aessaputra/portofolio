@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { isAllowedAdminEmail } from "@/lib/adminAuthConfig";
+import { isAllowedAdminEmail } from "@/shared/lib/adminAllowlist";
 
 // Simple in-memory rate limiting store
 const rateLimitStore = new Map<string, { count: number; lastReset: number }>();
