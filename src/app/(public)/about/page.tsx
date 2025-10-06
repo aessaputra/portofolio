@@ -40,7 +40,7 @@ export default async function AboutPage() {
             <div className="relative col-span-3 h-max rounded-2xl border-2 border-solid border-dark bg-light p-8 dark:border-light dark:bg-dark xl:col-span-4 md:order-1 md:col-span-8">
               <div className="absolute top-0 -right-3 -z-10 h-[103%] w-[102%] rounded-4xl bg-dark dark:bg-light" />
               <Image
-                src={content.profileImagePath}
+                src={content.aboutProfileImagePath}
                 alt="Aes"
                 className="h-auto w-full rounded-2xl"
                 priority

@@ -1,11 +1,17 @@
+import "server-only";
+
 import { DeleteObjectCommand, GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import {
+  buildR2PublicUrlFromKey,
+  extractR2ObjectKey,
+  resolveR2PublicUrl,
+} from "@/shared/lib/r2PublicUrl";
 
 const {
   CLOUDFLARE_ACCOUNT_ID: ACCOUNT_ID = "",
   CLOUDFLARE_R2_ACCESS_KEY_ID: ACCESS_KEY_ID = "",
   CLOUDFLARE_R2_SECRET_ACCESS_KEY: SECRET_ACCESS_KEY = "",
   CLOUDFLARE_R2_BUCKET_NAME: BUCKET = "",
-  CLOUDFLARE_R2_PUBLIC_URL: PUBLIC_URL = "",
 } = process.env;
 
 const DEFAULT_CACHE_CONTROL = "public, max-age=31536000, immutable";
@@ -20,18 +26,22 @@ export const r2Client = new S3Client({
   region: "auto",
   endpoint: `https://${ACCOUNT_ID}.r2.cloudflarestorage.com`,
   credentials: { accessKeyId: ACCESS_KEY_ID, secretAccessKey: SECRET_ACCESS_KEY },
+  forcePathStyle: true,
 });
 
 export function generateUniqueFilename(
   originalName: string,
-  type: "profile" | "project" | "certification" = "profile"
+  type: "profile" | "project" | "certification" | "about" = "profile"
 ): string {
   const extension = originalName.split(".").pop() ?? "jpg";
   const randomString = Math.random().toString(36).slice(2, 8);
   return `${type}-${Date.now()}-${randomString}.${extension}`;
 }
 
-export const getPublicUrl = (objectKey: string) => (PUBLIC_URL ? `${PUBLIC_URL}/${objectKey}` : objectKey);
+export const ensurePublicR2Url = resolveR2PublicUrl;
+
+export const getPublicUrl = (objectKey: string) =>
+  buildR2PublicUrlFromKey(objectKey, { fallbackToBase: true });
 
 export async function uploadImageToR2(
   file: Buffer | Uint8Array,
@@ -86,11 +96,8 @@ export async function streamFileToR2(
   }
 }
 
-export const extractObjectKeyFromUrl = (url: string): string | null => {
-  if (!url || !PUBLIC_URL || !url.startsWith(PUBLIC_URL)) return null;
-  const key = url.slice(PUBLIC_URL.length);
-  return key.startsWith("/") ? key.slice(1) : key;
-};
+export const extractObjectKeyFromUrl = (url: string): string | null =>
+  extractR2ObjectKey(url);
 
 export const deleteImageFromR2 = async (objectKey: string): Promise<void> => {
   try {

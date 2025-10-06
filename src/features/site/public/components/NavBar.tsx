@@ -104,14 +104,17 @@ const CustomLink = ({ href, title, className = "" }: CustomLinkProps) => {
   const pathname = usePathname();
 
   return (
-    <Link href={href} className={cn(className, "relative group")}> 
+    <Link href={href} className={cn(className, "relative group")}>
       {title}
       <span
+        aria-hidden="true"
         className={cn(
           "absolute left-0 -bottom-0.5 inline-block h-px w-0 bg-dark transition-[width] duration-300 ease group-hover:w-full dark:bg-light",
           pathname === href && "w-full"
         )}
-      />
+      >
+        &nbsp;
+      </span>
     </Link>
   );
 };
@@ -133,11 +136,14 @@ const CustomMobileLink = ({ href, title, className = "", toggle }: CustomMobileL
     >
       {title}
       <span
+        aria-hidden="true"
         className={cn(
           "absolute left-0 -bottom-0.5 inline-block h-px w-0 bg-light transition-[width] duration-300 ease group-hover:w-full dark:bg-dark",
           pathname === href && "w-full"
         )}
-      />
+      >
+        &nbsp;
+      </span>
     </button>
   );
 };
@@ -187,10 +193,10 @@ export default function NavBar({ socialLinks, brandName = "Portfolio" }: NavBarP
   };
 
   return (
-    <header className="relative z-20 flex w-full items-center justify-between px-32 py-8 font-medium dark:text-light lg:px-16 md:px-12 sm:px-8">
+    <header className="w-full px-32 py-8 font-medium flex items-center justify-between dark:text-light relative z-10 lg:px-16 md:px-12 sm:px-8">
       <button
         type="button"
-        className="flex flex-col items-center justify-center md:hidden"
+        className="flex flex-col items-center justify-center hidden lg:flex"
         onClick={handleToggleMenu}
         aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
       >
@@ -214,7 +220,7 @@ export default function NavBar({ socialLinks, brandName = "Portfolio" }: NavBarP
         />
       </button>
 
-      <div className="hidden w-full items-center justify-between md:flex">
+      <div className="w-full flex justify-between items-center lg:hidden">
         <nav className="flex items-center">
           {NAV_LINKS.map(({ href, title, className = "" }) => (
             <CustomLink key={href} href={href} title={title} className={className} />
@@ -244,7 +250,7 @@ export default function NavBar({ socialLinks, brandName = "Portfolio" }: NavBarP
         <motion.div
           initial={{ scale: 0, opacity: 0, x: "-50%", y: "-50%" }}
           animate={{ scale: 1, opacity: 1, x: "-50%", y: "-50%" }}
-          className="fixed left-1/2 top-1/2 z-30 flex min-w-[70vw] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-between rounded-lg bg-dark/90 py-32 backdrop-blur-md dark:bg-light/75"
+          className="min-w-[70vw] flex flex-col justify-between z-30 items-center fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-dark/90 dark:bg-light/75 rounded-lg backdrop-blur-md py-32"
         >
           <nav className="flex flex-col items-center justify-center">
             {NAV_LINKS.map(({ href, title }) => (
@@ -257,15 +263,20 @@ export default function NavBar({ socialLinks, brandName = "Portfolio" }: NavBarP
             ))}
           </nav>
 
-          <nav className="mt-2 flex flex-wrap items-center justify-center gap-4">
-            {resolvedSocialLinks.map(({ href, label, Icon }) => (
+          <nav className="flex items-center justify-center flex-wrap mt-2">
+            {resolvedSocialLinks.map(({ href, label, Icon }, index) => (
               <motion.a
                 key={`mobile-${label}`}
                 href={href}
                 target="_blank"
                 rel="noreferrer"
                 aria-label={label}
-                className="w-6"
+                className={cn(
+                  "w-6",
+                  index === 0
+                    ? "mr-3 rounded-full bg-light dark:bg-dark"
+                    : "mx-3"
+                )}
                 {...socialLinkMotionProps}
               >
                 <Icon />

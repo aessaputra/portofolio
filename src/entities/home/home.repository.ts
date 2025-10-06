@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 
 import { db } from "@/db/client";
 import { homeContent } from "@/db/schema";
+import { ensurePublicR2Url } from "@/shared/lib/storage";
 
 import type { HomeContent, HomeContentRecord, HomeContentUpdateInput } from "./home.types";
 
@@ -31,7 +32,7 @@ function mapHomeContent(record: HomeContentRecord): HomeContent {
     subheadline: record.subheadline,
     resumeUrl: record.resumeUrl,
     contactEmail: record.contactEmail,
-    profileImagePath: record.profileImagePath,
+    profileImagePath: ensurePublicR2Url(record.profileImagePath),
     githubUrl: record.githubUrl,
     linkedinUrl: record.linkedinUrl,
     xUrl: record.xUrl,
@@ -55,6 +56,20 @@ export async function getHomeContent(): Promise<HomeContent> {
   return mapHomeContent(record);
 }
 
+export async function updateHomeProfileImage(imageUrl: string): Promise<HomeContent> {
+  const current = await ensureHomeContentRecord();
+
+  const [updated] = await db
+    .update(homeContent)
+    .set({
+      profileImagePath: imageUrl,
+      updatedAt: new Date(),
+    })
+    .where(eq(homeContent.id, current.id))
+    .returning();
+
+  return mapHomeContent(updated ?? current);
+}
 export async function updateHomeContent(input: HomeContentUpdateInput): Promise<HomeContent> {
   const current = await ensureHomeContentRecord();
   const [updated] = await db

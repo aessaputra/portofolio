@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 
 import { db } from "@/db/client";
 import { aboutContent } from "@/db/schema";
+import { ensurePublicR2Url } from "@/shared/lib/storage";
 
 import type {
   AboutContent,
@@ -95,6 +96,7 @@ export const DEFAULT_ABOUT_CONTENT: AboutContentUpdateInput = {
   aboutMeText3:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
   profileImagePath: "/images/profile/developer-pic-2.jpg",
+  aboutProfileImagePath: "/images/profile/developer-pic-2.jpg",
   satisfiedClients: "8",
   projectsCompleted: "10",
   yearsOfExperience: "4",
@@ -162,6 +164,7 @@ function mergeWithDefaults(record: AboutContentRecord | null): AboutContentRecor
     aboutMeText2: record.aboutMeText2 ?? DEFAULT_ABOUT_CONTENT.aboutMeText2,
     aboutMeText3: record.aboutMeText3 ?? DEFAULT_ABOUT_CONTENT.aboutMeText3,
     profileImagePath: record.profileImagePath ?? DEFAULT_ABOUT_CONTENT.profileImagePath,
+    aboutProfileImagePath: record.aboutProfileImagePath ?? DEFAULT_ABOUT_CONTENT.aboutProfileImagePath,
     satisfiedClients: record.satisfiedClients ?? DEFAULT_ABOUT_CONTENT.satisfiedClients,
     projectsCompleted: record.projectsCompleted ?? DEFAULT_ABOUT_CONTENT.projectsCompleted,
     yearsOfExperience: record.yearsOfExperience ?? DEFAULT_ABOUT_CONTENT.yearsOfExperience,
@@ -180,7 +183,8 @@ function mapAboutContent(record: AboutContentRecord | null): AboutContent {
     aboutMeText1: merged.aboutMeText1 ?? DEFAULT_ABOUT_CONTENT.aboutMeText1,
     aboutMeText2: merged.aboutMeText2 ?? DEFAULT_ABOUT_CONTENT.aboutMeText2,
     aboutMeText3: merged.aboutMeText3 ?? DEFAULT_ABOUT_CONTENT.aboutMeText3,
-    profileImagePath: merged.profileImagePath ?? DEFAULT_ABOUT_CONTENT.profileImagePath,
+    profileImagePath: ensurePublicR2Url(merged.profileImagePath ?? DEFAULT_ABOUT_CONTENT.profileImagePath),
+    aboutProfileImagePath: ensurePublicR2Url(merged.aboutProfileImagePath ?? DEFAULT_ABOUT_CONTENT.aboutProfileImagePath),
     counters: {
       satisfiedClients: merged.satisfiedClients ?? DEFAULT_ABOUT_CONTENT.satisfiedClients,
       projectsCompleted: merged.projectsCompleted ?? DEFAULT_ABOUT_CONTENT.projectsCompleted,
@@ -213,6 +217,36 @@ export async function getAboutContent(): Promise<AboutContent> {
   }
 }
 
+export async function updateAboutMainProfileImage(imageUrl: string): Promise<AboutContent> {
+  const current = await ensureAboutContentRecord();
+
+  const [updated] = await db
+    .update(aboutContent)
+    .set({
+      profileImagePath: imageUrl,
+      updatedAt: new Date(),
+    })
+    .where(eq(aboutContent.id, current.id))
+    .returning();
+
+  return mapAboutContent(updated ?? current);
+}
+
+export async function updateAboutProfileImage(imageUrl: string): Promise<AboutContent> {
+  const current = await ensureAboutContentRecord();
+
+  const [updated] = await db
+    .update(aboutContent)
+    .set({
+      aboutProfileImagePath: imageUrl,
+      updatedAt: new Date(),
+    })
+    .where(eq(aboutContent.id, current.id))
+    .returning();
+
+  return mapAboutContent(updated ?? current);
+}
+
 export async function updateAboutContent(input: AboutContentUpdateInput): Promise<AboutContent> {
   const current = await ensureAboutContentRecord();
 
@@ -224,6 +258,7 @@ export async function updateAboutContent(input: AboutContentUpdateInput): Promis
       aboutMeText2: input.aboutMeText2,
       aboutMeText3: input.aboutMeText3,
       profileImagePath: input.profileImagePath,
+      aboutProfileImagePath: input.aboutProfileImagePath,
       satisfiedClients: input.satisfiedClients,
       projectsCompleted: input.projectsCompleted,
       yearsOfExperience: input.yearsOfExperience,

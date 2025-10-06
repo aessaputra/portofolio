@@ -115,6 +115,7 @@ export default function HomeClient({
       setImageDeleting(true);
       const formData = new FormData();
       formData.append("imageUrl", formState.profileImagePath);
+      formData.append("fallbackUrl", fallbackProfileImagePath);
       await deleteProfileImageAction(formData);
       setFormState((current) => ({
         ...current,
@@ -122,8 +123,8 @@ export default function HomeClient({
       }));
       showNotification("Profile image deleted successfully!", "success");
     } catch (error) {
-      console.error("Error deleting profile image:", error);
-      showNotification("Error deleting profile image", "error");
+      const message = error instanceof Error ? error.message : "Unknown error";
+      showNotification(`Error deleting profile image: ${message}`, "error");
     } finally {
       setImageDeleting(false);
       setShowDeleteConfirmation(false);

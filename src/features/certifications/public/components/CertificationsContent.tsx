@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import AnimatedText from "@/shared/ui/animated-text";
+import { resolveR2PublicUrl } from "@/shared/lib/r2PublicUrl";
 import { makeMotion } from "@/shared/ui/motion";
 import type { Certification } from "@/entities/certifications";
 
@@ -29,6 +30,7 @@ function CertificationCard({ certification }: CertificationCardProps) {
   } = certification;
 
   const [isHovered, setIsHovered] = useState(false);
+  const resolvedImageUrl = resolveR2PublicUrl(imageUrl);
 
   return (
     <article
@@ -46,11 +48,12 @@ function CertificationCard({ certification }: CertificationCardProps) {
         <div className={`w-full ${featured ? "md:w-1/3" : "md:w-2/5"} cursor-pointer overflow-hidden rounded-lg`}>
           <Link href={credentialUrl} target="_blank">
             <MotionImage
-              src={imageUrl}
+              src={resolvedImageUrl}
               alt={imageAlt ?? title}
               width={600}
               height={400}
               className="h-auto w-full rounded-xl object-cover"
+              unoptimized
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.3 }}
             />

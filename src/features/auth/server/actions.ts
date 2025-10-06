@@ -47,7 +47,7 @@ export async function requestMagicLinkAction({
   }
 
   const token = await generateMagicLinkToken(normalizedEmail);
-  const baseUrl = getMagicLinkBaseUrl();
+  const baseUrl = await getMagicLinkBaseUrl();
   const redirectPath = sanitizeRedirectPath(redirectUrl);
 
   const magicLink = new URL("/auth/magic-link", baseUrl);

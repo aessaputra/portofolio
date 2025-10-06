@@ -2,6 +2,7 @@ import { asc, desc, eq } from "drizzle-orm";
 
 import { db } from "@/db/client";
 import { certifications } from "@/db/schema";
+import { ensurePublicR2Url } from "@/shared/lib/storage";
 
 import type {
   Certification,
@@ -25,7 +26,7 @@ function mapCertification(record: CertificationRecord): Certification {
     expiryDate: record.expiryDate ?? null,
     credentialId: record.credentialId ?? null,
     credentialUrl: record.credentialUrl,
-    imageUrl: record.imageUrl,
+    imageUrl: ensurePublicR2Url(record.imageUrl),
     imageAlt: record.imageAlt,
     description: record.description ?? null,
     tags: (record.tags ?? []) as string[],
@@ -130,3 +131,4 @@ export async function updateCertificationImage(id: number, imageUrl: string): Pr
 
   return (result.rowCount ?? 0) > 0;
 }
+

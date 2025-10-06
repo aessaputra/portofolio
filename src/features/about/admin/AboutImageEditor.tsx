@@ -3,23 +3,23 @@
 import { useState, useRef, useEffect, useTransition } from "react";
 import NextImage from "next/image";
 import { Button } from "@/shared/ui/button";
-import { uploadProfileImageAction } from "@/features/profile/admin/actions";
+import { uploadAboutProfileImageAction, deleteAboutProfileImageAction } from "@/features/about/admin/image-actions";
 import { resolveR2PublicUrl } from "@/shared/lib/r2PublicUrl";
 
 // Constants
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-const VALID_IMAGE_TYPES = ["image/png", "image/jpeg", "image/jpg"];
-interface ProfileImageEditorProps {
+const VALID_IMAGE_TYPES = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
+interface AboutImageEditorProps {
   currentImageUrl: string;
   onImageSave: (imageUrl: string) => void;
   onCancel: () => void;
 }
 
-export default function ProfileImageEditor({
+export default function AboutImageEditor({
   currentImageUrl,
   onImageSave,
   onCancel,
-}: ProfileImageEditorProps) {
+}: AboutImageEditorProps) {
   // State management
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -71,7 +71,7 @@ export default function ProfileImageEditor({
     setError(null);
     
     if (!isValidFileType(file)) {
-      setError("Please select an image file (PNG, JPG, or JPEG)");
+      setError("Please select an image file (PNG, JPG, JPEG, or WebP)");
       return;
     }
     
@@ -131,7 +131,7 @@ export default function ProfileImageEditor({
     startTransition(() => {
       void (async () => {
         try {
-          const imageUrl = await uploadProfileImageAction(formData);
+          const imageUrl = await uploadAboutProfileImageAction(formData);
           setUploadProgress(100);
           onImageSave(resolveR2PublicUrl(imageUrl));
           clearSelection();
@@ -173,7 +173,7 @@ export default function ProfileImageEditor({
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <label htmlFor="file-upload" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-          Upload New Image
+          Upload New About Page Image
         </label>
         {selectedFile && (
           <button
@@ -239,7 +239,7 @@ export default function ProfileImageEditor({
               <span className="text-blue-600 dark:text-blue-400 font-semibold">Click to upload</span> or drag and drop
             </p>
             <p id="upload-description" className="text-sm text-gray-500 dark:text-gray-400">
-              PNG, JPG, or JPEG (MAX. 5MB)
+              PNG, JPG, JPEG, or WebP (MAX. 5MB)
             </p>
           </div>
         ) : (
@@ -284,13 +284,13 @@ export default function ProfileImageEditor({
   const renderCurrentImage = () => (
     <div className="space-y-4">
       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-        Current Image
+        Current About Page Image
       </label>
       <div className="relative flex items-center justify-center w-full aspect-square rounded-xl overflow-hidden border-2 border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800">
         {normalizedCurrentImageUrl ? (
           <NextImage
             src={normalizedCurrentImageUrl}
-            alt="Current profile"
+            alt="Current about page image"
             fill
             className="object-cover"
             unoptimized
@@ -315,7 +315,7 @@ export default function ProfileImageEditor({
               </svg>
             </div>
             <p className="text-base font-medium text-gray-500 dark:text-gray-400">
-              No profile image set
+              No about page image set
             </p>
           </div>
         )}
@@ -337,13 +337,13 @@ export default function ProfileImageEditor({
             <p>
               <span className="font-medium">Dimensions:</span>
               {previewUrl ? (
-                <span className="ml-1">
-                  {previewMetadata ? (
-                    <>{previewMetadata.width} × {previewMetadata.height}px</>
-                  ) : (
-                    "Loading..."
-                  )}
-                </span>
+                previewMetadata ? (
+                  <span className="ml-1">
+                    {previewMetadata.width} × {previewMetadata.height}px
+                  </span>
+                ) : (
+                  "Loading..."
+                )
               ) : (
                 "Loading..."
               )}
@@ -372,10 +372,10 @@ export default function ProfileImageEditor({
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <h2 id="modal-title" className="text-xl font-bold text-gray-900 dark:text-white">
-                Edit Profile Image
+                Edit About Page Image
               </h2>
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                Upload a new profile image. Recommended aspect ratio is 1:1.
+                Upload a new image for the about page. Recommended aspect ratio is 1:1.
               </p>
             </div>
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">

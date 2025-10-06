@@ -1,3 +1,4 @@
+import { ensurePublicR2Url } from "@/shared/lib/storage";
 import type { ProjectRecord, Project } from "./model";
 
 export function mapProject(record: ProjectRecord): Project {
@@ -8,7 +9,7 @@ export function mapProject(record: ProjectRecord): Project {
     summary: record.summary ?? null,
     description: record.description ?? null,
     editableText: record.editableText,
-    imageUrl: record.imageUrl,
+    imageUrl: ensurePublicR2Url(record.imageUrl),
     imageAlt: record.imageAlt,
     link: record.link,
     github: record.github,

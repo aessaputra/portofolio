@@ -7,6 +7,7 @@ import {
   deleteCertificationImageAction,
   uploadCertificationImageAction,
 } from "@/features/certifications/admin/actions";
+import { resolveR2PublicUrl } from "@/shared/lib/r2PublicUrl";
 
 // Constants
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB for certificates
@@ -44,10 +45,11 @@ export default function CertificateImageEditor({
   const [isFocused, setIsFocused] = useState(false);
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [warning, setWarning] = useState<string | null>(null);
-  
+
   // Refs
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [, startTransition] = useTransition();
+  const normalizedCurrentImageUrl = resolveR2PublicUrl(currentImageUrl);
 
   // Clean up preview URL when component unmounts
   useEffect(() => {
@@ -272,11 +274,13 @@ export default function CertificateImageEditor({
               setWarning(result.warning);
             }
             setUploadProgress(100);
-            onImageSave(result.imageUrl);
+            const resolvedUploadUrl = resolveR2PublicUrl(result.imageUrl);
+            onImageSave(resolvedUploadUrl);
 
-            if (currentImageUrl && currentImageUrl !== result.imageUrl) {
+            const previousImageUrl = resolveR2PublicUrl(currentImageUrl);
+            if (previousImageUrl && previousImageUrl !== resolvedUploadUrl) {
               const deleteFormData = new FormData();
-              deleteFormData.append("imageUrl", currentImageUrl);
+              deleteFormData.append("imageUrl", previousImageUrl);
               await deleteCertificationImageAction(deleteFormData).catch((deleteError) => {
                 console.error("Error deleting previous image:", deleteError);
                 setWarning(
@@ -463,9 +467,9 @@ export default function CertificateImageEditor({
         Current Certificate Image
       </label>
       <div className="relative flex items-center justify-center w-full aspect-video rounded-xl overflow-hidden border-2 border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800">
-        {currentImageUrl ? (
+        {normalizedCurrentImageUrl ? (
           <NextImage
-            src={currentImageUrl}
+            src={normalizedCurrentImageUrl}
             alt="Current certificate"
             fill
             className="object-contain"

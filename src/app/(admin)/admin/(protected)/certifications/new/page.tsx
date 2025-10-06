@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import CertificateImageEditor from "@/features/certifications/admin/components/CertificateImageEditor";
+import { resolveR2PublicUrl } from "@/shared/lib/r2PublicUrl";
 import {
   CertificationFormState,
   createEmptyCertificationFormState,
@@ -84,9 +85,10 @@ export default function NewCertificationPage() {
   };
 
   const handleImageSave = (imageUrl: string) => {
+    const normalizedImageUrl = resolveR2PublicUrl(imageUrl);
     setNewCertification((current) => ({
       ...current,
-      imageUrl,
+      imageUrl: normalizedImageUrl,
       imageAlt: current.imageAlt || current.title,
     }));
     setShowImageEditor(false);
@@ -312,10 +314,11 @@ export default function NewCertificationPage() {
                     <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Preview:</p>
                     <div className="h-32 w-32 relative">
                       <Image
-                        src={newCertification.imageUrl}
+                        src={resolveR2PublicUrl(newCertification.imageUrl)}
                         alt="Preview"
                         fill
                         className="object-cover rounded-md"
+                        unoptimized
                         onError={(e) => {
                           e.currentTarget.style.display = "none";
                         }}

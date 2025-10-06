@@ -2,6 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 
+import { DEFAULT_HOME_CONTENT, updateHomeProfileImage } from "@/entities/home";
+import { DEFAULT_ABOUT_CONTENT, updateAboutProfileImage } from "@/entities/about";
 import { requireAdmin } from "@/features/auth/server/nextAuth";
 import { deleteProfileImage, uploadProfileImage } from "@/features/profile/admin/service";
 
@@ -20,6 +22,11 @@ export async function uploadProfileImageAction(formData: FormData) {
 
   const url = await uploadProfileImage(file);
 
+  await Promise.all([
+    updateHomeProfileImage(url),
+    updateAboutProfileImage(url),
+  ]);
+
   revalidatePath(ADMIN_HOME_PATH);
   revalidatePath(ADMIN_ABOUT_PATH);
   revalidatePath(PUBLIC_HOME_PATH);
@@ -37,6 +44,18 @@ export async function deleteProfileImageAction(formData: FormData) {
   }
 
   await deleteProfileImage(imageUrl);
+
+  const fallbackUrlEntry = formData.get("fallbackUrl");
+  const fallbackUrl = typeof fallbackUrlEntry === "string" && fallbackUrlEntry.trim() !== "" ? fallbackUrlEntry : null;
+
+  const [homeImage, aboutImage] = fallbackUrl
+    ? [fallbackUrl, fallbackUrl]
+    : [DEFAULT_HOME_CONTENT.profileImagePath, DEFAULT_ABOUT_CONTENT.profileImagePath];
+
+  await Promise.all([
+    updateHomeProfileImage(homeImage),
+    updateAboutProfileImage(aboutImage),
+  ]);
 
   revalidatePath(ADMIN_HOME_PATH);
   revalidatePath(ADMIN_ABOUT_PATH);

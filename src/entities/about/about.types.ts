@@ -39,6 +39,7 @@ export type AboutContent = {
   aboutMeText2: string;
   aboutMeText3: string;
   profileImagePath: string;
+  aboutProfileImagePath: string;
   counters: AboutCounters;
   skills: AboutSkill[];
   experiences: AboutExperience[];
@@ -52,6 +53,7 @@ export type AboutContentUpdateInput = {
   aboutMeText2: string;
   aboutMeText3: string;
   profileImagePath: string;
+  aboutProfileImagePath: string;
   satisfiedClients: string;
   projectsCompleted: string;
   yearsOfExperience: string;

@@ -15,6 +15,7 @@ export type AboutFormState = {
   aboutMeText2: string;
   aboutMeText3: string;
   profileImagePath: string;
+  aboutProfileImagePath: string;
   satisfiedClients: string;
   projectsCompleted: string;
   yearsOfExperience: string;
@@ -38,6 +39,7 @@ export function aboutContentToFormState(content: SerializedAboutContent): AboutF
     aboutMeText2: content.aboutMeText2 ?? "",
     aboutMeText3: content.aboutMeText3 ?? "",
     profileImagePath: content.profileImagePath ?? "",
+    aboutProfileImagePath: (content as any).aboutProfileImagePath ?? "",
     satisfiedClients: counters.satisfiedClients,
     projectsCompleted: counters.projectsCompleted,
     yearsOfExperience: counters.yearsOfExperience,
@@ -54,6 +56,7 @@ export function formStateToAboutContentInput(formState: AboutFormState): AboutCo
     aboutMeText2: formState.aboutMeText2,
     aboutMeText3: formState.aboutMeText3,
     profileImagePath: formState.profileImagePath,
+    aboutProfileImagePath: formState.aboutProfileImagePath,
     satisfiedClients: formState.satisfiedClients,
     projectsCompleted: formState.projectsCompleted,
     yearsOfExperience: formState.yearsOfExperience,

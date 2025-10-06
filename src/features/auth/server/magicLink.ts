@@ -56,12 +56,12 @@ function normalizeBaseUrl(base: string): string {
   return base.endsWith("/") ? base.slice(0, -1) : base;
 }
 
-export function getMagicLinkBaseUrl(): string {
+export async function getMagicLinkBaseUrl(): Promise<string> {
   if (process.env.NEXT_PUBLIC_APP_URL) {
     return normalizeBaseUrl(process.env.NEXT_PUBLIC_APP_URL);
   }
 
-  const headerList = headers();
+  const headerList = await headers();
   const host = headerList.get("x-forwarded-host") ?? headerList.get("host");
   if (!host) {
     throw new Error("Unable to determine host when generating magic link URL.");

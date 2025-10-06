@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-import ProfileImageEditor from "@/features/profile/admin/ProfileImageEditor";
+import AboutImageEditor from "@/features/about/admin/AboutImageEditor";
 import ConfirmationDialog from "@/shared/ui/ConfirmationDialog";
 import {
   aboutContentToFormState,
@@ -12,7 +12,7 @@ import {
   type AboutFormState,
 } from "@/features/about/admin/types";
 import { updateAboutContentAction } from "@/features/about/admin/actions";
-import { deleteProfileImageAction } from "@/features/profile/admin/actions";
+import { deleteAboutProfileImageAction } from "@/features/about/admin/image-actions";
 
 const NOTIFICATION_TIMEOUT = 5000;
 
@@ -172,13 +172,13 @@ export default function AboutClient({
       setImageUploading(true);
       setFormState((current) => ({
         ...current,
-        profileImagePath: imageUrl,
+        aboutProfileImagePath: imageUrl,
       }));
-      showNotification("Profile image updated successfully!", "success");
+      showNotification("About page image updated successfully!", "success");
       setShowImageEditor(false);
     } catch (error) {
-      console.error("Error updating profile image:", error);
-      showNotification("Error updating profile image", "error");
+      console.error("Error updating about page image:", error);
+      showNotification("Error updating about page image", "error");
     } finally {
       setImageUploading(false);
     }
@@ -188,16 +188,16 @@ export default function AboutClient({
     try {
       setImageDeleting(true);
       const formData = new FormData();
-      formData.append("imageUrl", formState.profileImagePath);
-      await deleteProfileImageAction(formData);
+      formData.append("imageUrl", formState.aboutProfileImagePath);
+      await deleteAboutProfileImageAction(formData);
       setFormState((current) => ({
         ...current,
-        profileImagePath: fallbackProfileImagePath,
+        aboutProfileImagePath: fallbackProfileImagePath,
       }));
-      showNotification("Profile image deleted successfully!", "success");
+      showNotification("About page image deleted successfully!", "success");
     } catch (error) {
-      console.error("Error deleting image:", error);
-      showNotification("Error deleting image", "error");
+      const message = error instanceof Error ? error.message : "Unknown error";
+      showNotification(`Error deleting about page image: ${message}`, "error");
     } finally {
       setImageDeleting(false);
       setShowDeleteConfirmation(false);
@@ -325,7 +325,7 @@ export default function AboutClient({
                 <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800">
                   <Image
                     className="h-16 w-16 rounded-full object-cover"
-                    src={formState.profileImagePath || fallbackProfileImagePath}
+                    src={formState.aboutProfileImagePath || fallbackProfileImagePath}
                     alt="Profile"
                     width={64}
                     height={64}
@@ -614,8 +614,8 @@ export default function AboutClient({
       </form>
 
       {showImageEditor && (
-        <ProfileImageEditor
-          currentImageUrl={formState.profileImagePath}
+        <AboutImageEditor
+          currentImageUrl={formState.aboutProfileImagePath}
           onCancel={() => setShowImageEditor(false)}
           onImageSave={handleImageUpload}
         />

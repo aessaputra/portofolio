@@ -1,4 +1,42 @@
 /** @type {import('next').NextConfig} */
+const remotePatterns = [
+  {
+    protocol: 'https',
+    hostname: 'pub-849bf017d6de432ab0c1b15fd92009b0.r2.dev',
+    port: '',
+    pathname: '/**',
+    search: '',
+  },
+];
+
+const { CLOUDFLARE_R2_PUBLIC_URL } = process.env;
+
+if (CLOUDFLARE_R2_PUBLIC_URL) {
+  try {
+    const parsed = new URL(CLOUDFLARE_R2_PUBLIC_URL);
+    const protocol = (parsed.protocol || 'https').replace(':', '') || 'https';
+    const hostname = parsed.hostname;
+    const basePath = parsed.pathname && parsed.pathname !== '/' ? parsed.pathname.replace(/\/$/, '') : '';
+    const pathname = basePath ? basePath + '/**' : '/**';
+
+    const alreadyConfigured = remotePatterns.some(
+      (pattern) => pattern.hostname === hostname && pattern.pathname === pathname
+    );
+
+    if (hostname && !alreadyConfigured) {
+      remotePatterns.push({
+        protocol,
+        hostname,
+        port: parsed.port ?? "",
+        pathname,
+        search: "",
+      });
+    }
+  } catch (error) {
+    console.warn('[next.config] Invalid CLOUDFLARE_R2_PUBLIC_URL:', CLOUDFLARE_R2_PUBLIC_URL);
+  }
+}
+
 const nextConfig = {
   reactStrictMode: true,
   experimental: {
@@ -19,22 +57,7 @@ const nextConfig = {
     // Use WebP and AVIF formats for optimization
     formats: ['image/webp', 'image/avif'],
     // Configure remote patterns for external images
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'img.clerk.com',
-        port: '',
-        pathname: '/**',
-        search: '',
-      },
-      {
-        protocol: 'https',
-        hostname: 'pub-849bf017d6de432ab0c1b15fd92009b0.r2.dev',
-        port: '',
-        pathname: '/**',
-        search: '',
-      },
-    ],
+    remotePatterns,
   },
   webpack(config) {
     // Grab the existing rule that handles SVG imports

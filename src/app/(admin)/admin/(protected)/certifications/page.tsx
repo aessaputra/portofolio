@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import CertificateImageEditor from "@/features/certifications/admin/components/CertificateImageEditor";
+import { resolveR2PublicUrl } from "@/shared/lib/r2PublicUrl";
 import ConfirmationDialog from "@/shared/ui/ConfirmationDialog";
 import type { Certification } from "@/entities/certifications";
 import {
@@ -203,20 +204,21 @@ export default function AdminCertificationsPage() {
   };
 
   const openImageEditor = (imageUrl: string, certificationId: number) => {
-    setCurrentImageUrl(imageUrl);
+    setCurrentImageUrl(resolveR2PublicUrl(imageUrl));
     setImageEditorCertificationId(certificationId);
     setShowImageEditor(true);
   };
 
   const handleImageSave = (imageUrl: string) => {
     setShowImageEditor(false);
-    setCurrentImageUrl(imageUrl);
+    const normalizedImageUrl = resolveR2PublicUrl(imageUrl);
+    setCurrentImageUrl(normalizedImageUrl);
 
     if (imageEditorCertificationId !== null) {
       setCertifications((current) =>
         current.map((certification) =>
           certification.id === imageEditorCertificationId
-            ? { ...certification, imageUrl }
+            ? { ...certification, imageUrl: normalizedImageUrl }
             : certification
         )
       );
@@ -535,6 +537,7 @@ export default function AdminCertificationsPage() {
                   {/* Certifications Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                     {filteredCertifications.map((certification) => {
+                      const imageSrc = resolveR2PublicUrl(certification.imageUrl);
                       // Check if certification is expired or expiring soon
                       const isExpired = certification.expiryDate ? new Date(certification.expiryDate) < new Date() : false;
                       const isExpiringSoon = certification.expiryDate ?
@@ -554,10 +557,11 @@ export default function AdminCertificationsPage() {
                           <div className="relative h-48 overflow-hidden bg-gray-100 dark:bg-gray-600 group">
                             <Image
                               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                              src={certification.imageUrl}
+                              src={imageSrc}
                               alt={certification.imageAlt}
                               width={400}
                               height={192}
+                              unoptimized
                               onError={(e) => {
                                 const target = e.target as HTMLImageElement;
                                 target.src = "https://via.placeholder.com/400x192?text=Certificate+Image";
@@ -646,7 +650,7 @@ export default function AdminCertificationsPage() {
                                   </svg>
                                 </Link>
                                 <button
-                                  onClick={() => openImageEditor(certification.imageUrl, certification.id)}
+                  onClick={() => openImageEditor(certification.imageUrl, certification.id)}
                                   className="p-1.5 rounded-md text-green-600 hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-900/20"
                                   title="Edit certificate image"
                                 >
