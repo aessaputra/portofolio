@@ -15,6 +15,13 @@
       "when": 1759506483042,
       "tag": "0001_steep_red_wolf",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1759773104771,
+      "tag": "0002_furry_preak",
+      "breakpoints": true
     }
   ]
 }

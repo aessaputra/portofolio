@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
 import { useSidebar } from "@/features/site/admin/ui/context/SidebarContext";
 import GridIcon from "@/features/site/admin/ui/icons/grid.svg";
 import PageIcon from "@/features/site/admin/ui/icons/page.svg";
@@ -54,6 +55,7 @@ const navItems: NavItem[] = [
 
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
+  const { theme } = useTheme();
   const pathname = usePathname();
 
   const renderMenuItems = (navItems: NavItem[]) => (
@@ -251,7 +253,12 @@ const AppSidebar: React.FC = () => {
         }`}
       >
         <Link href="/">
-          <div className="text-2xl font-bold">Logo</div>
+          <Image 
+            src={theme === "dark" ? "/admin/images/logo/logo-icon-dark.svg" : "/admin/images/logo/logo-icon-light.svg"} 
+            alt="Logo" 
+            width={150} 
+            height={30}
+          />
         </Link>
       </div>
       <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">

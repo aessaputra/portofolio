@@ -40,7 +40,7 @@ export const config = {
         return {
           id: `admin-${email}`,
           email,
-          name: email,
+          name: email, // Use email as name for magic link users initially
           role: "admin",
         } as const;
       },
@@ -80,6 +80,10 @@ export const config = {
         token.name = user.name ?? token.name;
         token.isAdmin = isAllowedAdminEmail(user.email);
         token.role = token.isAdmin ? "admin" : token.role;
+        
+        // Store basic user info in token - profile data will be fetched in session callback
+        token.originalName = user.name;
+        token.originalImage = user.image;
       }
 
       return token;
@@ -92,8 +96,11 @@ export const config = {
         id: typeof token.sub === "string" ? token.sub : user.id,
         email: typeof token.email === "string" ? token.email : user.email,
         name: typeof token.name === "string" ? token.name : user.name,
+        image: typeof token.originalImage === "string" ? token.originalImage : user.image,
         isAdmin: Boolean(token.isAdmin),
         role: typeof token.role === "string" ? token.role : user.role,
+        originalName: typeof token.originalName === "string" ? token.originalName : undefined,
+        originalImage: typeof token.originalImage === "string" ? token.originalImage : undefined,
       };
 
       return session;
@@ -107,7 +114,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth(config);
  * Require an authenticated admin user. Uses NextAuth.js to check authentication.
  * Throws when authentication or authorization fails.
  */
-export async function requireAdmin(): Promise<void> {
+export async function requireAdmin(): Promise<any> {
   const session = await auth();
 
   if (!session?.user?.email) {
@@ -117,6 +124,8 @@ export async function requireAdmin(): Promise<void> {
   if (!isAllowedAdminEmail(session.user.email)) {
     throw new Error("Admin access required");
   }
+
+  return session;
 }
 
 /**

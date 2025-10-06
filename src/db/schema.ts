@@ -152,3 +152,13 @@ export const certifications = pgTable("certifications", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
+// User profiles table for storing admin user profile information
+export const userProfiles = pgTable("user_profiles", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  name: text("name"),
+  profileImageUrl: text("profile_image_url"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+

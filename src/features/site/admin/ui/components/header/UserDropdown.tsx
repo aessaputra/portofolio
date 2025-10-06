@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, type MouseEvent } from "react";
+import { useState, type MouseEvent, useEffect } from "react";
 import { signOut, useSession } from "next-auth/react";
 
 import { Dropdown } from "@/features/site/admin/ui/components/ui/dropdown/Dropdown";
@@ -10,10 +10,28 @@ import { DropdownItem } from "@/features/site/admin/ui/components/ui/dropdown/Dr
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
+  const [userProfile, setUserProfile] = useState<{name?: string; image?: string} | null>(null);
   const { data: session } = useSession();
 
-  const userImage = session?.user?.image || "/admin/images/user/owner.jpg";
-  const userName = session?.user?.name || "Admin User";
+  // Fetch user profile data
+  useEffect(() => {
+    if (session?.user?.email) {
+      fetch('/api/admin/user-profile')
+        .then(res => res.json())
+        .then(data => {
+          if (data.name || data.profileImageUrl) {
+            setUserProfile({
+              name: data.name,
+              image: data.profileImageUrl || "/admin/images/profile/admin-profile.jpg"
+            });
+          }
+        })
+        .catch(console.error);
+    }
+  }, [session?.user?.email]);
+
+  const userImage = userProfile?.image || session?.user?.image || "/admin/images/profile/admin-profile.jpg";
+  const userName = userProfile?.name || session?.user?.name || "Admin User";
   const userEmail = session?.user?.email || "admin@example.com";
 
   const toggleDropdown = (event: MouseEvent<HTMLButtonElement>) => {
