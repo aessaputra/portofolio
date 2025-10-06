@@ -1,0 +1,2 @@
+ALTER TABLE "home_content" ALTER COLUMN "logo_text" SET DEFAULT 'AES';--> statement-breakpoint
+ALTER TABLE "home_content" ADD COLUMN "about_me_text" text DEFAULT 'Passionate developer with a love for creating innovative solutions and bringing ideas to life through code.' NOT NULL;

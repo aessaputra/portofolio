@@ -16,6 +16,7 @@ export const DEFAULT_HOME_CONTENT: HomeContentUpdateInput = {
   githubUrl: "https://github.com",
   linkedinUrl: "https://linkedin.com",
   xUrl: "https://x.com",
+  logoText: "Portfolio",
   showHireMe: true,
 };
 
@@ -36,6 +37,7 @@ function mapHomeContent(record: HomeContentRecord): HomeContent {
     githubUrl: record.githubUrl,
     linkedinUrl: record.linkedinUrl,
     xUrl: record.xUrl,
+    logoText: record.logoText,
     showHireMe: record.showHireMe,
     updatedAt: toIso(record.updatedAt),
   };
@@ -83,6 +85,7 @@ export async function updateHomeContent(input: HomeContentUpdateInput): Promise<
       githubUrl: input.githubUrl,
       linkedinUrl: input.linkedinUrl,
       xUrl: input.xUrl,
+      logoText: input.logoText,
       showHireMe: input.showHireMe,
       updatedAt: new Date(),
     })

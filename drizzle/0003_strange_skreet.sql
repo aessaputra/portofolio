@@ -1,0 +1,1 @@
+ALTER TABLE "home_content" ADD COLUMN "logo_text" text DEFAULT 'Portfolio' NOT NULL;

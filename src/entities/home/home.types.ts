@@ -14,6 +14,7 @@ export type HomeContent = {
   githubUrl: string;
   linkedinUrl: string;
   xUrl: string;
+  logoText: string;
   showHireMe: boolean;
   updatedAt: string;
 };
@@ -27,5 +28,6 @@ export type HomeContentUpdateInput = {
   githubUrl: string;
   linkedinUrl: string;
   xUrl: string;
+  logoText: string;
   showHireMe: boolean;
 };

@@ -1,0 +1,52 @@
+/* Home Module CSS - Mobile Only Responsiveness */
+
+/* Mobile-specific headline text size adjustments ONLY */
+@media (max-width: 768px) {
+  .headlineText {
+    font-size: 2.5rem !important; /* Larger text for mobile */
+    line-height: 1.1;
+  }
+}
+
+@media (max-width: 640px) {
+  .headlineText {
+    font-size: 2rem !important; /* Slightly smaller for small mobile screens */
+    line-height: 1.05;
+  }
+}
+
+@media (max-width: 480px) {
+  .headlineText {
+    font-size: 1.75rem !important; /* Readable size for very small mobile screens */
+    line-height: 1;
+  }
+}
+
+/* Override Tailwind's md: breakpoint specifically */
+@media (max-width: 768px) {
+  .headlineText {
+    font-size: 2.5rem !important; /* Override md:text-5xl */
+  }
+}
+
+/* Override Tailwind's sm: breakpoint specifically */
+@media (max-width: 640px) {
+  .headlineText {
+    font-size: 2rem !important; /* Override sm:text-3xl */
+  }
+}
+
+/* Mobile-specific profile image display adjustments ONLY */
+@media (max-width: 768px) {
+  .profileImage {
+    max-width: 350px;
+    margin: 0 auto;
+    display: block !important; /* Ensure image shows on mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .profileImage {
+    max-width: 300px;
+  }
+}

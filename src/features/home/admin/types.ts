@@ -9,6 +9,7 @@ export type HomeFormState = {
   githubUrl: string;
   linkedinUrl: string;
   xUrl: string;
+  logoText: string;
   showHireMe: boolean;
 };
 
@@ -22,6 +23,7 @@ export function homeContentToFormState(content: HomeContent): HomeFormState {
     githubUrl: content.githubUrl,
     linkedinUrl: content.linkedinUrl,
     xUrl: content.xUrl,
+    logoText: content.logoText,
     showHireMe: content.showHireMe,
   };
 }
@@ -36,6 +38,7 @@ export function formStateToHomeContentInput(formState: HomeFormState): HomeConte
     githubUrl: formState.githubUrl,
     linkedinUrl: formState.linkedinUrl,
     xUrl: formState.xUrl,
+    logoText: formState.logoText,
     showHireMe: Boolean(formState.showHireMe),
   };
 }

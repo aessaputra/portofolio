@@ -10,6 +10,7 @@ export const homeContent = pgTable("home_content", {
   githubUrl: text("github_url").notNull(),
   linkedinUrl: text("linkedin_url").notNull(),
   xUrl: text("x_url").notNull(),
+  logoText: text("logo_text").default("AES").notNull(),
   showHireMe: boolean("show_hire_me").default(true).notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

@@ -185,6 +185,22 @@ export default function HomeClient({
                 </div>
                 <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Write a compelling description of your professional background and skills.</p>
               </div>
+
+              <div>
+                <label htmlFor="logo-text" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Logo Text</label>
+                <div className="mt-2">
+                  <input
+                    id="logo-text"
+                    type="text"
+                    value={formState.logoText}
+                    onChange={(event) => handleInputChange("logoText", event.target.value)}
+                    className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400"
+                    placeholder="Enter your brand name or initials"
+                    required
+                  />
+                </div>
+                <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">This text will appear in the logo on your website. It will be converted to initials for display.</p>
+              </div>
             </div>
 
             <div className="space-y-6">

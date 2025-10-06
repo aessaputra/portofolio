@@ -193,28 +193,28 @@ export default function NavBar({ socialLinks, brandName = "Portfolio" }: NavBarP
   };
 
   return (
-    <header className="w-full px-32 py-8 font-medium flex items-center justify-between dark:text-light relative z-10 lg:px-16 md:px-12 sm:px-8">
+    <header className="w-full px-32 py-8 font-medium flex items-center justify-between dark:text-light relative z-10 lg:px-16 md:px-12 sm:px-6">
       <button
         type="button"
-        className="flex flex-col items-center justify-center hidden lg:flex"
+        className="flex flex-col items-center justify-center hidden lg:flex sm:flex"
         onClick={handleToggleMenu}
         aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
       >
         <span
           className={cn(
-            "block h-0.5 w-6 rounded-xs bg-dark transition-all duration-300 ease-out dark:bg-light",
+            "block h-0.5 w-6 sm:w-5 rounded-xs bg-dark transition-all duration-300 ease-out dark:bg-light",
             isOpen ? "translate-y-1 rotate-45" : "-translate-y-0.5"
           )}
         />
         <span
           className={cn(
-            "my-0.5 block h-0.5 w-6 rounded-xs bg-dark transition-all duration-300 ease-out dark:bg-light",
+            "my-0.5 block h-0.5 w-6 sm:w-5 rounded-xs bg-dark transition-all duration-300 ease-out dark:bg-light",
             isOpen ? "opacity-0" : "opacity-100"
           )}
         />
         <span
           className={cn(
-            "block h-0.5 w-6 rounded-xs bg-dark transition-all duration-300 ease-out dark:bg-light",
+            "block h-0.5 w-6 sm:w-5 rounded-xs bg-dark transition-all duration-300 ease-out dark:bg-light",
             isOpen ? "-translate-y-1 -rotate-45" : "translate-y-0.5"
           )}
         />
@@ -247,23 +247,35 @@ export default function NavBar({ socialLinks, brandName = "Portfolio" }: NavBarP
       </div>
 
       {isOpen ? (
-        <motion.div
-          initial={{ scale: 0, opacity: 0, x: "-50%", y: "-50%" }}
-          animate={{ scale: 1, opacity: 1, x: "-50%", y: "-50%" }}
-          className="min-w-[70vw] flex flex-col justify-between z-30 items-center fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-dark/90 dark:bg-light/75 rounded-lg backdrop-blur-md py-32"
-        >
-          <nav className="flex flex-col items-center justify-center">
+        <>
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-20"
+            onClick={handleToggleMenu}
+          />
+          {/* Dialog */}
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            className="min-w-[70vw] sm:min-w-[80vw] flex flex-col justify-center z-30 items-center fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-dark/90 dark:bg-light/75 rounded-lg backdrop-blur-md py-32 sm:py-24"
+          >
+          <nav className="flex flex-col items-center justify-center space-y-4">
             {NAV_LINKS.map(({ href, title }) => (
               <CustomMobileLink
                 key={href}
                 href={href}
                 title={title}
                 toggle={handleToggleMenu}
+                className="text-2xl sm:text-xl"
               />
             ))}
           </nav>
 
-          <nav className="flex items-center justify-center flex-wrap mt-2">
+          <nav className="flex items-center justify-center flex-wrap mt-8 sm:mt-6">
             {resolvedSocialLinks.map(({ href, label, Icon }, index) => (
               <motion.a
                 key={`mobile-${label}`}
@@ -272,10 +284,10 @@ export default function NavBar({ socialLinks, brandName = "Portfolio" }: NavBarP
                 rel="noreferrer"
                 aria-label={label}
                 className={cn(
-                  "w-6",
+                  "w-6 sm:w-5",
                   index === 0
-                    ? "mr-3 rounded-full bg-light dark:bg-dark"
-                    : "mx-3"
+                    ? "mr-3 sm:mr-2 rounded-full bg-light dark:bg-dark"
+                    : "mx-3 sm:mx-2"
                 )}
                 {...socialLinkMotionProps}
               >
@@ -283,9 +295,10 @@ export default function NavBar({ socialLinks, brandName = "Portfolio" }: NavBarP
               </motion.a>
             ))}
 
-            <ThemeToggleButton className="ml-3" />
+            <ThemeToggleButton className="ml-3 sm:ml-2" />
           </nav>
-        </motion.div>
+          </motion.div>
+        </>
       ) : null}
 
       <div className="absolute left-1/2 top-2 -translate-x-1/2">

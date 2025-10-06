@@ -22,6 +22,20 @@
       "when": 1759773104771,
       "tag": "0002_furry_preak",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1759777985242,
+      "tag": "0003_strange_skreet",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1759787542893,
+      "tag": "0004_free_menace",
+      "breakpoints": true
     }
   ]
 }
