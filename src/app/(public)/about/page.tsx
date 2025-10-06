@@ -9,6 +9,7 @@ import Skills from "@/features/about/public/components/Skills";
 import TransitionEffect from "@/shared/ui/transition-effect";
 import AboutCounters from "@/features/about/public/components/AboutCounters";
 import { getAboutContent } from "@/entities/about";
+import styles from "@/styles/About.module.css";
 
 export const metadata: Metadata = {
   title: "Aes Saputra | About Page",
@@ -27,22 +28,24 @@ export default async function AboutPage() {
             text={content.headline}
             className="mb-16 lg:text-7xl! sm:mb-8 sm:text-6xl! xs:text-4xl!"
           />
-          <div className="grid w-full grid-cols-8 gap-16 sm:gap-8">
-            <div className="col-span-3 flex flex-col items-start justify-start xl:col-span-4 md:order-2 md:col-span-8">
+          <div className={`grid w-full grid-cols-8 gap-16 sm:gap-8 ${styles.mobileAboutContainer}`}>
+            <div className={`col-span-3 flex flex-col items-start justify-start xl:col-span-4 md:order-2 md:col-span-8 ${styles.mobileTextColumn}`}>
               <h2 className="mb-4 text-lg font-bold uppercase text-dark/75 dark:text-light/75">
                 About Me
               </h2>
-              <p className="font-medium">{content.aboutMeText1}</p>
-              <p className="my-4 font-medium">{content.aboutMeText2}</p>
-              <p className="font-medium">{content.aboutMeText3}</p>
+              <div className={styles.mobileTextContainer}>
+                <p className={`font-medium ${styles.mobileAboutMeText1} ${styles.aboutMeTextJustified}`}>{content.aboutMeText1}</p>
+                <p className={`my-4 font-medium ${styles.mobileAboutMeText2} ${styles.aboutMeTextJustified}`}>{content.aboutMeText2}</p>
+                <p className={`font-medium ${styles.mobileAboutMeText3} ${styles.aboutMeTextJustified}`}>{content.aboutMeText3}</p>
+              </div>
             </div>
 
-            <div className="relative col-span-3 h-max rounded-2xl border-2 border-solid border-dark bg-light p-8 dark:border-light dark:bg-dark xl:col-span-4 md:order-1 md:col-span-8">
+            <div className={`relative col-span-3 h-max rounded-2xl border-2 border-solid border-dark bg-light p-8 dark:border-light dark:bg-dark xl:col-span-4 md:order-1 md:col-span-8 ${styles.mobileImageColumn}`}>
               <div className="absolute top-0 -right-3 -z-10 h-[103%] w-[102%] rounded-4xl bg-dark dark:bg-light" />
               <Image
                 src={content.aboutProfileImagePath}
                 alt="Aes"
-                className="h-auto w-full rounded-2xl"
+                className={`h-auto w-full rounded-2xl ${styles.mobileProfileImage}`}
                 priority
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
                 width={500}

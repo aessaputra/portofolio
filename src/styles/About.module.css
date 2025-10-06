@@ -1,0 +1,89 @@
+/* About.module.css - Mobile-responsive styles for About page */
+
+/* Global text justification for about me text */
+.aboutMeTextJustified {
+  text-align: justify;
+}
+
+/* Mobile-only styles - Only affects screens smaller than 768px */
+@media (max-width: 767px) {
+  /* Override the grid layout for mobile to stack elements vertically */
+  .mobileAboutContainer {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+    gap: 1.5rem !important;
+    padding: 1rem !important;
+  }
+
+  /* Mobile profile image styling */
+  .mobileProfileImage {
+    width: 100% !important;
+    max-width: 300px !important;
+    height: auto !important;
+    border-radius: 1rem !important;
+    margin-bottom: 1rem !important;
+    order: 1 !important; /* Ensure image appears first on mobile */
+  }
+
+  /* Mobile text container styling */
+  .mobileTextContainer {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1rem !important;
+    width: 100% !important;
+    order: 2 !important; /* Ensure text appears after image on mobile */
+    text-align: center !important; /* Center text on mobile */
+  }
+
+  /* Mobile text styling */
+  .mobileAboutMeText1,
+  .mobileAboutMeText2,
+  .mobileAboutMeText3 {
+    font-weight: 500 !important;
+    line-height: 1.6 !important;
+    color: inherit !important;
+    margin: 0 !important;
+    text-align: justify !important;
+  }
+
+  .mobileAboutMeText2 {
+    margin: 1rem 0 !important;
+  }
+
+  /* Override the original grid column spans for mobile */
+  .mobileTextColumn {
+    order: 2 !important;
+    text-align: center !important;
+    align-items: center !important;
+  }
+
+  .mobileImageColumn {
+    order: 1 !important;
+    margin-bottom: 1rem !important;
+  }
+}
+
+/* Dark mode support for mobile */
+@media (max-width: 767px) and (prefers-color-scheme: dark) {
+  .mobileProfileImage {
+    filter: brightness(0.9) !important;
+  }
+}
+
+/* High contrast mode support for mobile */
+@media (max-width: 767px) and (prefers-contrast: high) {
+  .mobileAboutMeText1,
+  .mobileAboutMeText2,
+  .mobileAboutMeText3 {
+    font-weight: 600 !important;
+  }
+}
+
+/* Reduced motion support for mobile */
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+  .mobileAboutContainer {
+    transition: none !important;
+  }
+}
