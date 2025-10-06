@@ -7,6 +7,14 @@ const remotePatterns = [
     pathname: '/**',
     search: '',
   },
+  // Allow R2.dev domains (bucket-name.r2.dev)
+  {
+    protocol: 'https',
+    hostname: '*.r2.dev',
+    port: '',
+    pathname: '/**',
+    search: '',
+  },
 ];
 
 const { CLOUDFLARE_R2_PUBLIC_URL } = process.env;

@@ -198,6 +198,15 @@ export default function HomeClient({
                 height={96}
                 className="h-24 w-24 rounded-lg object-cover"
                 unoptimized
+                onError={(e) => {
+                  console.error('[HomeClient] Failed to load profile image:', {
+                    src: formState.profileImagePath || fallbackProfileImagePath,
+                    error: e,
+                  });
+                }}
+                onLoad={() => {
+                  console.log('[HomeClient] Successfully loaded profile image:', formState.profileImagePath || fallbackProfileImagePath);
+                }}
               />
               <div className="space-y-2">
                 <button

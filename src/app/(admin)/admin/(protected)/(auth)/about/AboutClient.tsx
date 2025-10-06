@@ -176,6 +176,8 @@ export default function AboutClient({
       }));
       showNotification("About page image updated successfully!", "success");
       setShowImageEditor(false);
+      // Refresh data from server to ensure consistency
+      startRefresh(() => router.refresh());
     } catch (error) {
       console.error("Error updating about page image:", error);
       showNotification("Error updating about page image", "error");
@@ -195,6 +197,8 @@ export default function AboutClient({
         aboutProfileImagePath: fallbackProfileImagePath,
       }));
       showNotification("About page image deleted successfully!", "success");
+      // Refresh data from server to ensure consistency
+      startRefresh(() => router.refresh());
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unknown error";
       showNotification(`Error deleting about page image: ${message}`, "error");

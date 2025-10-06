@@ -35,6 +35,16 @@ export default function ProfileImageEditor({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const normalizedCurrentImageUrl = resolveR2PublicUrl(currentImageUrl);
 
+  // Debug logging
+  useEffect(() => {
+    console.log('[ProfileImageEditor] Debug info:', {
+      currentImageUrl,
+      normalizedCurrentImageUrl,
+      hasCurrentImage: !!currentImageUrl,
+      hasNormalizedUrl: !!normalizedCurrentImageUrl,
+    });
+  }, [currentImageUrl, normalizedCurrentImageUrl]);
+
   // Clean up preview URL when component unmounts
   useEffect(() => {
     return () => {
@@ -294,6 +304,15 @@ export default function ProfileImageEditor({
             fill
             className="object-cover"
             unoptimized
+            onError={(e) => {
+              console.error('[ProfileImageEditor] Failed to load current image:', {
+                src: normalizedCurrentImageUrl,
+                error: e,
+              });
+            }}
+            onLoad={() => {
+              console.log('[ProfileImageEditor] Successfully loaded current image:', normalizedCurrentImageUrl);
+            }}
           />
         ) : (
           <div className="flex flex-col items-center justify-center p-6 text-center">

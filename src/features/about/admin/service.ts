@@ -6,9 +6,9 @@ import {
   validateImageFile,
 } from "@/shared/lib/storage";
 
-const PROFILE_IMAGE_PREFIX = "profile";
+const ABOUT_IMAGE_PREFIX = "about";
 
-export async function uploadProfileImage(file: File): Promise<string> {
+export async function uploadAboutImage(file: File): Promise<string> {
   // Validate file using centralized validation
   const validation = validateImageFile(file);
   if (!validation.valid) {
@@ -20,15 +20,15 @@ export async function uploadProfileImage(file: File): Promise<string> {
   try {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    const fileName = generateUniqueFilename(file.name, PROFILE_IMAGE_PREFIX);
+    const fileName = generateUniqueFilename(file.name, ABOUT_IMAGE_PREFIX);
     
     return await uploadImageToR2(buffer, contentType, fileName);
   } catch (error: any) {
-    throw new Error(`Failed to upload profile image: ${error.message}`);
+    throw new Error(`Failed to upload about image: ${error.message}`);
   }
 }
 
-export async function deleteProfileImage(imageUrl: string): Promise<void> {
+export async function deleteAboutImage(imageUrl: string): Promise<void> {
   if (!imageUrl) return;
   const objectKey = extractObjectKeyFromUrl(imageUrl);
   if (!objectKey) return;

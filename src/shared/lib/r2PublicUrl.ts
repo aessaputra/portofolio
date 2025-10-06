@@ -45,8 +45,25 @@ function computeConfig(): R2PublicConfig {
     readEnv("CLOUDFLARE_R2_BUCKET_NAME") ||
     readEnv("NEXT_PUBLIC_CLOUDFLARE_R2_BUCKET_NAME");
 
-  const normalizedPublicUrl = normalizePublicUrl(publicUrl);
+  // Validate required environment variables
+  if (!publicUrl) {
+    throw new Error(
+      "CLOUDFLARE_R2_PUBLIC_URL or NEXT_PUBLIC_CLOUDFLARE_R2_PUBLIC_URL environment variable is required"
+    );
+  }
+
+  if (!bucket) {
+    throw new Error(
+      "CLOUDFLARE_R2_BUCKET_NAME or NEXT_PUBLIC_CLOUDFLARE_R2_BUCKET_NAME environment variable is required"
+    );
+  }
+
   const normalizedBucket = normalizeBucket(bucket);
+  const normalizedPublicUrl = normalizePublicUrl(publicUrl);
+
+  if (!normalizedPublicUrl) {
+    throw new Error("Invalid CLOUDFLARE_R2_PUBLIC_URL: URL cannot be empty");
+  }
 
   const publicUrlIncludesBucket =
     Boolean(normalizedPublicUrl) &&
@@ -80,14 +97,15 @@ export function buildR2PublicUrlFromKey(
   const { fallbackToBase = false } = options;
   const config = getR2PublicConfig();
 
-  if (!config.normalizedPublicUrl) {
-    return fallbackToBase ? objectKey : objectKey;
-  }
-
   const keyPart = objectKey.replace(/^\/+/, "");
 
   if (!keyPart) {
     return fallbackToBase ? config.normalizedPublicUrl : "";
+  }
+
+  // For R2.dev domains, don't include bucket name in path
+  if (config.normalizedPublicUrl.includes('.r2.dev')) {
+    return `${config.normalizedPublicUrl}/${keyPart}`;
   }
 
   if (!config.normalizedBucket) {
@@ -120,13 +138,12 @@ export function resolveR2PublicUrl(value: string): string {
 export function isR2HostedUrl(url: string): boolean {
   if (!url) return false;
   const config = getR2PublicConfig();
-  if (!config.normalizedPublicUrl) return false;
   return url.startsWith(config.normalizedPublicUrl);
 }
 
 export function extractR2ObjectKey(url: string): string | null {
   const config = getR2PublicConfig();
-  if (!url || !config.normalizedPublicUrl || !url.startsWith(config.normalizedPublicUrl)) {
+  if (!url || !url.startsWith(config.normalizedPublicUrl)) {
     return null;
   }
 

@@ -67,6 +67,8 @@ function validateR2Credentials(): void {
   // Log the loaded R2 configuration for verification (server-side only)
   if (process.env.NODE_ENV !== "production") {
     console.log("[Environment Validation] R2 credentials loaded successfully.");
+    console.log(`[Environment Validation] R2 Bucket: ${process.env.CLOUDFLARE_R2_BUCKET_NAME}`);
+    console.log(`[Environment Validation] R2 Account ID: ${process.env.CLOUDFLARE_ACCOUNT_ID}`);
   }
 }
 

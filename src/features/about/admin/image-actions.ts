@@ -2,6 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/features/auth/server/nextAuth";
+import { uploadAboutImage } from "@/features/about/admin/service";
+import { updateAboutProfileImage } from "@/entities/about";
 
 const ADMIN_ABOUT_PATH = "/admin/about";
 const PUBLIC_ABOUT_PATH = "/(public)/about";
@@ -9,26 +11,21 @@ const PUBLIC_ABOUT_PATH = "/(public)/about";
 export async function uploadAboutProfileImageAction(formData: FormData) {
   await requireAdmin();
 
+  const file = formData.get("image");
+  if (!(file instanceof File)) {
+    throw new Error("Image file is required");
+  }
+
   try {
-    const response = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/api/admin/about-profile-image/upload", {
-      method: "POST",
-      body: formData,
-      headers: {
-        // No need for Content-Type header when using FormData
-      },
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || "Failed to upload about profile image");
-    }
-
-    const data = await response.json();
+    const url = await uploadAboutImage(file);
+    
+    // Update database with new image URL
+    await updateAboutProfileImage(url);
     
     revalidatePath(ADMIN_ABOUT_PATH);
     revalidatePath(PUBLIC_ABOUT_PATH);
 
-    return data.url;
+    return url;
   } catch (error) {
     console.error("Error uploading about profile image:", error);
     throw error;
@@ -38,26 +35,19 @@ export async function uploadAboutProfileImageAction(formData: FormData) {
 export async function deleteAboutProfileImageAction(formData: FormData) {
   await requireAdmin();
 
+  const imageUrl = formData.get("imageUrl");
+  if (typeof imageUrl !== "string" || imageUrl.trim() === "") {
+    throw new Error("Image URL is required");
+  }
+
   try {
-    const imageUrl = formData.get("imageUrl") as string;
+    const { deleteAboutImage } = await import("@/features/about/admin/service");
+    await deleteAboutImage(imageUrl);
     
-    if (!imageUrl) {
-      throw new Error("Image URL is required");
-    }
-
-    const response = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/api/admin/about-profile-image/delete", {
-      method: "POST",
-      body: JSON.stringify({ imageUrl }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || "Failed to delete about profile image");
-    }
-
+    // Update database to remove image URL (set to fallback)
+    const { DEFAULT_ABOUT_CONTENT } = await import("@/entities/about");
+    await updateAboutProfileImage(DEFAULT_ABOUT_CONTENT.aboutProfileImagePath);
+    
     revalidatePath(ADMIN_ABOUT_PATH);
     revalidatePath(PUBLIC_ABOUT_PATH);
 
