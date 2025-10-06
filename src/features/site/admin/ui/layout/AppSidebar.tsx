@@ -10,7 +10,6 @@ import InfoIcon from "@/features/site/admin/ui/icons/info.svg";
 import ProjectsIcon from "@/features/site/admin/ui/icons/box.svg";
 import ArticlesIcon from "@/features/site/admin/ui/icons/docs.svg";
 import CertificationsIcon from "@/features/site/admin/ui/icons/check-circle.svg";
-import SidebarWidget from "./SidebarWidget";
 
 type NavItem = {
   name: string;
@@ -300,7 +299,6 @@ const AppSidebar: React.FC = () => {
             </div>
           </div>
         </nav>
-        {isExpanded || isHovered || isMobileOpen ? <SidebarWidget /> : null}
       </div>
     </aside>
   );

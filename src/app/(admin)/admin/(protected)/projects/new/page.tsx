@@ -134,139 +134,92 @@ export default function NewProjectPage() {
 
   return (
     <div className="space-y-6">
-      {/* Page Header */}
-      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Create New Project
-          </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            Add a new project to your portfolio
-          </p>
-        </div>
-      </div>
-
       {/* Notification */}
       {notification && (
         <div
-          className={`p-4 rounded-md ${
+          className={`rounded-md p-4 ${
             notification.type === "success"
               ? "bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-300"
               : "bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-300"
           }`}
         >
-          <div className="flex">
-            <div className="flex-shrink-0">
-              {notification.type === "success" ? (
-                <svg
-                  className="h-5 w-5 text-green-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  className="h-5 w-5 text-red-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              )}
-            </div>
-            <div className="ml-3">
-              <p className="text-sm font-medium">{notification.message}</p>
-            </div>
-          </div>
+          {notification.message}
         </div>
       )}
 
-      {/* Form */}
-      <div className="bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden">
-        <form onSubmit={handleSubmit} className="space-y-6 p-6">
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {/* Title */}
-            <div>
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Title *
-              </label>
-              <input
-                type="text"
-                name="title"
-                id="title"
-                value={formData.title}
-                onChange={handleInputChange}
-                required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
-              />
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Project Information */}
+        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+          <div className="mb-6">
+            <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Create New Project</h1>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Add a new project to your portfolio</p>
+          </div>
+          <div className="space-y-6">
+            {/* Basic Information */}
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <div>
+                <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Project Title *
+                </label>
+                <div className="mt-2">
+                  <input
+                    type="text"
+                    name="title"
+                    id="title"
+                    value={formData.title}
+                    onChange={handleInputChange}
+                    required
+                    className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400"
+                    placeholder="Enter project title"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="type" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Project Type *
+                </label>
+                <div className="mt-2">
+                  <select
+                    name="type"
+                    id="type"
+                    value={formData.type}
+                    onChange={handleInputChange}
+                    className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+                  >
+                    <option value="Project">Project</option>
+                    <option value="Featured Project">Featured Project</option>
+                    <option value="Open Source">Open Source</option>
+                    <option value="Personal">Personal</option>
+                  </select>
+                </div>
+              </div>
             </div>
 
-            {/* Type */}
+            {/* Description */}
             <div>
-              <label htmlFor="type" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Type *
-              </label>
-              <select
-                name="type"
-                id="type"
-                value={formData.type}
-                onChange={handleInputChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
-              >
-                <option value="Project">Project</option>
-                <option value="Featured Project">Featured Project</option>
-                <option value="Open Source">Open Source</option>
-                <option value="Personal">Personal</option>
-              </select>
-            </div>
-
-            {/* Summary */}
-            <div className="sm:col-span-2">
               <label htmlFor="summary" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Summary
+                Project Summary
               </label>
-              <textarea
-                name="summary"
-                id="summary"
-                rows={2}
-                value={formData.summary}
-                onChange={handleInputChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
-              />
-            </div>
-
-            {/* Editable Text */}
-            <div className="sm:col-span-2">
-              <label htmlFor="editableText" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Editable Text
-              </label>
-              <input
-                type="text"
-                name="editableText"
-                id="editableText"
-                value={formData.editableText}
-                onChange={handleInputChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
-              />
+              <div className="mt-2">
+                <textarea
+                  name="summary"
+                  id="summary"
+                  rows={3}
+                  value={formData.summary}
+                  onChange={handleInputChange}
+                  className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400"
+                  placeholder="Brief description of your project"
+                />
+              </div>
             </div>
 
             {/* Image Upload */}
-            <div className="sm:col-span-2">
+            <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Project Image *
               </label>
-              <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md dark:border-gray-600">
+              <div className="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg dark:border-gray-600">
                 <div className="space-y-1 text-center">
                   {formData.imageUrl ? (
                     <div className="flex flex-col items-center">
@@ -349,127 +302,159 @@ export default function NewProjectPage() {
               </div>
             </div>
 
-            {/* Link */}
-            <div>
-              <label htmlFor="link" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Project Link *
-              </label>
-              <input
-                type="url"
-                name="link"
-                id="link"
-                value={formData.link}
-                onChange={handleInputChange}
-                required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
-              />
-            </div>
+          </div>
+        </div>
 
-            {/* GitHub */}
-            <div>
-              <label htmlFor="github" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                GitHub Repository *
-              </label>
-              <input
-                type="url"
-                name="github"
-                id="github"
-                value={formData.github}
-                onChange={handleInputChange}
-                required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
-              />
-            </div>
-
-            {/* Tags */}
-            <div>
-              <label htmlFor="tags" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Tags
-              </label>
-              <input
-                type="text"
-                name="tags"
-                id="tags"
-                value={formData.tags}
-                onChange={handleInputChange}
-                placeholder="e.g., React, TypeScript, Tailwind CSS"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
-              />
-              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                Comma-separated values
-              </p>
-            </div>
-
-            {/* Technologies */}
-            <div>
-              <label htmlFor="technologies" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Technologies
-              </label>
-              <input
-                type="text"
-                name="technologies"
-                id="technologies"
-                value={formData.technologies}
-                onChange={handleInputChange}
-                placeholder="e.g., React, Node.js, MongoDB"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
-              />
-              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                Comma-separated values
-              </p>
-            </div>
-
-            {/* Display Order */}
-            <div>
-              <label htmlFor="displayOrder" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Display Order
-              </label>
-              <input
-                type="number"
-                name="displayOrder"
-                id="displayOrder"
-                value={formData.displayOrder}
-                onChange={handleInputChange}
-                min="0"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
-              />
-            </div>
-
-            {/* Featured */}
-            <div className="flex items-center">
-              <input
-                id="featured"
-                name="featured"
-                type="checkbox"
-                checked={formData.featured}
-                onChange={handleInputChange}
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label htmlFor="featured" className="ml-2 block text-sm text-gray-700 dark:text-gray-300">
-                Feature this project
-              </label>
-            </div>
+        {/* Project Links & Metadata */}
+        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+          <div className="mb-6">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Links & Metadata</h2>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Configure project links, tags, and display settings.</p>
           </div>
 
-          {/* Submit Button */}
-          <div className="flex justify-end space-x-3">
-            <button
-              type="button"
-              onClick={() => router.back()}
-              className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={loading || uploading}
-              className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-            >
-              {loading ? "Creating..." : "Create Project"}
-            </button>
+          <div className="space-y-6">
+            {/* Links */}
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <div>
+                <label htmlFor="link" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Project Link *
+                </label>
+                <div className="mt-2">
+                  <input
+                    type="url"
+                    name="link"
+                    id="link"
+                    value={formData.link}
+                    onChange={handleInputChange}
+                    required
+                    className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400"
+                    placeholder="https://your-project.com"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="github" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  GitHub Repository *
+                </label>
+                <div className="mt-2">
+                  <input
+                    type="url"
+                    name="github"
+                    id="github"
+                    value={formData.github}
+                    onChange={handleInputChange}
+                    required
+                    className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400"
+                    placeholder="https://github.com/username/repo"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Tags & Technologies */}
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <div>
+                <label htmlFor="tags" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Tags
+                </label>
+                <div className="mt-2">
+                  <input
+                    type="text"
+                    name="tags"
+                    id="tags"
+                    value={formData.tags}
+                    onChange={handleInputChange}
+                    placeholder="e.g., React, TypeScript, Tailwind CSS"
+                    className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400"
+                  />
+                </div>
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                  Comma-separated values
+                </p>
+              </div>
+
+              <div>
+                <label htmlFor="technologies" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Technologies
+                </label>
+                <div className="mt-2">
+                  <input
+                    type="text"
+                    name="technologies"
+                    id="technologies"
+                    value={formData.technologies}
+                    onChange={handleInputChange}
+                    placeholder="e.g., React, Node.js, MongoDB"
+                    className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400"
+                  />
+                </div>
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                  Comma-separated values
+                </p>
+              </div>
+            </div>
+
+            {/* Display Settings */}
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <div>
+                <label htmlFor="displayOrder" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Display Order
+                </label>
+                <div className="mt-2">
+                  <input
+                    type="number"
+                    name="displayOrder"
+                    id="displayOrder"
+                    value={formData.displayOrder}
+                    onChange={handleInputChange}
+                    min="0"
+                    className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400"
+                    placeholder="0"
+                  />
+                </div>
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                  Lower numbers appear first
+                </p>
+              </div>
+
+              <div className="flex items-center">
+                <div className="flex items-center">
+                  <input
+                    id="featured"
+                    name="featured"
+                    type="checkbox"
+                    checked={formData.featured}
+                    onChange={handleInputChange}
+                    className="h-4 w-4 rounded border-gray-300 text-brand-600 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-800"
+                  />
+                  <label htmlFor="featured" className="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                    Feature this project
+                  </label>
+                </div>
+              </div>
+            </div>
           </div>
-        </form>
-      </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex items-center justify-end gap-3">
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={loading || uploading}
+            className="inline-flex items-center rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50"
+          >
+            {loading ? "Creating..." : "Create Project"}
+          </button>
+        </div>
+      </form>
 
       {/* Delete Image Confirmation Dialog */}
       {showDeleteImageConfirmation && (

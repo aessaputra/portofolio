@@ -145,146 +145,214 @@ export default function HomeClient({
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <div className="space-y-4">
-            <div>
-              <label className="mb-1 block font-medium">Headline</label>
-              <input
-                type="text"
-                value={formState.headline}
-                onChange={(event) => handleInputChange("headline", event.target.value)}
-                className="w-full rounded border border-gray-300 p-2"
-                required
-              />
-            </div>
-            <div>
-              <label className="mb-1 block font-medium">Subheadline</label>
-              <textarea
-                value={formState.subheadline}
-                onChange={(event) => handleInputChange("subheadline", event.target.value)}
-                className="h-32 w-full rounded border border-gray-300 p-2"
-                required
-              />
-            </div>
-            <div>
-              <label className="mb-1 block font-medium">Resume URL</label>
-              <input
-                type="url"
-                value={formState.resumeUrl}
-                onChange={(event) => handleInputChange("resumeUrl", event.target.value)}
-                className="w-full rounded border border-gray-300 p-2"
-                required
-              />
-            </div>
-            <div>
-              <label className="mb-1 block font-medium">Contact Email</label>
-              <input
-                type="email"
-                value={formState.contactEmail}
-                onChange={(event) => handleInputChange("contactEmail", event.target.value)}
-                className="w-full rounded border border-gray-300 p-2"
-                required
-              />
-            </div>
+      <form onSubmit={handleSubmit} className="space-y-8">
+        {/* Profile Information Section */}
+        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+          <div className="mb-6">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Profile Information</h2>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">This information will be displayed publicly so be careful what you share.</p>
           </div>
 
-          <div className="space-y-4">
-            <div className="flex items-center gap-4">
-              <Image
-                src={formState.profileImagePath || fallbackProfileImagePath}
-                alt="Profile"
-                width={96}
-                height={96}
-                className="h-24 w-24 rounded-lg object-cover"
-                unoptimized
-                onError={(e) => {
-                  console.error('[HomeClient] Failed to load profile image:', {
-                    src: formState.profileImagePath || fallbackProfileImagePath,
-                    error: e,
-                  });
-                }}
-                onLoad={() => {
-                  console.log('[HomeClient] Successfully loaded profile image:', formState.profileImagePath || fallbackProfileImagePath);
-                }}
-              />
-              <div className="space-y-2">
-                <button
-                  type="button"
-                  className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:opacity-50"
-                  onClick={() => setShowImageEditor(true)}
-                  disabled={imageUploading}
-                >
-                  {imageUploading ? "Uploading..." : "Change Image"}
-                </button>
-                <button
-                  type="button"
-                  className="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600 disabled:opacity-50"
-                  onClick={() => setShowDeleteConfirmation(true)}
-                  disabled={imageDeleting}
-                >
-                  {imageDeleting ? "Deleting..." : "Delete Image"}
-                </button>
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <div className="space-y-6">
+              <div>
+                <label htmlFor="headline" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Headline</label>
+                <div className="mt-2">
+                  <input
+                    id="headline"
+                    type="text"
+                    value={formState.headline}
+                    onChange={(event) => handleInputChange("headline", event.target.value)}
+                    className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400"
+                    placeholder="Enter your professional headline"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="subheadline" className="block text-sm font-medium text-gray-700 dark:text-gray-300">About</label>
+                <div className="mt-2">
+                  <textarea
+                    id="subheadline"
+                    value={formState.subheadline}
+                    onChange={(event) => handleInputChange("subheadline", event.target.value)}
+                    rows={4}
+                    className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400"
+                    placeholder="Write a few sentences about yourself and your expertise."
+                    required
+                  />
+                </div>
+                <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Write a compelling description of your professional background and skills.</p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-4">
+            <div className="space-y-6">
               <div>
-                <label className="mb-1 block font-medium">GitHub URL</label>
-                <input
-                  type="url"
-                  value={formState.githubUrl}
-                  onChange={(event) => handleInputChange("githubUrl", event.target.value)}
-                  className="w-full rounded border border-gray-300 p-2"
-                />
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Profile Photo</label>
+                <div className="mt-2 flex items-center gap-4">
+                  <div className="relative">
+                    <Image
+                      src={formState.profileImagePath || fallbackProfileImagePath}
+                      alt="Profile"
+                      width={80}
+                      height={80}
+                      className="h-20 w-20 rounded-full object-cover ring-2 ring-gray-200 dark:ring-gray-700"
+                      unoptimized
+                      onError={(e) => {
+                        console.error('[HomeClient] Failed to load profile image:', {
+                          src: formState.profileImagePath || fallbackProfileImagePath,
+                          error: e,
+                        });
+                      }}
+                      onLoad={() => {
+                        console.log('[HomeClient] Successfully loaded profile image:', formState.profileImagePath || fallbackProfileImagePath);
+                      }}
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <button
+                      type="button"
+                      className="inline-flex items-center rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                      onClick={() => setShowImageEditor(true)}
+                      disabled={imageUploading}
+                    >
+                      {imageUploading ? "Uploading..." : "Change"}
+                    </button>
+                    <button
+                      type="button"
+                      className="inline-flex items-center rounded-lg border border-red-300 bg-white px-3 py-2 text-sm font-medium text-red-700 shadow-sm hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 dark:border-red-600 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-900/20"
+                      onClick={() => setShowDeleteConfirmation(true)}
+                      disabled={imageDeleting}
+                    >
+                      {imageDeleting ? "Deleting..." : "Remove"}
+                    </button>
+                  </div>
+                </div>
               </div>
-              <div>
-                <label className="mb-1 block font-medium">LinkedIn URL</label>
-                <input
-                  type="url"
-                  value={formState.linkedinUrl}
-                  onChange={(event) => handleInputChange("linkedinUrl", event.target.value)}
-                  className="w-full rounded border border-gray-300 p-2"
-                />
-              </div>
-              <div>
-                <label className="mb-1 block font-medium">X URL</label>
-                <input
-                  type="url"
-                  value={formState.xUrl}
-                  onChange={(event) => handleInputChange("xUrl", event.target.value)}
-                  className="w-full rounded border border-gray-300 p-2"
-                />
-              </div>
-              <label className="flex items-center gap-2 font-medium">
-                <input
-                  type="checkbox"
-                  checked={formState.showHireMe}
-                  onChange={(event) => handleInputChange("showHireMe", event.target.checked)}
-                  className="h-4 w-4 rounded border-gray-300"
-                />
-                Show &quot;Hire Me&quot; badge
-              </label>
             </div>
           </div>
         </div>
 
+        {/* Contact Information Section */}
+        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+          <div className="mb-6">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Contact Information</h2>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Provide your contact details and professional links.</p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div>
+              <label htmlFor="resume-url" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Resume URL</label>
+              <div className="mt-2">
+                <input
+                  id="resume-url"
+                  type="url"
+                  value={formState.resumeUrl}
+                  onChange={(event) => handleInputChange("resumeUrl", event.target.value)}
+                  className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400"
+                  placeholder="https://your-resume.com"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="contact-email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Contact Email</label>
+              <div className="mt-2">
+                <input
+                  id="contact-email"
+                  type="email"
+                  value={formState.contactEmail}
+                  onChange={(event) => handleInputChange("contactEmail", event.target.value)}
+                  className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400"
+                  placeholder="your.email@example.com"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="github-url" className="block text-sm font-medium text-gray-700 dark:text-gray-300">GitHub URL</label>
+              <div className="mt-2">
+                <input
+                  id="github-url"
+                  type="url"
+                  value={formState.githubUrl}
+                  onChange={(event) => handleInputChange("githubUrl", event.target.value)}
+                  className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400"
+                  placeholder="https://github.com/username"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="linkedin-url" className="block text-sm font-medium text-gray-700 dark:text-gray-300">LinkedIn URL</label>
+              <div className="mt-2">
+                <input
+                  id="linkedin-url"
+                  type="url"
+                  value={formState.linkedinUrl}
+                  onChange={(event) => handleInputChange("linkedinUrl", event.target.value)}
+                  className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400"
+                  placeholder="https://linkedin.com/in/username"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="x-url" className="block text-sm font-medium text-gray-700 dark:text-gray-300">X (Twitter) URL</label>
+              <div className="mt-2">
+                <input
+                  id="x-url"
+                  type="url"
+                  value={formState.xUrl}
+                  onChange={(event) => handleInputChange("xUrl", event.target.value)}
+                  className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400"
+                  placeholder="https://x.com/username"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Display Preferences Section */}
+        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+          <div className="mb-6">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Display Preferences</h2>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Configure how your profile appears to visitors.</p>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <div className="flex h-5 items-center">
+              <input
+                id="show-hire-me"
+                type="checkbox"
+                checked={formState.showHireMe}
+                onChange={(event) => handleInputChange("showHireMe", event.target.checked)}
+                className="h-4 w-4 rounded border-gray-300 text-brand-600 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-800 dark:ring-offset-gray-900"
+              />
+            </div>
+            <div className="text-sm">
+              <label htmlFor="show-hire-me" className="font-medium text-gray-900 dark:text-white">Show "Hire Me" Badge</label>
+              <p className="text-gray-500 dark:text-gray-400">Display a prominent "Hire Me" badge on your profile to indicate availability.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
         <div className="flex items-center justify-end gap-3">
           <button
             type="button"
-            className="rounded border border-gray-300 px-5 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100 disabled:opacity-50"
-            onClick={() =>
-              startRefreshing(() => {
-                router.refresh();
-              })
-            }
+            className="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+            onClick={() => startRefreshing(() => router.refresh())}
             disabled={isRefreshing}
           >
-            {isRefreshing ? "Refreshing..." : "Refresh"}
+            {isRefreshing ? "Refreshing..." : "Cancel"}
           </button>
           <button
             type="submit"
-            className="rounded bg-dark px-6 py-3 text-light hover:bg-dark/80 disabled:opacity-50"
+            className="inline-flex items-center rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50"
             disabled={saving}
           >
             {saving ? "Saving..." : "Save Changes"}
