@@ -1,4 +1,4 @@
-import { DEFAULT_ABOUT_CONTENT, getAboutContent } from "@/entities/about";
+import { getAboutContent } from "@/entities/about";
 import { aboutContentToFormState } from "@/features/about/admin/types";
 
 import AboutClient from "./AboutClient";
@@ -9,7 +9,7 @@ export default async function AdminAboutPage() {
   return (
     <AboutClient
       initialState={aboutContentToFormState(content)}
-      fallbackProfileImagePath={DEFAULT_ABOUT_CONTENT.profileImagePath}
+      fallbackProfileImagePath=""
     />
   );
 }

@@ -17,7 +17,7 @@ export default async function ProfilePage() {
     // Create a basic profile for new users
     userProfile = await upsertUserProfile({
       email: session.user.email,
-      name: session.user.originalName || session.user.name,
+      name: session.user.originalName || session.user.name || undefined,
       profileImageUrl: session.user.originalImage || session.user.image || "/admin/images/profile/admin-profile.jpg",
     });
   }

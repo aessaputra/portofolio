@@ -1,0 +1,690 @@
+/* Certifications.module.css - Responsive styles for Certifications page */
+
+/* Main Container */
+.certificationsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Desktop Layout - Grid */
+@media (min-width: 640px) {
+  .certificationsContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    align-items: start;
+  }
+}
+
+@media (min-width: 1024px) {
+  .certificationsContainer {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .certificationsContainer {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* Featured Cards Container - Premium Glassmorphism Layout */
+.featuredCardsContainer {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  max-width: 100%;
+  width: 100%;
+  position: relative;
+  padding: 2rem 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(10px);
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.featuredCardsContainer::before {
+  content: '';
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: #E53935;
+  border-radius: 2px;
+  box-shadow: 0 0 20px rgba(229, 57, 53, 0.3);
+}
+
+.dark .featuredCardsContainer::before {
+  background: #00BCD4;
+  box-shadow: 0 0 20px rgba(0, 188, 212, 0.3);
+}
+
+.dark .featuredCardsContainer {
+  background: rgba(0, 0, 0, 0.1);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+@media (min-width: 640px) {
+  .featuredCardsContainer {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2.5rem 1.5rem;
+  }
+  
+  .featuredCardsContainer::before {
+    width: 80px;
+    height: 5px;
+    top: 1.25rem;
+  }
+  
+}
+
+@media (min-width: 1024px) {
+  .featuredCardsContainer {
+    gap: 2.5rem;
+    max-width: 1000px;
+    padding: 3rem 2rem;
+  }
+  
+  .featuredCardsContainer::before {
+    width: 100px;
+    height: 6px;
+    top: 1.5rem;
+  }
+  
+}
+
+@media (min-width: 1280px) {
+  .featuredCardsContainer {
+    max-width: 1100px;
+    padding: 3.5rem 2.5rem;
+  }
+  
+  .featuredCardsContainer::before {
+    width: 120px;
+    height: 7px;
+    top: 1.75rem;
+  }
+  
+}
+
+/* Featured Card - Grid Item */
+.featuredCard {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Regular Card */
+.regularCard {
+  grid-column: span 1;
+}
+
+/* Empty State */
+.emptyState {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.emptyStateText {
+  font-size: 1.125rem;
+  color: #6b7280;
+}
+
+.dark .emptyStateText {
+  color: #9ca3af;
+}
+
+/* Card Layout Styles - Consistent with Other Pages */
+.certificationCard {
+  position: relative;
+  width: 100%;
+  max-width: 24rem;
+  border-radius: 1rem;
+  border: 2px solid;
+  border-right-width: 4px;
+  background: #ffffff;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.certificationCard::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 3px;
+  height: 100%;
+  background: #E53935;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.dark .certificationCard::after {
+  background: #00BCD4;
+}
+
+.certificationCard:hover {
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.12),
+              0 4px 12px -2px rgba(0, 0, 0, 0.08);
+  transform: translateY(-3px);
+  border-color: #E53935;
+}
+
+.certificationCard:hover::after {
+  opacity: 1;
+}
+
+.dark .certificationCard {
+  background: #1f2937;
+  border-color: #f3f4f6;
+  color: #f5f5f5;
+}
+
+.light .certificationCard {
+  border-color: #1f2937;
+}
+
+.certificationCard:hover {
+  border-color: #E53935;
+}
+
+.dark .certificationCard:hover {
+  border-color: #00BCD4;
+}
+
+/* Card Content Layout - Optimized for Minimal Content */
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  height: 100%;
+  flex: 1;
+  justify-content: space-between;
+}
+
+@media (min-width: 640px) {
+  .cardContent {
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .cardContent {
+    gap: 1rem;
+  }
+}
+
+/* Image Container - Consistent with Card Border */
+.imageContainer {
+  width: 100%;
+  aspect-ratio: 16/9;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 1rem 1rem 0 0;
+  flex-shrink: 0;
+  position: relative;
+  background: #f8f9fa;
+}
+
+.imageContainer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(182, 62, 150, 0.05);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.imageContainer:hover::before {
+  opacity: 1;
+}
+
+.dark .imageContainer::before {
+  background: rgba(88, 230, 217, 0.05);
+}
+
+/* Image Styles - Consistent with Card Border */
+.certificationImage {
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem 1rem 0 0;
+  object-fit: cover;
+  object-position: center;
+  background-color: #f8f9fa;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 0;
+}
+
+.certificationImage:hover {
+  transform: scale(1.08);
+  filter: brightness(1.05) contrast(1.02);
+}
+
+.dark .imageContainer {
+  background: #374151;
+}
+
+.dark .certificationImage {
+  background-color: #374151;
+}
+
+/* Content Container - Template Based Design */
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  padding: 1.25rem;
+  gap: 0.75rem;
+}
+
+/* Text Styles - Template Based Design */
+.issuerText {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  margin-bottom: 0;
+  display: block;
+  line-height: 1.4;
+}
+
+.dark .issuerText {
+  color: #9ca3af;
+}
+
+.featuredBadge {
+  margin-left: 0.375rem;
+  border-radius: 0.5rem;
+  background: #E53935;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 2px 8px -2px rgba(182, 62, 150, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.featuredBadge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s ease;
+}
+
+.featuredBadge:hover::before {
+  left: 100%;
+}
+
+.dark .featuredBadge {
+  background: #00BCD4;
+  color: #1b1b1b;
+  box-shadow: 0 2px 8px -2px rgba(0, 188, 212, 0.4);
+}
+
+.titleText {
+  margin: 0 0 0.5rem 0;
+  width: 100%;
+  text-align: left;
+  font-weight: 700;
+  text-transform: capitalize;
+  color: #111827;
+  line-height: 1.25;
+  font-size: 1.5rem;
+  display: block;
+  letter-spacing: -0.025em;
+}
+
+.dark .titleText {
+  color: #f5f5f5;
+}
+
+/* Featured Title Sizes */
+.featuredTitle {
+  font-size: 1rem;
+}
+
+/* Featured Card - Consistent with Other Pages */
+.featuredCard .certificationCard {
+  max-width: 28rem;
+  border-radius: 1.5rem;
+  border: 2px solid;
+  border-right-width: 4px;
+  background: #ffffff !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.featuredCard .certificationCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #E53935;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+
+.featuredCard .certificationCard:hover::before {
+  transform: scaleX(1);
+}
+
+.dark .featuredCard .certificationCard::before {
+  background: #00BCD4;
+}
+
+.dark .featuredCard .certificationCard {
+  background: #1f2937;
+  border-color: #f3f4f6;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.light .featuredCard .certificationCard {
+  border-color: #1f2937;
+}
+
+.featuredCard .certificationCard:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px);
+  border-color: #E53935;
+  background: #ffffff !important;
+}
+
+.dark .featuredCard .certificationCard:hover {
+  background: #1f2937 !important;
+  border-color: #00BCD4;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Featured Card - Override regular card styling */
+.featuredCard .certificationCard::after {
+  display: none;
+}
+
+
+@media (min-width: 640px) {
+  .featuredCard .certificationCard {
+    max-width: 420px;
+    padding: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .featuredCard .certificationCard {
+    max-width: 480px;
+    padding: 1.5rem;
+  }
+}
+
+/* Featured Card Typography - Responsive */
+.featuredCard .issuerText {
+  font-size: 0.75rem;
+}
+
+.featuredCard .titleText {
+  font-size: 0.875rem;
+}
+
+.featuredCard .dateText {
+  font-size: 0.7rem;
+}
+
+.featuredCard .descriptionText {
+  font-size: 0.7rem;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.featuredCard .tagItem {
+  font-size: 0.65rem;
+}
+
+
+/* Responsive Featured Typography */
+@media (min-width: 640px) {
+  .featuredCard .issuerText {
+    font-size: 0.8rem;
+  }
+  
+  .featuredCard .titleText {
+    font-size: 0.95rem;
+  }
+  
+  .featuredCard .dateText {
+    font-size: 0.75rem;
+  }
+  
+  .featuredCard .descriptionText {
+    font-size: 0.75rem;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+  
+  .featuredCard .tagItem {
+    font-size: 0.7rem;
+  }
+  
+}
+
+@media (min-width: 1024px) {
+  .featuredCard .issuerText {
+    font-size: 0.85rem;
+  }
+  
+  .featuredCard .titleText {
+    font-size: 1rem;
+  }
+  
+  .featuredCard .dateText {
+    font-size: 0.8rem;
+  }
+  
+  .featuredCard .descriptionText {
+    font-size: 0.8rem;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+  }
+  
+  .featuredCard .tagItem {
+    font-size: 0.75rem;
+  }
+  
+}
+
+/* Featured Card - Consistent Image and Content Styling */
+.featuredCard .imageContainer {
+  aspect-ratio: 16/9;
+  border-radius: 1.5rem 1.5rem 0 0;
+}
+
+.featuredCard .certificationImage {
+  border-radius: 1.5rem 1.5rem 0 0;
+}
+
+.featuredCard .contentContainer {
+  padding: 1.25rem;
+  gap: 0.75rem;
+}
+
+/* Featured cards use same styling as regular cards, just scaled up */
+
+/* Responsive Text Sizes */
+@media (min-width: 640px) {
+  .issuerText {
+    font-size: 0.8rem;
+  }
+  
+  .titleText {
+    font-size: 0.9rem;
+  }
+  
+  .featuredTitle {
+    font-size: 1.1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .issuerText {
+    font-size: 0.85rem;
+  }
+  
+  .titleText {
+    font-size: 0.95rem;
+  }
+  
+  .featuredTitle {
+    font-size: 1.15rem;
+  }
+}
+
+.dateText {
+  margin-bottom: 0.5rem;
+  font-size: 0.7rem;
+  color: #6b7280;
+  display: block;
+}
+
+.dark .dateText {
+  color: #9ca3af;
+}
+
+.dateItem {
+  font-weight: 500;
+  display: block;
+}
+
+.descriptionText {
+  margin-bottom: 0.5rem;
+  font-size: 0.7rem;
+  color: #6b7280;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+.dark .descriptionText {
+  color: #9ca3af;
+}
+
+/* Tags Container - Enhanced Modern Design */
+.tagsContainer {
+  margin-bottom: 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.tagItem {
+  border-radius: 0.5rem;
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  border: 1px solid rgba(30, 64, 175, 0.1);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #1e40af;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.tagItem::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 100%;
+  background: #E53935;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.tagItem:hover {
+  background: linear-gradient(135deg, #bfdbfe, #93c5fd);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px -1px rgba(30, 64, 175, 0.2);
+}
+
+.tagItem:hover::before {
+  opacity: 1;
+}
+
+.dark .tagItem::before {
+  background: #00BCD4;
+}
+
+.dark .tagItem {
+  background-color: rgba(59, 130, 246, 0.3);
+  color: #93c5fd;
+}
+
+/* Responsive Date and Description */
+@media (min-width: 640px) {
+  .dateText {
+    font-size: 0.75rem;
+  }
+  
+  .descriptionText {
+    font-size: 0.75rem;
+  }
+  
+  .tagItem {
+    font-size: 0.7rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .dateText {
+    font-size: 0.8rem;
+  }
+  
+  .descriptionText {
+    font-size: 0.8rem;
+  }
+  
+  .tagItem {
+    font-size: 0.75rem;
+  }
+}
+

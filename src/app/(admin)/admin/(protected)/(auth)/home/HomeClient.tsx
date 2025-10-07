@@ -350,8 +350,8 @@ export default function HomeClient({
               />
             </div>
             <div className="text-sm">
-              <label htmlFor="show-hire-me" className="font-medium text-gray-900 dark:text-white">Show "Hire Me" Badge</label>
-              <p className="text-gray-500 dark:text-gray-400">Display a prominent "Hire Me" badge on your profile to indicate availability.</p>
+              <label htmlFor="show-hire-me" className="font-medium text-gray-900 dark:text-white">Show &quot;Hire Me&quot; Badge</label>
+              <p className="text-gray-500 dark:text-gray-400">Display a prominent &quot;Hire Me&quot; badge on your profile to indicate availability.</p>
             </div>
           </div>
         </div>

@@ -11,8 +11,8 @@ module.exports = {
       colors: {
         light: '#f5f5f5',
         dark: '#1b1b1b',
-        primary: '#b63e96',
-        primaryDark: '#58e6d9',
+        primary: '#E53935',
+        primaryDark: '#00BCD4',
       },
       fontFamily: {
         mont: ['var(--font-mont)', 'sans-serif'],

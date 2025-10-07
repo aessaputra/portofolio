@@ -6,19 +6,6 @@ import { ensurePublicR2Url } from "@/shared/lib/storage";
 
 import type { HomeContent, HomeContentRecord, HomeContentUpdateInput } from "./home.types";
 
-export const DEFAULT_HOME_CONTENT: HomeContentUpdateInput = {
-  headline: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-  subheadline:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  resumeUrl: "/example.pdf",
-  contactEmail: "mailto:aessaputra@yahoo.com",
-  profileImagePath: "/images/profile/developer-pic-1.png",
-  githubUrl: "https://github.com",
-  linkedinUrl: "https://linkedin.com",
-  xUrl: "https://x.com",
-  logoText: "Portfolio",
-  showHireMe: true,
-};
 
 function toIso(value: Date | string): string {
   if (value instanceof Date) return value.toISOString();
@@ -49,7 +36,19 @@ async function ensureHomeContentRecord(): Promise<HomeContentRecord> {
     return existing;
   }
 
-  const [created] = await db.insert(homeContent).values(DEFAULT_HOME_CONTENT).returning();
+  // Create empty record - will be filled via admin panel
+  const [created] = await db.insert(homeContent).values({
+    headline: "",
+    subheadline: "",
+    resumeUrl: "",
+    contactEmail: "",
+    profileImagePath: "",
+    githubUrl: "",
+    linkedinUrl: "",
+    xUrl: "",
+    logoText: "",
+    showHireMe: true,
+  }).returning();
   return created;
 }
 

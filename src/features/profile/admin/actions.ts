@@ -2,8 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 
-import { DEFAULT_HOME_CONTENT, updateHomeProfileImage } from "@/entities/home";
-import { DEFAULT_ABOUT_CONTENT, updateAboutProfileImage } from "@/entities/about";
+import { updateHomeProfileImage } from "@/entities/home";
+import { updateAboutProfileImage } from "@/entities/about";
 import { requireAdmin } from "@/features/auth/server/nextAuth";
 import { deleteProfileImage, uploadProfileImage } from "@/features/profile/admin/service";
 
@@ -50,7 +50,7 @@ export async function deleteProfileImageAction(formData: FormData) {
 
   const [homeImage, aboutImage] = fallbackUrl
     ? [fallbackUrl, fallbackUrl]
-    : [DEFAULT_HOME_CONTENT.profileImagePath, DEFAULT_ABOUT_CONTENT.profileImagePath];
+    : ["", ""];
 
   await Promise.all([
     updateHomeProfileImage(homeImage),

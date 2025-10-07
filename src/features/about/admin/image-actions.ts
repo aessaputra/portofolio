@@ -44,9 +44,8 @@ export async function deleteAboutProfileImageAction(formData: FormData) {
     const { deleteAboutImage } = await import("@/features/about/admin/service");
     await deleteAboutImage(imageUrl);
     
-    // Update database to remove image URL (set to fallback)
-    const { DEFAULT_ABOUT_CONTENT } = await import("@/entities/about");
-    await updateAboutProfileImage(DEFAULT_ABOUT_CONTENT.aboutProfileImagePath);
+    // Update database to remove image URL (set to empty)
+    await updateAboutProfileImage("");
     
     revalidatePath(ADMIN_ABOUT_PATH);
     revalidatePath(PUBLIC_ABOUT_PATH);

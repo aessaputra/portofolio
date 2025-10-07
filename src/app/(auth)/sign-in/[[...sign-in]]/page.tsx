@@ -7,12 +7,13 @@ import { isAllowedAdminEmail } from "@/shared/lib/adminAllowlist";
 export default async function SignInPage({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
+  const resolvedSearchParams = await searchParams;
   const redirectUrl =
-    (Array.isArray(searchParams.redirect_url)
-      ? searchParams.redirect_url[0]
-      : searchParams.redirect_url) || "/admin/dashboard";
+    (Array.isArray(resolvedSearchParams.redirect_url)
+      ? resolvedSearchParams.redirect_url[0]
+      : resolvedSearchParams.redirect_url) || "/admin/dashboard";
 
   const session = await auth();
 

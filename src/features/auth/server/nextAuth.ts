@@ -82,8 +82,8 @@ export const config = {
         token.role = token.isAdmin ? "admin" : token.role;
         
         // Store basic user info in token - profile data will be fetched in session callback
-        token.originalName = user.name;
-        token.originalImage = user.image;
+        token.originalName = user.name || undefined;
+        token.originalImage = user.image || undefined;
       }
 
       return token;

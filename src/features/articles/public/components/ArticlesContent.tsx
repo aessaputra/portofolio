@@ -7,6 +7,7 @@ import Link from "next/link";
 import AnimatedText from "@/shared/ui/animated-text";
 import { m, makeMotion, useMotionValue } from "@/shared/ui/motion";
 import type { Article } from "@/entities/articles";
+import styles from "@/styles/Articles.module.css";
 
 const MotionImage = makeMotion(Image);
 
@@ -39,6 +40,28 @@ function asStaticImageData(url: string | null, alt: string | null, fallbackAlt: 
   };
 }
 
+function formatAuthorName(name: string): string {
+  // Convert AESSAPUTRA to Aes Saputra
+  if (name === "AESSAPUTRA") {
+    return "Aes Saputra";
+  }
+  // For other names, add spaces between words if they're all caps
+  if (name === name.toUpperCase() && name.length > 1) {
+    return name
+      .toLowerCase()
+      .split('')
+      .map((char, index) => {
+        if (index === 0) return char.toUpperCase();
+        if (char === char.toUpperCase() && index > 0) return ' ' + char.toLowerCase();
+        return char;
+      })
+      .join('')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+  return name;
+}
+
 const MovingImg = ({ title, img, link, imageAlt }: MovingImgProps) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -48,8 +71,33 @@ const MovingImg = ({ title, img, link, imageAlt }: MovingImgProps) => {
   const handleMouse = (event: MouseEvent<HTMLAnchorElement>) => {
     if (!imgRef.current || !img) return;
     imgRef.current.style.display = "inline-block";
-    x.set(event.pageX);
-    y.set(-10);
+    
+    // More responsive positioning based on screen size
+    const rect = event.currentTarget.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+    
+    // Adjust positioning based on viewport width
+    const viewportWidth = window.innerWidth;
+    let offsetX = mouseX;
+    let offsetY = -10;
+    
+    if (viewportWidth < 640) {
+      // Mobile: smaller offset, position relative to element
+      offsetX = Math.min(mouseX, rect.width - 200);
+      offsetY = -5;
+    } else if (viewportWidth < 1024) {
+      // Tablet: medium offset
+      offsetX = Math.min(mouseX, rect.width - 250);
+      offsetY = -8;
+    } else {
+      // Desktop: full offset
+      offsetX = mouseX;
+      offsetY = -10;
+    }
+    
+    x.set(offsetX);
+    y.set(offsetY);
   };
 
   const handleMouseLeave = () => {
@@ -61,7 +109,7 @@ const MovingImg = ({ title, img, link, imageAlt }: MovingImgProps) => {
 
   return (
     <Link href={link} target="_blank" onMouseMove={handleMouse} onMouseLeave={handleMouseLeave}>
-      <h2 className="text-xl font-semibold capitalize hover:underline dark:text-light">{title}</h2>
+      <h2 className={styles.articleTitle}>{title}</h2>
       {img && !imgError ? (
         <MotionImage
           style={{ x, y }}
@@ -72,16 +120,16 @@ const MovingImg = ({ title, img, link, imageAlt }: MovingImgProps) => {
           alt={imageAlt ?? title}
           width={img.width}
           height={img.height}
-          className="absolute z-20 hidden h-auto w-96 rounded-lg object-cover md:hidden!"
+          className="absolute z-20 hidden h-auto w-64 rounded-lg object-cover sm:w-80 md:w-96 lg:w-[20rem] xl:w-[22rem]"
           onError={() => setImgError(true)}
         />
       ) : (
         <div
           ref={imgRef as any}
-          className="absolute z-20 hidden h-auto w-96 rounded-lg bg-gray-200 p-4 text-center text-gray-500 dark:bg-gray-700 dark:text-gray-400 md:hidden!"
+          className="absolute z-20 hidden h-auto w-64 rounded-lg bg-gray-200 p-3 text-center text-gray-500 dark:bg-gray-700 dark:text-gray-400 sm:w-80 sm:p-4 md:w-96 lg:w-[20rem] xl:w-[22rem]"
           style={{ transform: `translate(${x.get()}px, ${y.get()}px)` }}
         >
-          Image not available
+          <span className="text-sm">Image not available</span>
         </div>
       )}
     </Link>
@@ -90,17 +138,56 @@ const MovingImg = ({ title, img, link, imageAlt }: MovingImgProps) => {
 
 const ArticleItem = ({ article }: ArticleItemProps) => {
   const imageData = asStaticImageData(article.imageUrl, article.imageAlt, article.title);
+  
+  // Responsive animation based on screen size
+  const getAnimationProps = () => {
+    if (typeof window !== 'undefined') {
+      const viewportWidth = window.innerWidth;
+      if (viewportWidth < 640) {
+        // Mobile: smaller initial offset, faster animation
+        return {
+          initial: { y: 100, opacity: 0 },
+          animate: { y: 0, opacity: 1 },
+          transition: { duration: 0.4 }
+        };
+      } else if (viewportWidth < 1024) {
+        // Tablet: medium offset, standard animation
+        return {
+          initial: { y: 150, opacity: 0 },
+          animate: { y: 0, opacity: 1 },
+          transition: { duration: 0.5 }
+        };
+      } else {
+        // Desktop: full offset, smooth animation
+        return {
+          initial: { y: 200, opacity: 0 },
+          animate: { y: 0, opacity: 1 },
+          transition: { duration: 0.6 }
+        };
+      }
+    }
+    // Default fallback
+    return {
+      initial: { y: 200, opacity: 0 },
+      animate: { y: 0, opacity: 1 },
+      transition: { duration: 0.5 }
+    };
+  };
+
+  const animationProps = getAnimationProps();
+
   return (
     <m.li
-      initial={{ y: 200 }}
-      whileInView={{ y: 0, transition: { duration: 0.5, ease: "easeInOut" } }}
-      viewport={{ once: true }}
-      className="relative my-4 flex w-full items-center justify-between rounded-2xl border border-solid border-dark border-r-4 bg-light p-4 py-6 text-dark first:mt-0 transition-all duration-300 hover:shadow-lg dark:bg-dark dark:border-light dark:border-r-4 dark:text-light sm:flex-col"
+      initial={animationProps.initial}
+      whileInView={animationProps.animate}
+      transition={animationProps.transition}
+      viewport={{ once: true, margin: "-50px" }}
+      className={styles.articleItem}
     >
-      <div className="flex-1">
+      <div className={styles.articleContent}>
         <MovingImg title={article.title} img={imageData} link={article.link} imageAlt={article.imageAlt} />
       </div>
-      <span className="pl-4 font-semibold text-primary sm:self-start sm:pl-0 xs:text-sm">
+      <span className={styles.articleDate}>
         {new Date(article.date).toLocaleDateString()}
       </span>
     </m.li>
@@ -108,19 +195,15 @@ const ArticleItem = ({ article }: ArticleItemProps) => {
 };
 
 const FeaturedArticle = ({ article }: FeaturedArticleProps) => {
-  const [isHovered, setIsHovered] = useState(false);
   const [imgError, setImgError] = useState(false);
   const imageData = asStaticImageData(article.imageUrl, article.imageAlt, article.title);
 
   return (
-    <li
-      className="relative w-full rounded-2xl border border-solid border-dark border-r-4 bg-light p-4 transition-all duration-300 hover:shadow-lg dark:bg-dark dark:border-light dark:border-r-4"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+    <div
+      className={styles.featuredCard}
     >
-      <div className="absolute top-0 -right-3 -z-10 h-[103%] w-full rounded-4xl rounded-br-3xl bg-dark dark:bg-light" />
-      <Link href={article.link} target="_blank" className="inline-block w-full cursor-pointer overflow-hidden rounded-lg">
-        <div className="relative h-64 w-full">
+      <Link href={article.link} target="_blank" className={styles.featuredImageLink}>
+        <div className={styles.featuredImageContainer}>
           {imageData && !imgError ? (
             <MotionImage
               src={imageData.src}
@@ -132,67 +215,72 @@ const FeaturedArticle = ({ article }: FeaturedArticleProps) => {
               onError={() => setImgError(true)}
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-gray-200 dark:bg-gray-700">
-              <span className="text-gray-500 dark:text-gray-400">Image not available</span>
+            <div className={styles.imageErrorFallback}>
+              <span>Image not available</span>
             </div>
           )}
         </div>
       </Link>
 
-      <div className="mt-4">
-        <span className="text-sm font-semibold uppercase text-primary dark:text-primaryDark">{article.source}</span>
-        <Link href={article.link} target="_blank" className="hover:underline underline-offset-2">
-          <h2 className="my-2 w-full text-left text-3xl font-bold hover:underline dark:text-light lg:text-2xl md:text-xl">
-            {article.title}
-          </h2>
-        </Link>
-        <p className="mb-4 text-sm text-gray-600 dark:text-gray-300 line-clamp-3">{article.excerpt}</p>
+      <div className={styles.featuredContent}>
+        <div>
+          <span className={styles.featuredSource}>{formatAuthorName(article.source)}</span>
+          <Link href={article.link} target="_blank" className={styles.featuredTitleLink}>
+            <h2 className={styles.featuredTitleText}>
+              {article.title}
+            </h2>
+          </Link>
+        </div>
 
-        <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
-          <span>{new Date(article.date).toLocaleDateString()}</span>
-          {isHovered && <span>Click to read</span>}
+        <div className={styles.featuredFooter}>
         </div>
       </div>
-    </li>
+    </div>
   );
 };
 
 export default function ArticlesContent({ articles }: ArticlesContentProps) {
   if (articles.length === 0) {
     return (
-      <div className="flex h-64 items-center justify-center">
-        <p className="text-lg text-gray-600 dark:text-gray-400">No articles available at the moment.</p>
+      <div className={styles.emptyState}>
+        <p className={styles.emptyStateText}>No articles available at the moment.</p>
       </div>
     );
   }
 
-  const [featured, ...rest] = articles;
+  const [featured, secondFeatured, thirdFeatured, ...rest] = articles;
   const headingText = featured?.source ? `${featured.source} Highlights` : "Latest Articles";
 
   return (
     <>
       <AnimatedText
         text={headingText}
-        className="mb-16 lg:text-7xl! sm:mb-8 sm:text-6xl! xs:text-4xl!"
+        className="mb-12 lg:text-7xl! sm:mb-8 sm:text-6xl! xs:text-4xl!"
       />
 
-      <div className="grid grid-cols-12 gap-16 md:gap-8 sm:gap-6">
-        {featured && (
-          <div className="col-span-12 md:col-span-6">
-            <h2 className="mb-4 text-2xl font-bold dark:text-light">Featured Article</h2>
-            <FeaturedArticle article={featured} />
+      {/* Featured Articles Section - Three Card Layout */}
+      {(featured || secondFeatured || thirdFeatured) && (
+        <div className={styles.featuredSection}>
+          <h2 className={styles.featuredTitle}>Featured Articles</h2>
+          <div className={styles.featuredGrid}>
+            {featured && <FeaturedArticle article={featured} />}
+            {secondFeatured && <FeaturedArticle article={secondFeatured} />}
+            {thirdFeatured && <FeaturedArticle article={thirdFeatured} />}
           </div>
-        )}
+        </div>
+      )}
 
-        <div className="col-span-12 md:col-span-6">
-          <h2 className="mb-4 text-2xl font-bold dark:text-light">Latest Articles</h2>
-          <ul className="flex flex-col">
+      {/* Latest Articles Section */}
+      {rest.length > 0 && (
+        <div className={styles.latestSection}>
+          <h2 className={styles.latestTitle}>Latest Articles</h2>
+          <div className={styles.latestGrid}>
             {rest.map((article) => (
               <ArticleItem key={article.id} article={article} />
             ))}
-          </ul>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

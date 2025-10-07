@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     await db
       .update(homeContent)
       .set({
-        profileImagePath: "/images/profile.jpg", // Default profile image
+        profileImagePath: "", // Default profile image
         updatedAt: new Date(),
       })
       .where(eq(homeContent.id, 1));

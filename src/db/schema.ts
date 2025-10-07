@@ -22,7 +22,7 @@ export const aboutContent = pgTable("about_content", {
   aboutMeText2: text("about_me_text_2").notNull(),
   aboutMeText3: text("about_me_text_3").notNull(),
   profileImagePath: text("profile_image_path").notNull(),
-  aboutProfileImagePath: text("about_profile_image_path").notNull().default("/images/profile/developer-pic-2.jpg"),
+  aboutProfileImagePath: text("about_profile_image_path").notNull().default(""),
   satisfiedClients: text("satisfied_clients").notNull().default("8"),
   projectsCompleted: text("projects_completed").notNull().default("10"),
   yearsOfExperience: text("years_of_experience").notNull().default("4"),

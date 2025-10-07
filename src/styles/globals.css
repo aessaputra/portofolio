@@ -5,8 +5,8 @@
 @theme {
   --color-light: #f5f5f5;
   --color-dark: #1b1b1b;
-  --color-primary: #b63e96;
-  --color-primaryDark: #58e6d9;
+  --color-primary: #E53935;
+  --color-primaryDark: #00BCD4;
   --font-mont: var(--font-mont);
   --animate-spin-slow: spin 8s linear infinite;
   --shadow-dark: 0 30px 90px -15px rgba(0, 0, 0, 0.3);
