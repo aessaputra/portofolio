@@ -167,6 +167,92 @@ export default function AboutClient({
     });
   }, []);
 
+  // Add/Remove functions for skills
+  const handleAddSkill = useCallback(() => {
+    setFormState((current) => ({
+      ...current,
+      skills: [...current.skills, { name: "", x: "0", y: "0" }],
+    }));
+  }, []);
+
+  const handleRemoveSkill = useCallback((index: number) => {
+    setFormState((current) => ({
+      ...current,
+      skills: current.skills.filter((_, i) => i !== index),
+    }));
+  }, []);
+
+  // Add/Remove functions for experience
+  const handleAddExperience = useCallback(() => {
+    setFormState((current) => ({
+      ...current,
+      experiences: [...current.experiences, {
+        position: "",
+        company: "",
+        companyLink: "",
+        time: "",
+        address: "",
+        work: [""]
+      }],
+    }));
+  }, []);
+
+  const handleRemoveExperience = useCallback((index: number) => {
+    setFormState((current) => ({
+      ...current,
+      experiences: current.experiences.filter((_, i) => i !== index),
+    }));
+  }, []);
+
+  // Add/Remove functions for education
+  const handleAddEducation = useCallback(() => {
+    setFormState((current) => ({
+      ...current,
+      education: [...current.education, {
+        type: "",
+        time: "",
+        place: "",
+        info: ""
+      }],
+    }));
+  }, []);
+
+  const handleRemoveEducation = useCallback((index: number) => {
+    setFormState((current) => ({
+      ...current,
+      education: current.education.filter((_, i) => i !== index),
+    }));
+  }, []);
+
+  // Memoized function for removing experience
+  const handleRemoveExperienceInline = useCallback((index: number) => {
+    setFormState((current) => ({
+      ...current,
+      experiences: current.experiences.filter((_, i) => i !== index),
+    }));
+  }, []);
+
+  // Memoized function for adding education
+  const handleAddEducationInline = useCallback(() => {
+    setFormState((current) => ({
+      ...current,
+      education: [...current.education, {
+        type: "",
+        time: "",
+        place: "",
+        info: ""
+      }],
+    }));
+  }, []);
+
+  // Memoized function for removing education
+  const handleRemoveEducationInline = useCallback((index: number) => {
+    setFormState((current) => ({
+      ...current,
+      education: current.education.filter((_, i) => i !== index),
+    }));
+  }, []);
+
   const handleImageUpload = async (imageUrl: string) => {
     try {
       setImageUploading(true);
@@ -368,12 +454,7 @@ export default function AboutClient({
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Skills</label>
                 <button
                   type="button"
-                  onClick={useCallback(() => {
-                    setFormState((current) => ({
-                      ...current,
-                      skills: [...current.skills, { name: "", x: "0", y: "0" }],
-                    }));
-                  }, [])}
+                  onClick={handleAddSkill}
                   className="inline-flex items-center rounded-md border border-transparent bg-brand-600 px-3 py-1 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
                 >
                   Add Skill
@@ -391,12 +472,7 @@ export default function AboutClient({
                     />
                     <button
                       type="button"
-                      onClick={useCallback(() => {
-                        setFormState((current) => ({
-                          ...current,
-                          skills: current.skills.filter((_, i) => i !== index),
-                        }));
-                      }, [index])}
+                      onClick={() => handleRemoveSkill(index)}
                       className="rounded-md border border-red-300 bg-white px-2 py-1 text-sm font-medium text-red-700 shadow-sm hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:border-red-600 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-900/20"
                     >
                       Remove
@@ -413,19 +489,7 @@ export default function AboutClient({
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Work Experience</label>
                 <button
                   type="button"
-                  onClick={useCallback(() => {
-                    setFormState((current) => ({
-                      ...current,
-                      experiences: [...current.experiences, {
-                        position: "",
-                        company: "",
-                        companyLink: "",
-                        time: "",
-                        address: "",
-                        work: [""]
-                      }],
-                    }));
-                  }, [])}
+                  onClick={handleAddExperience}
                   className="inline-flex items-center rounded-md border border-transparent bg-brand-600 px-3 py-1 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
                 >
                   Add Experience
@@ -438,12 +502,7 @@ export default function AboutClient({
                       <h3 className="text-sm font-medium text-gray-900 dark:text-white">Experience #{index + 1}</h3>
                       <button
                         type="button"
-                        onClick={useCallback(() => {
-                          setFormState((current) => ({
-                            ...current,
-                            experiences: current.experiences.filter((_, i) => i !== index),
-                          }));
-                        }, [index])}
+                        onClick={() => handleRemoveExperienceInline(index)}
                         className="rounded-md border border-red-300 bg-white px-2 py-1 text-sm font-medium text-red-700 shadow-sm hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:border-red-600 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-900/20"
                       >
                         Remove
@@ -512,17 +571,7 @@ export default function AboutClient({
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Education</label>
                 <button
                   type="button"
-                  onClick={useCallback(() => {
-                    setFormState((current) => ({
-                      ...current,
-                      education: [...current.education, {
-                        type: "",
-                        time: "",
-                        place: "",
-                        info: ""
-                      }],
-                    }));
-                  }, [])}
+                  onClick={handleAddEducationInline}
                   className="inline-flex items-center rounded-md border border-transparent bg-brand-600 px-3 py-1 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
                 >
                   Add Education
@@ -535,12 +584,7 @@ export default function AboutClient({
                       <h3 className="text-sm font-medium text-gray-900 dark:text-white">Education #{index + 1}</h3>
                       <button
                         type="button"
-                        onClick={useCallback(() => {
-                          setFormState((current) => ({
-                            ...current,
-                            education: current.education.filter((_, i) => i !== index),
-                          }));
-                        }, [index])}
+                        onClick={() => handleRemoveEducationInline(index)}
                         className="rounded-md border border-red-300 bg-white px-2 py-1 text-sm font-medium text-red-700 shadow-sm hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:border-red-600 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-900/20"
                       >
                         Remove
