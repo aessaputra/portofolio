@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition, useCallback } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -82,21 +82,21 @@ export default function AboutClient({
     }
   };
 
-  const handleInputChange = (field: keyof AboutFormState, value: string) => {
+  const handleInputChange = useCallback((field: keyof AboutFormState, value: string) => {
     setFormState((current) => ({
       ...current,
       [field]: value,
     }));
-  };
+  }, []);
 
-  const handleCounterChange = (field: "satisfiedClients" | "projectsCompleted" | "yearsOfExperience", value: string) => {
+  const handleCounterChange = useCallback((field: "satisfiedClients" | "projectsCompleted" | "yearsOfExperience", value: string) => {
     setFormState((current) => ({
       ...current,
       [field]: value,
     }));
-  };
+  }, []);
 
-  const handleSkillsChange = (index: number, skillField: string, value: string) => {
+  const handleSkillsChange = useCallback((index: number, skillField: string, value: string) => {
     setFormState((current) => {
       const updatedSkills = current.skills.map((skill, i) =>
         i === index
@@ -111,9 +111,9 @@ export default function AboutClient({
         skills: updatedSkills,
       };
     });
-  };
+  }, []);
 
-  const handleExperienceChange = (index: number, expField: string, value: string) => {
+  const handleExperienceChange = useCallback((index: number, expField: string, value: string) => {
     setFormState((current) => {
       const updatedExperiences = current.experiences.map((experience, i) =>
         i === index
@@ -128,9 +128,9 @@ export default function AboutClient({
         experiences: updatedExperiences,
       };
     });
-  };
+  }, []);
 
-  const handleExperienceWorkChange = (expIndex: number, workIndex: number, value: string) => {
+  const handleExperienceWorkChange = useCallback((expIndex: number, workIndex: number, value: string) => {
     setFormState((current) => {
       const updatedExperiences = current.experiences.map((experience, i) => {
         if (i !== expIndex) return experience;
@@ -148,9 +148,9 @@ export default function AboutClient({
         experiences: updatedExperiences,
       };
     });
-  };
+  }, []);
 
-  const handleEducationChange = (index: number, eduField: string, value: string) => {
+  const handleEducationChange = useCallback((index: number, eduField: string, value: string) => {
     setFormState((current) => {
       const updatedEducation = current.education.map((education, i) =>
         i === index
@@ -165,7 +165,7 @@ export default function AboutClient({
         education: updatedEducation,
       };
     });
-  };
+  }, []);
 
   const handleImageUpload = async (imageUrl: string) => {
     try {
@@ -368,12 +368,12 @@ export default function AboutClient({
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Skills</label>
                 <button
                   type="button"
-                  onClick={() => {
+                  onClick={useCallback(() => {
                     setFormState((current) => ({
                       ...current,
                       skills: [...current.skills, { name: "", x: "0", y: "0" }],
                     }));
-                  }}
+                  }, [])}
                   className="inline-flex items-center rounded-md border border-transparent bg-brand-600 px-3 py-1 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
                 >
                   Add Skill
@@ -391,12 +391,12 @@ export default function AboutClient({
                     />
                     <button
                       type="button"
-                      onClick={() => {
+                      onClick={useCallback(() => {
                         setFormState((current) => ({
                           ...current,
                           skills: current.skills.filter((_, i) => i !== index),
                         }));
-                      }}
+                      }, [index])}
                       className="rounded-md border border-red-300 bg-white px-2 py-1 text-sm font-medium text-red-700 shadow-sm hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:border-red-600 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-900/20"
                     >
                       Remove
@@ -413,7 +413,7 @@ export default function AboutClient({
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Work Experience</label>
                 <button
                   type="button"
-                  onClick={() => {
+                  onClick={useCallback(() => {
                     setFormState((current) => ({
                       ...current,
                       experiences: [...current.experiences, {
@@ -425,7 +425,7 @@ export default function AboutClient({
                         work: [""]
                       }],
                     }));
-                  }}
+                  }, [])}
                   className="inline-flex items-center rounded-md border border-transparent bg-brand-600 px-3 py-1 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
                 >
                   Add Experience
@@ -438,12 +438,12 @@ export default function AboutClient({
                       <h3 className="text-sm font-medium text-gray-900 dark:text-white">Experience #{index + 1}</h3>
                       <button
                         type="button"
-                        onClick={() => {
+                        onClick={useCallback(() => {
                           setFormState((current) => ({
                             ...current,
                             experiences: current.experiences.filter((_, i) => i !== index),
                           }));
-                        }}
+                        }, [index])}
                         className="rounded-md border border-red-300 bg-white px-2 py-1 text-sm font-medium text-red-700 shadow-sm hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:border-red-600 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-900/20"
                       >
                         Remove
@@ -512,7 +512,7 @@ export default function AboutClient({
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Education</label>
                 <button
                   type="button"
-                  onClick={() => {
+                  onClick={useCallback(() => {
                     setFormState((current) => ({
                       ...current,
                       education: [...current.education, {
@@ -522,7 +522,7 @@ export default function AboutClient({
                         info: ""
                       }],
                     }));
-                  }}
+                  }, [])}
                   className="inline-flex items-center rounded-md border border-transparent bg-brand-600 px-3 py-1 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
                 >
                   Add Education
@@ -535,12 +535,12 @@ export default function AboutClient({
                       <h3 className="text-sm font-medium text-gray-900 dark:text-white">Education #{index + 1}</h3>
                       <button
                         type="button"
-                        onClick={() => {
+                        onClick={useCallback(() => {
                           setFormState((current) => ({
                             ...current,
                             education: current.education.filter((_, i) => i !== index),
                           }));
-                        }}
+                        }, [index])}
                         className="rounded-md border border-red-300 bg-white px-2 py-1 text-sm font-medium text-red-700 shadow-sm hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:border-red-600 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-900/20"
                       >
                         Remove
