@@ -41,22 +41,25 @@ export default function AboutClient({
   const router = useRouter();
   const timeoutRef = useRef<number | null>(null);
   const isInitialMount = useRef(true);
+  const previousInitialState = useRef(initialState);
 
   useEffect(() => {
     // Only update the form state on initial mount or when initialState actually changes
     if (isInitialMount.current) {
       isInitialMount.current = false;
       setFormState(initialState);
+      previousInitialState.current = initialState;
     } else {
       // Only update if initialState has actually changed (not due to user input)
-      const currentStateString = JSON.stringify(formState);
-      const initialStateString = JSON.stringify(initialState);
+      const previousStateString = JSON.stringify(previousInitialState.current);
+      const currentStateString = JSON.stringify(initialState);
       
-      if (currentStateString !== initialStateString) {
+      if (previousStateString !== currentStateString) {
         setFormState(initialState);
+        previousInitialState.current = initialState;
       }
     }
-  }, [initialState, formState]); // Include formState in dependencies as required by ESLint
+  }, [initialState]); // Only depend on initialState
 
   useEffect(() => {
     return () => {
