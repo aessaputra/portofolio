@@ -12,6 +12,7 @@ import {
   getPublicUrl as enhancedGetPublicUrl,
   extractR2ObjectKey as enhancedExtractObjectKeyFromUrl,
   resolveR2UrlWithFallback,
+  r2Client,
   type UploadResult,
   type ImageType,
   type PutObjectOptions,

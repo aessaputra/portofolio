@@ -14,7 +14,7 @@ import {
   getAllPossibleUrls,
   extractR2ObjectKey,
 } from "@/shared/lib/r2UrlManager";
-import { r2Client, r2Config, validateR2Config } from "@/shared/lib/r2Client";
+import { r2Client as r2ClientInstance, r2Config, validateR2Config } from "@/shared/lib/r2Client";
 
 // Validate configuration at module load
 validateR2Config();
@@ -154,7 +154,7 @@ export async function uploadImageToR2(
       ContentDisposition: options.contentDisposition ?? "inline",
     });
 
-    const result = await r2Client.send(command);
+    const result = await r2ClientInstance.send(command);
     
     if (result.$metadata.httpStatusCode && result.$metadata.httpStatusCode >= 400) {
       return { 
@@ -206,9 +206,9 @@ export async function objectExistsInR2(objectKey: string): Promise<boolean> {
   }
 
   try {
-    await r2Client.send(new HeadObjectCommand({ 
-      Bucket: r2Config.bucket, 
-      Key: objectKey 
+    await r2ClientInstance.send(new HeadObjectCommand({
+      Bucket: r2Config.bucket,
+      Key: objectKey
     }));
     return true;
   } catch (error: any) {
@@ -228,9 +228,9 @@ export async function deleteImageFromR2(objectKey: string): Promise<void> {
   }
 
   try {
-    await r2Client.send(new DeleteObjectCommand({ 
-      Bucket: r2Config.bucket, 
-      Key: objectKey 
+    await r2ClientInstance.send(new DeleteObjectCommand({
+      Bucket: r2Config.bucket,
+      Key: objectKey
     }));
   } catch (error: any) {
     // Handle specific R2 errors
@@ -257,9 +257,9 @@ export async function copyObjectInR2(
   options: PutObjectOptions = {}
 ): Promise<UploadResult> {
   try {
-    const response = await r2Client.send(new GetObjectCommand({ 
-      Bucket: r2Config.bucket, 
-      Key: sourceObjectKey 
+    const response = await r2ClientInstance.send(new GetObjectCommand({
+      Bucket: r2Config.bucket,
+      Key: sourceObjectKey
     }));
     
     const bytes = await response.Body?.transformToByteArray();
@@ -379,4 +379,4 @@ export const ensurePublicR2Url = buildR2PublicUrlFromManager;
 export const getPublicUrl = (objectKey: string) => buildR2PublicUrlFromManager(objectKey, { fallbackToBase: true });
 export const extractObjectKeyFromUrl = extractR2ObjectKey;
 export const buildR2PublicUrl = buildR2PublicUrlFromManager;
-export { extractR2ObjectKey };
+export { extractR2ObjectKey, r2ClientInstance as r2Client };
