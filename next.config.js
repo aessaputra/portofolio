@@ -8,6 +8,14 @@ const remotePatterns = [
     pathname: '/**',
     search: '',
   },
+  {
+    protocol: 'https',
+    hostname: 'cdn.aes.my.id',
+    port: '',
+    pathname: '/**',
+    search: '',
+  },
+  
 ];
 
 const { CLOUDFLARE_R2_PUBLIC_URL } = process.env;
