@@ -50,7 +50,7 @@ export default function AboutClient({
     if (currentStateString !== initialStateString) {
       setFormState(initialState);
     }
-  }, [initialState, formState]);
+  }, [initialState]); // Remove formState from dependency array to prevent reset on user input
 
   useEffect(() => {
     return () => {
