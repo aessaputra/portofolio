@@ -47,13 +47,13 @@ async function runVercelMigration() {
     const migrationFiles = [
       '0000_abnormal_sasquatch.sql',
       '0001_steep_red_wolf.sql', 
-      '0002_extend_about_content_schema.sql',
-      '0003_create_projects_table.sql',
-      '0004_add_editable_text_to_projects.sql',
-      '0005_create_articles_table.sql',
-      '0006_create_certifications_table.sql',
+      '0002_furry_preak.sql',
+      '0003_strange_skreet.sql',
+      '0004_free_menace.sql',
+      '0005_regular_senator_kelly.sql',
       '0007_add_about_page_image_column.sql',
-      '0008_rename_about_me_text_fields.sql'
+      '0008_rename_about_me_text_fields.sql',
+      '0009_remove_skills_x_y_positions.sql'
     ];
 
     for (const file of migrationFiles) {
