@@ -5,48 +5,48 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useSidebar } from "@/features/site/admin/ui/context/SidebarContext";
-import GridIcon from "@/features/site/admin/ui/icons/grid.svg";
-import PageIcon from "@/features/site/admin/ui/icons/page.svg";
-import InfoIcon from "@/features/site/admin/ui/icons/info.svg";
-import ProjectsIcon from "@/features/site/admin/ui/icons/box.svg";
-import ArticlesIcon from "@/features/site/admin/ui/icons/docs.svg";
-import CertificationsIcon from "@/features/site/admin/ui/icons/check-circle.svg";
+import { GridIcon } from "@/features/site/admin/ui/icons";
+import { PageIcon } from "@/features/site/admin/ui/icons";
+import { InfoIcon } from "@/features/site/admin/ui/icons";
+import { BoxIcon } from "@/features/site/admin/ui/icons";
+import { DocsIcon } from "@/features/site/admin/ui/icons";
+import { CheckCircleIcon } from "@/features/site/admin/ui/icons";
 
 type NavItem = {
   name: string;
-  icon: string;
+  icon: React.ComponentType<any>;
   path?: string;
   subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
 };
 
 const navItems: NavItem[] = [
   {
-    icon: GridIcon.src,
+    icon: GridIcon,
     name: "Dashboard",
     path: "/admin/dashboard",
   },
   {
-    icon: PageIcon.src,
+    icon: PageIcon,
     name: "Home",
     path: "/admin/home",
   },
   {
-    icon: InfoIcon.src,
+    icon: InfoIcon,
     name: "About",
     path: "/admin/about",
   },
   {
-    icon: ProjectsIcon.src,
+    icon: BoxIcon,
     name: "Projects",
     path: "/admin/projects",
   },
   {
-    icon: ArticlesIcon.src,
+    icon: DocsIcon,
     name: "Articles",
     path: "/admin/articles",
   },
   {
-    icon: CertificationsIcon.src,
+    icon: CheckCircleIcon,
     name: "Certifications",
     path: "/admin/certifications",
   },
@@ -88,12 +88,10 @@ const AppSidebar: React.FC = () => {
                     : "menu-item-icon-inactive"
                 }`}
               >
-                <Image 
-                  src={nav.icon} 
-                  alt={nav.name} 
-                  width={20} 
-                  height={20} 
-                  className="w-5 h-5 transition-all duration-200" 
+                <nav.icon
+                  width={20}
+                  height={20}
+                  className="w-5 h-5 transition-all duration-200"
                 />
               </span>
               {(isExpanded || isHovered || isMobileOpen) && (
@@ -115,12 +113,10 @@ const AppSidebar: React.FC = () => {
                       : "menu-item-icon-inactive"
                   }`}
                 >
-                  <Image 
-                    src={nav.icon} 
-                    alt={nav.name} 
-                    width={20} 
-                    height={20} 
-                    className="w-5 h-5 transition-all duration-200" 
+                  <nav.icon
+                    width={20}
+                    height={20}
+                    className="w-5 h-5 transition-all duration-200"
                   />
                 </span>
                 {(isExpanded || isHovered || isMobileOpen) && (
