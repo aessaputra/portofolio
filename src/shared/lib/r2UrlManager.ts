@@ -136,7 +136,10 @@ export function buildR2PublicUrl(
 
   if (useCustomDomain && !config.isR2DevDomain) {
     // Use custom domain for production
-    if (config.publicUrlIncludesBucket) {
+    // For cdn.aes.my.id, the bucket name is not included in the path
+    if (config.normalizedPublicUrl === 'https://cdn.aes.my.id') {
+      return `${config.normalizedPublicUrl}/${keyPart}`;
+    } else if (config.publicUrlIncludesBucket) {
       return `${config.normalizedPublicUrl}/${keyPart}`;
     } else {
       return `${config.normalizedPublicUrl}/${config.normalizedBucket}/${keyPart}`;
@@ -172,7 +175,10 @@ export function buildCustomDomainUrl(objectKey: string): string {
   
   if (!keyPart) return "";
   
-  if (config.publicUrlIncludesBucket) {
+  // For cdn.aes.my.id, the bucket name is not included in the path
+  if (config.normalizedPublicUrl === 'https://cdn.aes.my.id') {
+    return `${config.normalizedPublicUrl}/${keyPart}`;
+  } else if (config.publicUrlIncludesBucket) {
     return `${config.normalizedPublicUrl}/${keyPart}`;
   } else {
     return `${config.normalizedPublicUrl}/${config.normalizedBucket}/${keyPart}`;
