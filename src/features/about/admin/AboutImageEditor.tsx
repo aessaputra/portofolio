@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useTransition } from "react";
 import NextImage from "next/image";
 import { Button } from "@/shared/ui/button";
-import { uploadAboutProfileImageAction, deleteAboutProfileImageAction } from "@/features/about/admin/image-actions";
+import { uploadAboutProfileImageAction, deleteAboutProfileImageAction } from "@/features/profile/admin/actions";
 import { resolveR2PublicUrl } from "@/shared/lib/r2PublicUrl";
 
 // Constants

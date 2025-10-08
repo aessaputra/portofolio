@@ -12,7 +12,7 @@ import {
   type AboutFormState,
 } from "@/features/about/admin/types";
 import { updateAboutContentAction } from "@/features/about/admin/actions";
-import { deleteAboutProfileImageAction } from "@/features/about/admin/image-actions";
+import { deleteAboutProfileImageAction } from "@/features/profile/admin/actions";
 
 const NOTIFICATION_TIMEOUT = 5000;
 
@@ -364,7 +364,21 @@ export default function AboutClient({
           <div className="space-y-6">
             {/* Skills - Simplified as tags */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Skills</label>
+              <div className="flex justify-between items-center mb-3">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Skills</label>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFormState((current) => ({
+                      ...current,
+                      skills: [...current.skills, { name: "", x: "0", y: "0" }],
+                    }));
+                  }}
+                  className="inline-flex items-center rounded-md border border-transparent bg-brand-600 px-3 py-1 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
+                >
+                  Add Skill
+                </button>
+              </div>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {formState.skills.map((skill, index) => (
                   <div key={`${skill.name}-${index}`} className="flex items-center gap-2">
@@ -375,6 +389,18 @@ export default function AboutClient({
                       className="flex-1 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400"
                       placeholder={`Skill ${index + 1}`}
                     />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFormState((current) => ({
+                          ...current,
+                          skills: current.skills.filter((_, i) => i !== index),
+                        }));
+                      }}
+                      className="rounded-md border border-red-300 bg-white px-2 py-1 text-sm font-medium text-red-700 shadow-sm hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:border-red-600 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-900/20"
+                    >
+                      Remove
+                    </button>
                   </div>
                 ))}
               </div>
@@ -383,10 +409,46 @@ export default function AboutClient({
 
             {/* Experience - Simplified */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Work Experience</label>
+              <div className="flex justify-between items-center mb-3">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Work Experience</label>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFormState((current) => ({
+                      ...current,
+                      experiences: [...current.experiences, {
+                        position: "",
+                        company: "",
+                        companyLink: "",
+                        time: "",
+                        address: "",
+                        work: [""]
+                      }],
+                    }));
+                  }}
+                  className="inline-flex items-center rounded-md border border-transparent bg-brand-600 px-3 py-1 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
+                >
+                  Add Experience
+                </button>
+              </div>
               <div className="space-y-4">
                 {formState.experiences.map((experience, index) => (
                   <div key={`${experience.company}-${index}`} className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="text-sm font-medium text-gray-900 dark:text-white">Experience #{index + 1}</h3>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFormState((current) => ({
+                            ...current,
+                            experiences: current.experiences.filter((_, i) => i !== index),
+                          }));
+                        }}
+                        className="rounded-md border border-red-300 bg-white px-2 py-1 text-sm font-medium text-red-700 shadow-sm hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:border-red-600 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-900/20"
+                      >
+                        Remove
+                      </button>
+                    </div>
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       <div>
                         <label className="block text-xs font-medium text-gray-500 dark:text-gray-400">Position</label>
@@ -446,10 +508,44 @@ export default function AboutClient({
 
             {/* Education - Simplified */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Education</label>
+              <div className="flex justify-between items-center mb-3">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Education</label>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFormState((current) => ({
+                      ...current,
+                      education: [...current.education, {
+                        type: "",
+                        time: "",
+                        place: "",
+                        info: ""
+                      }],
+                    }));
+                  }}
+                  className="inline-flex items-center rounded-md border border-transparent bg-brand-600 px-3 py-1 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
+                >
+                  Add Education
+                </button>
+              </div>
               <div className="space-y-4">
                 {formState.education.map((education, index) => (
                   <div key={`${education.place}-${index}`} className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="text-sm font-medium text-gray-900 dark:text-white">Education #{index + 1}</h3>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFormState((current) => ({
+                            ...current,
+                            education: current.education.filter((_, i) => i !== index),
+                          }));
+                        }}
+                        className="rounded-md border border-red-300 bg-white px-2 py-1 text-sm font-medium text-red-700 shadow-sm hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:border-red-600 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-900/20"
+                      >
+                        Remove
+                      </button>
+                    </div>
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       <div>
                         <label className="block text-xs font-medium text-gray-500 dark:text-gray-400">Degree</label>
@@ -479,6 +575,16 @@ export default function AboutClient({
                           onChange={(event) => handleEducationChange(index, "place", event.target.value)}
                           className="mt-1 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400"
                           placeholder="e.g., University Name"
+                        />
+                      </div>
+                      <div className="sm:col-span-2">
+                        <label className="block text-xs font-medium text-gray-500 dark:text-gray-400">Additional Information</label>
+                        <input
+                          type="text"
+                          value={education.info}
+                          onChange={(event) => handleEducationChange(index, "info", event.target.value)}
+                          className="mt-1 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400"
+                          placeholder="e.g., Graduated with honors"
                         />
                       </div>
                     </div>
