@@ -1,12 +1,5 @@
 /** @type {import('next').NextConfig} */
 const remotePatterns = [
-  {
-    protocol: 'https',
-    hostname: 'pub-849bf017d6de432ab0c1b15fd92009b0.r2.dev',
-    port: '',
-    pathname: '/**',
-    search: '',
-  },
   // Allow R2.dev domains (bucket-name.r2.dev)
   {
     protocol: 'https',
@@ -51,6 +44,14 @@ const nextConfig = {
     staleTimes: {
       dynamic: 30,
       static: 180,
+    },
+  },
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
     },
   },
   images: {

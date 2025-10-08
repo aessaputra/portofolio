@@ -20,6 +20,7 @@ function validateAdminAccessConfiguration(): void {
     throw new Error("ADMIN_EMAIL_ALLOWLIST must include at least one administrator email.");
   }
 
+  // Only log in development mode
   if (process.env.NODE_ENV !== "production") {
     console.log(
       `[Environment Validation] Loaded ${allowlist.length} admin email(s).`
@@ -64,7 +65,7 @@ function validateR2Credentials(): void {
     }
   }
 
-  // Log the loaded R2 configuration for verification (server-side only)
+  // Only log R2 configuration in development mode
   if (process.env.NODE_ENV !== "production") {
     console.log("[Environment Validation] R2 credentials loaded successfully.");
     console.log(`[Environment Validation] R2 Bucket: ${process.env.CLOUDFLARE_R2_BUCKET_NAME}`);
@@ -79,7 +80,9 @@ export function validateEnvironment(): void {
     validateNextAuthSecrets();
     validateEmailProviderConfiguration();
     validateR2Credentials();
-    console.log("[Environment Validation] All environment variables are valid.");
+    if (process.env.NODE_ENV !== "production") {
+      console.log("[Environment Validation] All environment variables are valid.");
+    }
   } catch (error) {
     console.error("[Environment Validation Error]", error);
     throw error;

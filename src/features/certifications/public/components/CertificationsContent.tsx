@@ -38,10 +38,8 @@ function CertificationCard({ certification }: CertificationCardProps) {
           featured ? "md:col-span-2" : ""
         }`}
       >
-        {featured && (
-          <div className="absolute top-0 -right-3 -z-10 h-[103%] w-full rounded-[2.5rem] rounded-br-3xl bg-light dark:bg-dark xs:-right-2 xs:h-[102%] xs:w-full xs:rounded-3xl" />
-        )}
-
+        <div className="absolute top-0 -right-3 -z-10 h-[103%] w-full rounded-[2.5rem] rounded-br-3xl bg-dark dark:bg-light xs:-right-2 xs:h-[102%] xs:w-full xs:rounded-3xl" />
+        
         <div className={styles.cardContent}>
           <div className={styles.imageContainer}>
             <MotionImage
@@ -57,12 +55,13 @@ function CertificationCard({ certification }: CertificationCardProps) {
           </div>
 
           <div className={styles.contentContainer}>
-            <div>
+            <div className={styles.issuerContainer}>
               <span className={styles.issuerText}>
                 {issuer}
               </span>
               {featured && (
                 <span className={styles.featuredBadge}>
+                  Featured
                 </span>
               )}
             </div>
@@ -72,7 +71,23 @@ function CertificationCard({ certification }: CertificationCardProps) {
             >
               {title}
             </h2>
-
+            
+            {description && (
+              <p className={styles.descriptionText}>
+                {description.length > 100 ? `${description.substring(0, 100)}...` : description}
+              </p>
+            )}
+            
+            {issueDate && (
+              <div className={styles.dateText}>
+                <span className={styles.dateItem}>Issued: {new Date(issueDate).toLocaleDateString()}</span>
+                {expiryDate && (
+                  <span className={styles.dateItem}>Expires: {new Date(expiryDate).toLocaleDateString()}</span>
+                )}
+              </div>
+            )}
+            
+            {/* Tags removed from featured certifications */}
           </div>
         </div>
       </article>

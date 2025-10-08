@@ -4,29 +4,29 @@
 .certificationsContainer {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 /* Desktop Layout - Grid */
 @media (min-width: 640px) {
   .certificationsContainer {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    align-items: start;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    align-items: stretch;
   }
 }
 
 @media (min-width: 1024px) {
   .certificationsContainer {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.25rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
   }
 }
 
 @media (min-width: 1280px) {
   .certificationsContainer {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
   }
 }
@@ -46,6 +46,7 @@
   border-radius: 1.5rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
+
 
 .featuredCardsContainer::before {
   content: '';
@@ -122,11 +123,15 @@
   width: 100%;
   display: flex;
   justify-content: center;
+  height: 100%;
 }
 
 /* Regular Card */
 .regularCard {
   grid-column: span 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Empty State */
@@ -149,6 +154,7 @@
 .certificationCard {
   position: relative;
   width: 100%;
+  height: 30rem;
   max-width: 24rem;
   border-radius: 1rem;
   border: 2px solid;
@@ -160,6 +166,11 @@
   flex-direction: column;
   overflow: hidden;
   cursor: pointer;
+}
+
+/* Regular Card Specific Styles */
+.regularCard .certificationCard {
+  /* Reverted to original layout */
 }
 
 .certificationCard::after {
@@ -178,33 +189,18 @@
   background: #00BCD4;
 }
 
-.certificationCard:hover {
-  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.12),
-              0 4px 12px -2px rgba(0, 0, 0, 0.08);
-  transform: translateY(-3px);
-  border-color: #E53935;
-}
-
 .certificationCard:hover::after {
   opacity: 1;
 }
 
 .dark .certificationCard {
-  background: #1f2937;
+  background: #374151;
   border-color: #f3f4f6;
   color: #f5f5f5;
 }
 
 .light .certificationCard {
   border-color: #1f2937;
-}
-
-.certificationCard:hover {
-  border-color: #E53935;
-}
-
-.dark .certificationCard:hover {
-  border-color: #00BCD4;
 }
 
 /* Card Content Layout - Optimized for Minimal Content */
@@ -232,13 +228,18 @@
 /* Image Container - Consistent with Card Border */
 .imageContainer {
   width: 100%;
-  aspect-ratio: 16/9;
+  aspect-ratio: 3/2;
   cursor: pointer;
   overflow: hidden;
   border-radius: 1rem 1rem 0 0;
   flex-shrink: 0;
   position: relative;
   background: #f8f9fa;
+}
+
+/* Regular Card Specific Image Container */
+.regularCard .imageContainer {
+  /* Reverted to original layout */
 }
 
 .imageContainer::before {
@@ -296,7 +297,12 @@
   flex: 1;
   min-height: 0;
   padding: 1.25rem;
-  gap: 0.75rem;
+  gap: 0.5rem;
+}
+
+/* Regular Card Specific Content Container */
+.regularCard .contentContainer {
+  /* Reverted to original layout */
 }
 
 /* Text Styles - Template Based Design */
@@ -305,16 +311,36 @@
   font-weight: 500;
   color: #6b7280;
   margin-bottom: 0;
-  display: block;
+  display: inline-block;
   line-height: 1.4;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  background-color: #f9fafb;
 }
 
 .dark .issuerText {
   color: #9ca3af;
+  border-color: #4b5563;
+  background-color: #374151;
+}
+
+/* Regular Card Specific Issuer Text */
+.regularCard .issuerText {
+  /* Reverted to original layout */
+}
+
+/* Issuer Container - Flex layout for issuer and badge */
+.issuerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 0.25rem;
 }
 
 .featuredBadge {
-  margin-left: 0.375rem;
+  margin-left: 0.5rem;
   border-radius: 0.5rem;
   background: #E53935;
   padding: 0.25rem 0.5rem;
@@ -328,6 +354,7 @@
   box-shadow: 0 2px 8px -2px rgba(182, 62, 150, 0.4);
   position: relative;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .featuredBadge::before {
@@ -352,15 +379,19 @@
 }
 
 .titleText {
-  margin: 0 0 0.5rem 0;
+  margin: 0;
   width: 100%;
   text-align: left;
   font-weight: 700;
   text-transform: capitalize;
   color: #111827;
-  line-height: 1.25;
-  font-size: 1.5rem;
-  display: block;
+  line-height: 1.3;
+  font-size: 1.1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
   letter-spacing: -0.025em;
 }
 
@@ -371,15 +402,24 @@
 /* Featured Title Sizes */
 .featuredTitle {
   font-size: 1rem;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+/* Regular Card Specific Title */
+.regularCard .titleText {
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
 }
 
 /* Featured Card - Consistent with Other Pages */
 .featuredCard .certificationCard {
-  max-width: 28rem;
+  max-width: 32rem;
+  min-height: 36rem;
   border-radius: 1.5rem;
   border: 2px solid;
   border-right-width: 4px;
-  background: #ffffff !important;
+  background: #ffffff;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   position: relative;
@@ -399,7 +439,6 @@
   transition: transform 0.4s ease;
 }
 
-
 .featuredCard .certificationCard:hover::before {
   transform: scaleX(1);
 }
@@ -409,26 +448,13 @@
 }
 
 .dark .featuredCard .certificationCard {
-  background: #1f2937;
+  background: #374151 !important;
   border-color: #f3f4f6;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
 .light .featuredCard .certificationCard {
   border-color: #1f2937;
-}
-
-.featuredCard .certificationCard:hover {
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-  transform: translateY(-4px);
-  border-color: #E53935;
-  background: #ffffff !important;
-}
-
-.dark .featuredCard .certificationCard:hover {
-  background: #1f2937 !important;
-  border-color: #00BCD4;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
 /* Featured Card - Override regular card styling */
@@ -457,17 +483,26 @@
 }
 
 .featuredCard .titleText {
-  font-size: 0.875rem;
+  font-size: 1rem;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
 }
 
 .featuredCard .dateText {
   font-size: 0.7rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.featuredCard .dateItem {
+  display: inline;
 }
 
 .featuredCard .descriptionText {
-  font-size: 0.7rem;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
+  font-size: 0.75rem;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
 }
 
 .featuredCard .tagItem {
@@ -482,7 +517,9 @@
   }
   
   .featuredCard .titleText {
-    font-size: 0.95rem;
+    font-size: 1.3rem;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
   }
   
   .featuredCard .dateText {
@@ -490,7 +527,7 @@
   }
   
   .featuredCard .descriptionText {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     -webkit-line-clamp: 3;
     line-clamp: 3;
   }
@@ -507,7 +544,9 @@
   }
   
   .featuredCard .titleText {
-    font-size: 1rem;
+    font-size: 1.4rem;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
   }
   
   .featuredCard .dateText {
@@ -515,7 +554,7 @@
   }
   
   .featuredCard .descriptionText {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     -webkit-line-clamp: 4;
     line-clamp: 4;
   }
@@ -528,7 +567,7 @@
 
 /* Featured Card - Consistent Image and Content Styling */
 .featuredCard .imageContainer {
-  aspect-ratio: 16/9;
+  aspect-ratio: 3/2;
   border-radius: 1.5rem 1.5rem 0 0;
 }
 
@@ -538,7 +577,7 @@
 
 .featuredCard .contentContainer {
   padding: 1.25rem;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 /* Featured cards use same styling as regular cards, just scaled up */
@@ -550,11 +589,13 @@
   }
   
   .titleText {
-    font-size: 0.9rem;
+    font-size: 1.1rem;
+    -webkit-line-clamp: 5;
+    line-clamp: 5;
   }
   
   .featuredTitle {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
   }
 }
 
@@ -564,19 +605,23 @@
   }
   
   .titleText {
-    font-size: 0.95rem;
+    font-size: 1.15rem;
+    -webkit-line-clamp: 5;
+    line-clamp: 5;
   }
   
   .featuredTitle {
-    font-size: 1.15rem;
+    font-size: 1.25rem;
   }
 }
 
 .dateText {
-  margin-bottom: 0.5rem;
-  font-size: 0.7rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.65rem;
   color: #6b7280;
-  display: block;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
 }
 
 .dark .dateText {
@@ -585,29 +630,44 @@
 
 .dateItem {
   font-weight: 500;
-  display: block;
+  display: inline;
+}
+
+/* Regular Card Specific Date Text */
+.regularCard .dateText {
+  /* Reverted to original layout */
+}
+
+.regularCard .dateItem {
+  /* Reverted to original layout */
 }
 
 .descriptionText {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
   font-size: 0.7rem;
   color: #6b7280;
-  line-height: 1.3;
+  line-height: 1.2;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  flex: 1;
+  flex: none;
 }
 
 .dark .descriptionText {
   color: #9ca3af;
 }
 
+/* Regular Card Specific Description Text */
+.regularCard .descriptionText {
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
 /* Tags Container - Enhanced Modern Design */
 .tagsContainer {
-  margin-bottom: 0.75rem;
+  margin-top: auto;
   display: flex;
   flex-wrap: wrap;
   gap: 0.375rem;
@@ -615,17 +675,20 @@
 
 .tagItem {
   border-radius: 0.5rem;
-  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  background: #f3f4f6;
   border: 1px solid rgba(30, 64, 175, 0.1);
   padding: 0.25rem 0.5rem;
   font-size: 0.65rem;
   font-weight: 600;
-  color: #1e40af;
+  color: #374151;
   display: inline-flex;
   align-items: center;
   transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
+  white-space: nowrap;
+  max-width: 100px;
+  text-overflow: ellipsis;
 }
 
 .tagItem::before {
@@ -641,7 +704,6 @@
 }
 
 .tagItem:hover {
-  background: linear-gradient(135deg, #bfdbfe, #93c5fd);
   transform: translateY(-1px);
   box-shadow: 0 2px 4px -1px rgba(30, 64, 175, 0.2);
 }
@@ -656,7 +718,7 @@
 
 .dark .tagItem {
   background-color: rgba(59, 130, 246, 0.3);
-  color: #93c5fd;
+  color: #9ca3af;
 }
 
 /* Responsive Date and Description */
@@ -666,7 +728,7 @@
   }
   
   .descriptionText {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
   }
   
   .tagItem {
@@ -680,7 +742,7 @@
   }
   
   .descriptionText {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
   }
   
   .tagItem {

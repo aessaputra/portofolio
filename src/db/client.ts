@@ -11,7 +11,7 @@ if (!process.env.DATABASE_URL) {
 // Create a connection pool with better error handling and retry logic
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }, // Required for Neon
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: true } : { rejectUnauthorized: false }, // Secure SSL for production
   max: 10, // Reduced maximum number of clients in the pool
   idleTimeoutMillis: 30000, // How long a client is allowed to remain idle before being closed
   connectionTimeoutMillis: 5000, // Increased timeout for connection establishment
