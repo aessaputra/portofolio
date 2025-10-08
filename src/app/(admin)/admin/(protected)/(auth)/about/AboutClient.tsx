@@ -40,17 +40,23 @@ export default function AboutClient({
   const [isRefreshing, startRefresh] = useTransition();
   const router = useRouter();
   const timeoutRef = useRef<number | null>(null);
+  const isInitialMount = useRef(true);
 
   useEffect(() => {
-    // Only update the form state if the initialState has actually changed
-    // We'll use a deep comparison to avoid unnecessary updates
-    const currentStateString = JSON.stringify(formState);
-    const initialStateString = JSON.stringify(initialState);
-    
-    if (currentStateString !== initialStateString) {
+    // Only update the form state on initial mount or when initialState actually changes
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
       setFormState(initialState);
+    } else {
+      // Only update if initialState has actually changed (not due to user input)
+      const currentStateString = JSON.stringify(formState);
+      const initialStateString = JSON.stringify(initialState);
+      
+      if (currentStateString !== initialStateString) {
+        setFormState(initialState);
+      }
     }
-  }, [initialState]); // Remove formState from dependency array to prevent reset on user input
+  }, [initialState]); // Only depend on initialState
 
   useEffect(() => {
     return () => {
