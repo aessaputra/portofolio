@@ -8,8 +8,9 @@ if (!process.env.DATABASE_URL) {
   process.exit(1);
 }
 
+
 const sql = postgres(process.env.DATABASE_URL, {
-  ssl: process.env.NODE_ENV === 'production' ? 'require' : false,
+  ssl: process.env.DATABASE_URL.includes('sslmode=require') ? 'require' : (process.env.NODE_ENV === 'production' ? 'require' : false),
   max: 1,
 });
 

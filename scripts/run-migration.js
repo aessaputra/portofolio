@@ -16,7 +16,7 @@ if (!process.env.DATABASE_URL) {
 console.log('Database URL found, connecting to database...');
 
 const sql = postgres(process.env.DATABASE_URL, {
-  ssl: process.env.NODE_ENV === 'production' ? 'require' : false,
+  ssl: process.env.DATABASE_URL.includes('sslmode=require') ? 'require' : (process.env.NODE_ENV === 'production' ? 'require' : false),
   max: 1, // Use only one connection for migration
 });
 
