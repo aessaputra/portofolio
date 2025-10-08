@@ -21,7 +21,18 @@ import {
 // Re-export all the enhanced functions with legacy compatibility
 export const validateImageFile = enhancedValidateImageFile;
 export const generateUniqueFilename = enhancedGenerateUniqueFilename;
-export const ensurePublicR2Url = enhancedEnsurePublicR2Url;
+
+// Fixed ensurePublicR2Url function that handles already complete URLs
+export const ensurePublicR2Url = (value: string): string => {
+  // If the value is already an absolute URL, return it as-is
+  if (value.startsWith('http://') || value.startsWith('https://')) {
+    return value;
+  }
+  
+  // Otherwise, build the R2 URL
+  return enhancedEnsurePublicR2Url(value);
+};
+
 export const getPublicUrl = enhancedGetPublicUrl;
 export const extractObjectKeyFromUrl = enhancedExtractObjectKeyFromUrl;
 
