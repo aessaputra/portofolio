@@ -48,6 +48,15 @@ function validateEmailProviderConfiguration(): void {
 }
 
 // Validate Cloudflare R2 environment variables
+function validateDatabaseConfiguration(): void {
+  ensureEnvVar("DATABASE_URL");
+  
+  // Only log database configuration in development mode
+  if (process.env.NODE_ENV !== "production") {
+    console.log("[Environment Validation] Database URL configured successfully.");
+  }
+}
+
 function validateR2Credentials(): void {
   const requiredVars = [
     'CLOUDFLARE_ACCOUNT_ID',
@@ -79,6 +88,7 @@ export function validateEnvironment(): void {
     validateAdminAccessConfiguration();
     validateNextAuthSecrets();
     validateEmailProviderConfiguration();
+    validateDatabaseConfiguration();
     validateR2Credentials();
     if (process.env.NODE_ENV !== "production") {
       console.log("[Environment Validation] All environment variables are valid.");

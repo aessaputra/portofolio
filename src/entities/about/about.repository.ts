@@ -144,10 +144,23 @@ async function ensureAboutContentRecord(): Promise<AboutContentRecord> {
 
 export async function getAboutContent(): Promise<AboutContent> {
   try {
+    // Check if DATABASE_URL is available
+    if (!process.env.DATABASE_URL) {
+      console.warn("[AboutRepository] DATABASE_URL not available, returning default content");
+      return mapAboutContent(null);
+    }
+
     const record = await ensureAboutContentRecord();
     return mapAboutContent(record);
   } catch (error) {
     console.error("[AboutRepository] Failed to fetch about content", error);
+    
+    // During build time, if database is not available, return default content
+    if (error instanceof Error && (error.message.includes('ENOTFOUND') || error.message.includes('ECONNREFUSED'))) {
+      console.warn("[AboutRepository] Database connection failed during build, using default content");
+      return mapAboutContent(null);
+    }
+    
     return mapAboutContent(null);
   }
 }

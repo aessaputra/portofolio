@@ -45,13 +45,47 @@ async function ensureArticleSource(): Promise<void> {
 }
 
 export async function getArticleSources(options: GetArticleSourcesOptions = {}): Promise<ArticleSource[]> {
-  await ensureArticleSource();
-  const records = await db
-    .select()
-    .from(articles)
-    .where(options.enabled === undefined ? undefined : eq(articles.enabled, options.enabled))
-    .orderBy(asc(articles.displayOrder), asc(articles.createdAt));
-  return records.map(mapSource);
+  try {
+    // Check if DATABASE_URL is available
+    if (!process.env.DATABASE_URL) {
+      console.warn("[ArticlesRepository] DATABASE_URL not available, returning default source");
+      return [mapSource({
+        id: 0,
+        name: DEFAULT_SOURCE.name,
+        url: DEFAULT_SOURCE.url,
+        enabled: DEFAULT_SOURCE.enabled,
+        displayOrder: DEFAULT_SOURCE.displayOrder,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })];
+    }
+
+    await ensureArticleSource();
+    const records = await db
+      .select()
+      .from(articles)
+      .where(options.enabled === undefined ? undefined : eq(articles.enabled, options.enabled))
+      .orderBy(asc(articles.displayOrder), asc(articles.createdAt));
+    return records.map(mapSource);
+  } catch (error) {
+    console.error("[ArticlesRepository] Failed to fetch article sources", error);
+    
+    // During build time, if database is not available, return default source
+    if (error instanceof Error && (error.message.includes('ENOTFOUND') || error.message.includes('ECONNREFUSED'))) {
+      console.warn("[ArticlesRepository] Database connection failed during build, using default source");
+      return [mapSource({
+        id: 0,
+        name: DEFAULT_SOURCE.name,
+        url: DEFAULT_SOURCE.url,
+        enabled: DEFAULT_SOURCE.enabled,
+        displayOrder: DEFAULT_SOURCE.displayOrder,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })];
+    }
+    
+    return [];
+  }
 }
 
 export async function createArticleSource(input: ArticleSourceInput): Promise<ArticleSource> {

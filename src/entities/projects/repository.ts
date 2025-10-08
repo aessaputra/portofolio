@@ -12,12 +12,30 @@ import {
 import { mapProject, mapProjects } from "./mappers";
 
 export async function getProjects(): Promise<Project[]> {
-  const rows = await db
-    .select()
-    .from(projects)
-    .orderBy(asc(projects.displayOrder), desc(projects.createdAt));
+  try {
+    // Check if DATABASE_URL is available
+    if (!process.env.DATABASE_URL) {
+      console.warn("[ProjectsRepository] DATABASE_URL not available, returning empty array");
+      return [];
+    }
 
-  return mapProjects(rows);
+    const rows = await db
+      .select()
+      .from(projects)
+      .orderBy(asc(projects.displayOrder), desc(projects.createdAt));
+
+    return mapProjects(rows);
+  } catch (error) {
+    console.error("[ProjectsRepository] Failed to fetch projects", error);
+    
+    // During build time, if database is not available, return empty array
+    if (error instanceof Error && (error.message.includes('ENOTFOUND') || error.message.includes('ECONNREFUSED'))) {
+      console.warn("[ProjectsRepository] Database connection failed during build, returning empty array");
+      return [];
+    }
+    
+    return [];
+  }
 }
 
 export async function getProjectById(id: number): Promise<Project | null> {

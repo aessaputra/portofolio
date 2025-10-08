@@ -13,7 +13,24 @@ function toIso(value: Date | string): string {
   return Number.isNaN(parsed.getTime()) ? new Date().toISOString() : parsed.toISOString();
 }
 
-function mapHomeContent(record: HomeContentRecord): HomeContent {
+function mapHomeContent(record: HomeContentRecord | null): HomeContent {
+  if (!record) {
+    return {
+      id: 0,
+      headline: "Welcome to My Portfolio",
+      subheadline: "Full Stack Developer & UI/UX Designer",
+      resumeUrl: "",
+      contactEmail: "contact@example.com",
+      profileImagePath: "",
+      githubUrl: "",
+      linkedinUrl: "",
+      xUrl: "",
+      logoText: "AES",
+      showHireMe: true,
+      updatedAt: new Date().toISOString(),
+    };
+  }
+
   return {
     id: record.id,
     headline: record.headline,
@@ -53,8 +70,26 @@ async function ensureHomeContentRecord(): Promise<HomeContentRecord> {
 }
 
 export async function getHomeContent(): Promise<HomeContent> {
-  const record = await ensureHomeContentRecord();
-  return mapHomeContent(record);
+  try {
+    // Check if DATABASE_URL is available
+    if (!process.env.DATABASE_URL) {
+      console.warn("[HomeRepository] DATABASE_URL not available, returning default content");
+      return mapHomeContent(null);
+    }
+
+    const record = await ensureHomeContentRecord();
+    return mapHomeContent(record);
+  } catch (error) {
+    console.error("[HomeRepository] Failed to fetch home content", error);
+    
+    // During build time, if database is not available, return default content
+    if (error instanceof Error && (error.message.includes('ENOTFOUND') || error.message.includes('ECONNREFUSED'))) {
+      console.warn("[HomeRepository] Database connection failed during build, using default content");
+      return mapHomeContent(null);
+    }
+    
+    return mapHomeContent(null);
+  }
 }
 
 export async function updateHomeProfileImage(imageUrl: string): Promise<HomeContent> {

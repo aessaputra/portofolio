@@ -43,23 +43,41 @@ type GetCertificationsOptions = {
 };
 
 export async function getCertifications(options: GetCertificationsOptions = {}): Promise<Certification[]> {
-  const { featuredOnly = false, limit } = options;
+  try {
+    // Check if DATABASE_URL is available
+    if (!process.env.DATABASE_URL) {
+      console.warn("[CertificationsRepository] DATABASE_URL not available, returning empty array");
+      return [];
+    }
 
-  let query: any = db
-    .select()
-    .from(certifications)
-    .orderBy(asc(certifications.displayOrder), desc(certifications.createdAt));
+    const { featuredOnly = false, limit } = options;
 
-  if (featuredOnly) {
-    query = query.where(eq(certifications.featured, true));
+    let query: any = db
+      .select()
+      .from(certifications)
+      .orderBy(asc(certifications.displayOrder), desc(certifications.createdAt));
+
+    if (featuredOnly) {
+      query = query.where(eq(certifications.featured, true));
+    }
+
+    if (limit && limit > 0) {
+      query = query.limit(limit);
+    }
+
+    const rows = await query;
+    return rows.map(mapCertification);
+  } catch (error) {
+    console.error("[CertificationsRepository] Failed to fetch certifications", error);
+    
+    // During build time, if database is not available, return empty array
+    if (error instanceof Error && (error.message.includes('ENOTFOUND') || error.message.includes('ECONNREFUSED'))) {
+      console.warn("[CertificationsRepository] Database connection failed during build, returning empty array");
+      return [];
+    }
+    
+    return [];
   }
-
-  if (limit && limit > 0) {
-    query = query.limit(limit);
-  }
-
-  const rows = await query;
-  return rows.map(mapCertification);
 }
 
 export async function getCertificationById(id: number): Promise<Certification | null> {
