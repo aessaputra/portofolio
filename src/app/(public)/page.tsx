@@ -18,7 +18,8 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   const content = await getHomeContent();
-  const shouldUnoptimize = !content.profileImagePath.endsWith(".png");
+  const hasProfileImage = content.profileImagePath && content.profileImagePath.trim() !== "";
+  const shouldUnoptimize = hasProfileImage && !content.profileImagePath.endsWith(".png");
   const contactHref = normalizeMailto(content.contactEmail);
 
   return (
@@ -28,17 +29,23 @@ export default async function HomePage() {
         <Layout className="pt-0 md:p-16 sm:pt-8">
           <div className="flex items-center justify-between w-full lg:flex-col">
             <div className="w-1/2 md:w-full sm:w-full">
-              <Image
-                src={content.profileImagePath}
-                alt="AES"
-                width={800}
-                height={800}
-                className={`${styles.profileImage} w-full h-auto lg:hidden md:inline-block md:w-full sm:block`}
-                priority
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
-                quality={95}
-                unoptimized={shouldUnoptimize}
-              />
+              {hasProfileImage ? (
+                <Image
+                  src={content.profileImagePath}
+                  alt="AES"
+                  width={800}
+                  height={800}
+                  className={`${styles.profileImage} w-full h-auto lg:hidden md:inline-block md:w-full sm:block`}
+                  priority
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
+                  quality={95}
+                  unoptimized={shouldUnoptimize}
+                />
+              ) : (
+                <div className={`${styles.profileImage} w-full h-auto lg:hidden md:inline-block md:w-full sm:block flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded-lg`}>
+                  <span className="text-gray-500 dark:text-gray-400 text-lg">No Profile Image</span>
+                </div>
+              )}
             </div>
             <div className="w-1/2 flex flex-col items-center self-center lg:w-full lg:text-center">
               <AnimatedText

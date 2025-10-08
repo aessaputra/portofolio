@@ -149,13 +149,19 @@ export default function AdminProjectsPage() {
                   >
                     {/* Project Image */}
                     <div className="h-48 overflow-hidden bg-gray-100 dark:bg-gray-600">
-                      <Image
-                        className="h-full w-full object-cover"
-                        src={project.imageUrl}
-                        alt={project.imageAlt}
-                        width={400}
-                        height={192}
-                      />
+                      {project.imageUrl && project.imageUrl.trim() !== "" ? (
+                        <Image
+                          className="h-full w-full object-cover"
+                          src={project.imageUrl}
+                          alt={project.imageAlt}
+                          width={400}
+                          height={192}
+                        />
+                      ) : (
+                        <div className="h-full w-full flex items-center justify-center bg-gray-200 dark:bg-gray-700">
+                          <span className="text-gray-500 dark:text-gray-400 text-sm">No Image</span>
+                        </div>
+                      )}
                     </div>
                     
                     {/* Project Content */}

@@ -30,6 +30,7 @@ function CertificationCard({ certification }: CertificationCardProps) {
   } = certification;
 
   const resolvedImageUrl = resolveR2PublicUrl(imageUrl);
+  const hasImage = resolvedImageUrl && resolvedImageUrl.trim() !== "";
 
   return (
     <Link href={credentialUrl} target="_blank" className="block">
@@ -42,16 +43,22 @@ function CertificationCard({ certification }: CertificationCardProps) {
         
         <div className={styles.cardContent}>
           <div className={styles.imageContainer}>
-            <MotionImage
-              src={resolvedImageUrl}
-              alt={imageAlt ?? title}
-              width={600}
-              height={400}
-              className={styles.certificationImage}
-              unoptimized
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.3 }}
-            />
+            {hasImage ? (
+              <MotionImage
+                src={resolvedImageUrl}
+                alt={imageAlt ?? title}
+                width={600}
+                height={400}
+                className={styles.certificationImage}
+                unoptimized
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.3 }}
+              />
+            ) : (
+              <div className={`${styles.certificationImage} bg-gray-200 dark:bg-gray-700 flex items-center justify-center`}>
+                <span className="text-gray-500 dark:text-gray-400 text-lg">No Image</span>
+              </div>
+            )}
           </div>
 
           <div className={styles.contentContainer}>

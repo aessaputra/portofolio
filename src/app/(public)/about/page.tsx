@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 
 export default async function AboutPage() {
   const content = await getAboutContent();
+  const hasAboutProfileImage = content.aboutProfileImagePath && content.aboutProfileImagePath.trim() !== "";
 
   return (
     <>
@@ -42,15 +43,21 @@ export default async function AboutPage() {
 
             <div className={`relative col-span-3 h-max rounded-2xl border-2 border-solid border-dark bg-light p-8 dark:border-light dark:bg-dark xl:col-span-4 md:order-1 md:col-span-8 ${styles.mobileImageColumn}`}>
               <div className="absolute top-0 -right-3 -z-10 h-[103%] w-[102%] rounded-4xl bg-dark dark:bg-light" />
-              <Image
-                src={content.aboutProfileImagePath}
-                alt="Aes"
-                className={`h-auto w-full rounded-2xl ${styles.mobileProfileImage}`}
-                priority
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
-                width={500}
-                height={500}
-              />
+              {hasAboutProfileImage ? (
+                <Image
+                  src={content.aboutProfileImagePath}
+                  alt="Aes"
+                  className={`h-auto w-full rounded-2xl ${styles.mobileProfileImage}`}
+                  priority
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
+                  width={500}
+                  height={500}
+                />
+              ) : (
+                <div className={`h-auto w-full rounded-2xl ${styles.mobileProfileImage} flex items-center justify-center bg-gray-200 dark:bg-gray-700`}>
+                  <span className="text-gray-500 dark:text-gray-400 text-lg">No Profile Image</span>
+                </div>
+              )}
             </div>
 
             <AboutCounters data={content.counters} />

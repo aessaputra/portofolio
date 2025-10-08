@@ -32,20 +32,29 @@ type ProjectsContentProps = {
   projects: Project[];
 };
 
-const FeaturedProject = ({ type, title, summary, editableText, img, link, github }: FeaturedProjectProps) => (
-  <article className="relative flex w-full items-center justify-between rounded-3xl rounded-br-2xl border border-solid border-dark bg-light p-8 shadow-2xl dark:border-light dark:bg-dark xl:flex-col xl:p-6 lg:flex-col lg:p-6 md:p-6 sm:rounded-2xl sm:rounded-br-3xl sm:p-4 xs:p-3">
-    <div className="absolute top-0 -right-3 -z-10 h-[103%] w-full rounded-[2.5rem] rounded-br-3xl bg-dark dark:bg-light xl:-right-2 xl:h-[102%] xl:w-full xl:rounded-3xl lg:-right-2 lg:h-[102%] lg:w-full lg:rounded-3xl md:-right-2 md:h-[102%] md:w-full md:rounded-3xl sm:-right-2 sm:h-[102%] sm:w-full sm:rounded-3xl xs:-right-1 xs:h-[101%] xs:w-full xs:rounded-2xl" />
-    <Link href={link} target="_blank" className="w-1/2 cursor-pointer overflow-hidden rounded-lg xl:w-full xl:mb-6 lg:w-full lg:mb-6 md:w-full md:mb-4 sm:w-full sm:mb-4">
-      <MotionImage
-        src={img}
-        alt={title}
-        width={600}
-        height={400}
-        className="h-auto w-full rounded-xl"
-        whileHover={{ scale: 1.05 }}
-        transition={{ duration: 0.2 }}
-      />
-    </Link>
+const FeaturedProject = ({ type, title, summary, editableText, img, link, github }: FeaturedProjectProps) => {
+  const hasImage = img && img.trim() !== "";
+  
+  return (
+    <article className="relative flex w-full items-center justify-between rounded-3xl rounded-br-2xl border border-solid border-dark bg-light p-8 shadow-2xl dark:border-light dark:bg-dark xl:flex-col xl:p-6 lg:flex-col lg:p-6 md:p-6 sm:rounded-2xl sm:rounded-br-3xl sm:p-4 xs:p-3">
+      <div className="absolute top-0 -right-3 -z-10 h-[103%] w-full rounded-[2.5rem] rounded-br-3xl bg-dark dark:bg-light xl:-right-2 xl:h-[102%] xl:w-full xl:rounded-3xl lg:-right-2 lg:h-[102%] lg:w-full lg:rounded-3xl md:-right-2 md:h-[102%] md:w-full md:rounded-3xl sm:-right-2 sm:h-[102%] sm:w-full sm:rounded-3xl xs:-right-1 xs:h-[101%] xs:w-full xs:rounded-2xl" />
+      <Link href={link} target="_blank" className="w-1/2 cursor-pointer overflow-hidden rounded-lg xl:w-full xl:mb-6 lg:w-full lg:mb-6 md:w-full md:mb-4 sm:w-full sm:mb-4">
+        {hasImage ? (
+          <MotionImage
+            src={img}
+            alt={title}
+            width={600}
+            height={400}
+            className="h-auto w-full rounded-xl"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.2 }}
+          />
+        ) : (
+          <div className="h-auto w-full rounded-xl bg-gray-200 dark:bg-gray-700 flex items-center justify-center aspect-[3/2]">
+            <span className="text-gray-500 dark:text-gray-400 text-lg">No Image</span>
+          </div>
+        )}
+      </Link>
 
     <div className="flex w-1/2 flex-col items-start justify-between pl-6 xl:w-full xl:pl-0 xl:pt-0 lg:w-full lg:pl-0 lg:pt-0 md:w-full md:pl-0 md:pt-0 sm:w-full sm:pl-0 sm:pt-0">
       <div className="mb-2">
@@ -74,22 +83,31 @@ const FeaturedProject = ({ type, title, summary, editableText, img, link, github
   </article>
 );
 
-const ProjectCard = ({ title, type, img, link, github }: ProjectCardProps) => (
-  <article className="relative flex w-full flex-col items-center justify-center rounded-2xl border border-solid border-dark bg-light p-6 dark:border-light dark:bg-dark xl:p-5 lg:p-5 md:p-4 sm:p-3 xs:p-3 transition-all duration-300 hover:shadow-lg">
-    <div className="absolute top-0 -right-3 -z-10 h-[103%] w-full rounded-4xl rounded-br-3xl bg-dark dark:bg-light xl:-right-2 xl:w-[101%] xl:rounded-3xl lg:-right-2 lg:w-[101%] lg:rounded-3xl md:-right-2 md:w-[101%] md:rounded-3xl sm:-right-1 sm:h-[102%] sm:w-full sm:rounded-3xl xs:-right-1 xs:h-[101%] xs:w-full xs:rounded-2xl" />
-    <div className="w-full cursor-pointer overflow-hidden rounded-lg mb-4">
-      <Link href={link} target="_blank">
-        <MotionImage
-          src={img}
-          alt={title}
-          width={600}
-          height={400}
-          className="h-auto w-full rounded-xl"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.2 }}
-        />
-      </Link>
-    </div>
+const ProjectCard = ({ title, type, img, link, github }: ProjectCardProps) => {
+  const hasImage = img && img.trim() !== "";
+  
+  return (
+    <article className="relative flex w-full flex-col items-center justify-center rounded-2xl border border-solid border-dark bg-light p-6 dark:border-light dark:bg-dark xl:p-5 lg:p-5 md:p-4 sm:p-3 xs:p-3 transition-all duration-300 hover:shadow-lg">
+      <div className="absolute top-0 -right-3 -z-10 h-[103%] w-full rounded-4xl rounded-br-3xl bg-dark dark:bg-light xl:-right-2 xl:w-[101%] xl:rounded-3xl lg:-right-2 lg:w-[101%] lg:rounded-3xl md:-right-2 md:w-[101%] md:rounded-3xl sm:-right-1 sm:h-[102%] sm:w-full sm:rounded-3xl xs:-right-1 xs:h-[101%] xs:w-full xs:rounded-2xl" />
+      <div className="w-full cursor-pointer overflow-hidden rounded-lg mb-4">
+        <Link href={link} target="_blank">
+          {hasImage ? (
+            <MotionImage
+              src={img}
+              alt={title}
+              width={600}
+              height={400}
+              className="h-auto w-full rounded-xl"
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.2 }}
+            />
+          ) : (
+            <div className="h-auto w-full rounded-xl bg-gray-200 dark:bg-gray-700 flex items-center justify-center aspect-[3/2]">
+              <span className="text-gray-500 dark:text-gray-400 text-lg">No Image</span>
+            </div>
+          )}
+        </Link>
+      </div>
 
     <div className="flex w-full flex-col items-start justify-between">
       <div className="mb-2">

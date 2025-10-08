@@ -238,14 +238,23 @@ export default function AboutClient({
             {/* Profile Image */}
             <div className="flex items-center gap-4">
               <div className="relative">
-                <Image
-                  src={formState.aboutProfileImagePath || fallbackProfileImagePath}
-                  alt="Profile"
-                  width={80}
-                  height={80}
-                  className="h-20 w-20 rounded-full object-cover ring-2 ring-gray-200 dark:ring-gray-700"
-                  unoptimized
-                />
+                {(() => {
+                  const imageSrc = formState.aboutProfileImagePath || fallbackProfileImagePath;
+                  return imageSrc && imageSrc.trim() !== "" ? (
+                    <Image
+                      src={imageSrc}
+                      alt="Profile"
+                      width={80}
+                      height={80}
+                      className="h-20 w-20 rounded-full object-cover ring-2 ring-gray-200 dark:ring-gray-700"
+                      unoptimized
+                    />
+                  ) : (
+                    <div className="h-20 w-20 rounded-full bg-gray-200 ring-2 ring-gray-200 dark:bg-gray-700 dark:ring-gray-700 flex items-center justify-center">
+                      <span className="text-gray-500 dark:text-gray-400 text-sm">No Image</span>
+                    </div>
+                  );
+                })()}
               </div>
               <div className="flex flex-col gap-2">
                 <button
