@@ -23,7 +23,8 @@ export const revalidate = 0;
 export default async function HomePage() {
   const content = await getHomeContent();
   const hasProfileImage = content.profileImagePath && content.profileImagePath.trim() !== "";
-  const shouldUnoptimize = hasProfileImage && !content.profileImagePath.endsWith(".png") ? true : undefined;
+  // Always unoptimize images from custom domain to avoid Next.js optimization issues
+  const shouldUnoptimize = hasProfileImage ? true : undefined;
   const contactHref = normalizeMailto(content.contactEmail);
 
   return (
