@@ -53,8 +53,8 @@ export async function getArticleSources(options: GetArticleSourcesOptions = {}):
         id: 0,
         name: DEFAULT_SOURCE.name,
         url: DEFAULT_SOURCE.url,
-        enabled: DEFAULT_SOURCE.enabled,
-        displayOrder: DEFAULT_SOURCE.displayOrder,
+        enabled: DEFAULT_SOURCE.enabled ?? true,
+        displayOrder: DEFAULT_SOURCE.displayOrder ?? 1,
         createdAt: new Date(),
         updatedAt: new Date(),
       })];
@@ -77,8 +77,8 @@ export async function getArticleSources(options: GetArticleSourcesOptions = {}):
         id: 0,
         name: DEFAULT_SOURCE.name,
         url: DEFAULT_SOURCE.url,
-        enabled: DEFAULT_SOURCE.enabled,
-        displayOrder: DEFAULT_SOURCE.displayOrder,
+        enabled: DEFAULT_SOURCE.enabled ?? true,
+        displayOrder: DEFAULT_SOURCE.displayOrder ?? 1,
         createdAt: new Date(),
         updatedAt: new Date(),
       })];
