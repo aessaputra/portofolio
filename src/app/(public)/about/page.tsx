@@ -35,9 +35,17 @@ export default async function AboutPage() {
                 About Me
               </h2>
               <div className={styles.mobileTextContainer}>
-                <p className={`font-medium ${styles.mobileAboutMeText1} ${styles.aboutMeTextJustified}`}>{content.aboutMeText1}</p>
-                <p className={`my-4 font-medium ${styles.mobileAboutMeText2} ${styles.aboutMeTextJustified}`}>{content.aboutMeText2}</p>
-                <p className={`font-medium ${styles.mobileAboutMeText3} ${styles.aboutMeTextJustified}`}>{content.aboutMeText3}</p>
+                {content.aboutMeText && (
+                  <div className={`font-medium ${styles.mobileAboutMeText1} ${styles.aboutMeTextJustified}`}>
+                    {content.aboutMeText.split('\n').map((paragraph, index) => (
+                      paragraph.trim() && (
+                        <p key={index} className="mb-4 last:mb-0">
+                          {paragraph.trim()}
+                        </p>
+                      )
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 

@@ -18,6 +18,8 @@
   --background-image-circular-dark-md: repeating-radial-gradient(rgba(255, 255, 255, 0.5) 2px, #1b1b1b 6px, #1b1b1b 60px);
   --background-image-circular-light-sm: repeating-radial-gradient(rgba(0, 0, 0, 0.4) 2px, #f5f5f5 5px, #f5f5f5 40px);
   --background-image-circular-dark-sm: repeating-radial-gradient(rgba(255, 255, 255, 0.5) 2px, #1b1b1b 4px, #1b1b1b 40px);
+  --background-image-circular-light-xs: repeating-radial-gradient(rgba(0, 0, 0, 0.4) 2px, #f5f5f5 5px, #f5f5f5 30px);
+  --background-image-circular-dark-xs: repeating-radial-gradient(rgba(255, 255, 255, 0.5) 2px, #1b1b1b 3px, #1b1b1b 30px);
 }
 
 @layer base {
@@ -112,4 +114,70 @@
 
 .z-10 {
   z-index: 10;
+}
+
+/* Additional concentric circles for mobile */
+.skills-container {
+  position: relative;
+}
+
+.skills-container::before,
+.skills-container::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Outer circle for mobile */
+@media (max-width: 639px) {
+  .skills-container::before {
+    width: 120%;
+    height: 120%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: pulse 4s ease-in-out infinite;
+  }
+  
+  .skills-container::after {
+    width: 140%;
+    height: 140%;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    animation: pulse 6s ease-in-out infinite reverse;
+  }
+}
+
+/* Dark mode styles for mobile circles */
+@media (max-width: 639px) {
+  .dark .skills-container::before {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .dark .skills-container::after {
+    border-color: rgba(255, 255, 255, 0.05);
+  }
+}
+
+/* Light mode styles for mobile circles */
+@media (max-width: 639px) {
+  .skills-container::before {
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .skills-container::after {
+    border-color: rgba(0, 0, 0, 0.05);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1.02);
+  }
 }

@@ -187,7 +187,7 @@ export default function AboutClient({
   const handleAddSkill = useCallback(() => {
     setFormState((current) => ({
       ...current,
-      skills: [...current.skills, { name: "", x: "0", y: "0" }],
+      skills: [...current.skills, { name: "" }],
     }));
   }, []);
 
@@ -393,20 +393,26 @@ export default function AboutClient({
               </div>
             </div>
 
-            {/* About Text - Combined into one field */}
+            {/* About Text - Single textarea with paragraph support */}
             <div>
-              <label htmlFor="aboutMeText1" className="block text-sm font-medium text-gray-700 dark:text-gray-300">About Me</label>
+              <label htmlFor="aboutMeText" className="block text-sm font-medium text-gray-700 dark:text-gray-300">About Me</label>
               <div className="mt-2">
                 <textarea
-                  id="aboutMeText1"
-                  rows={6}
-                  value={formState.aboutMeText1}
-                  onChange={(event) => handleInputChange("aboutMeText1", event.target.value)}
+                  id="aboutMeText"
+                  rows={8}
+                  value={formState.aboutMeText}
+                  onChange={(event) => handleInputChange("aboutMeText", event.target.value)}
                   className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400"
-                  placeholder="Write about yourself, your background, and what you do..."
+                  placeholder="Write about yourself, your background, and what you do...
+
+You can write multiple paragraphs by pressing Enter twice to create line breaks.
+
+Each paragraph will be displayed separately on the public about page."
                 />
               </div>
-              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">You can write multiple paragraphs here. Use line breaks to separate them.</p>
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                Use line breaks (Enter) to separate paragraphs. Each paragraph will be displayed separately on the public about page.
+              </p>
             </div>
 
             {/* Statistics - Simplified */}

@@ -64,9 +64,7 @@ function mergeWithDefaults(record: AboutContentRecord | null): AboutContentRecor
       updatedAt: new Date(),
       createdAt: new Date(),
       headline: "",
-      aboutMeText1: "",
-      aboutMeText2: "",
-      aboutMeText3: "",
+      aboutMeText: "",
       profileImagePath: "",
       aboutProfileImagePath: "",
       satisfiedClients: "",
@@ -81,9 +79,7 @@ function mergeWithDefaults(record: AboutContentRecord | null): AboutContentRecor
   return {
     ...record,
     headline: record.headline ?? "",
-    aboutMeText1: record.aboutMeText1 ?? "",
-    aboutMeText2: record.aboutMeText2 ?? "",
-    aboutMeText3: record.aboutMeText3 ?? "",
+    aboutMeText: record.aboutMeText ?? "",
     profileImagePath: record.profileImagePath ?? "",
     aboutProfileImagePath: record.aboutProfileImagePath ?? "",
     satisfiedClients: record.satisfiedClients ?? "",
@@ -101,9 +97,7 @@ function mapAboutContent(record: AboutContentRecord | null): AboutContent {
   return {
     id: merged.id,
     headline: merged.headline ?? "",
-    aboutMeText1: merged.aboutMeText1 ?? "",
-    aboutMeText2: merged.aboutMeText2 ?? "",
-    aboutMeText3: merged.aboutMeText3 ?? "",
+    aboutMeText: merged.aboutMeText ?? "",
     profileImagePath: ensurePublicR2Url(merged.profileImagePath ?? ""),
     aboutProfileImagePath: ensurePublicR2Url(merged.aboutProfileImagePath ?? ""),
     counters: {
@@ -127,9 +121,7 @@ async function ensureAboutContentRecord(): Promise<AboutContentRecord> {
   // Create empty record - will be filled via admin panel
   const [created] = await db.insert(aboutContent).values({
     headline: "",
-    aboutMeText1: "",
-    aboutMeText2: "",
-    aboutMeText3: "",
+    aboutMeText: "",
     profileImagePath: "",
     aboutProfileImagePath: "",
     satisfiedClients: "",
@@ -202,9 +194,7 @@ export async function updateAboutContent(input: AboutContentUpdateInput): Promis
     .update(aboutContent)
     .set({
       headline: input.headline,
-      aboutMeText1: input.aboutMeText1,
-      aboutMeText2: input.aboutMeText2,
-      aboutMeText3: input.aboutMeText3,
+      aboutMeText: input.aboutMeText,
       profileImagePath: input.profileImagePath,
       aboutProfileImagePath: input.aboutProfileImagePath,
       satisfiedClients: input.satisfiedClients,

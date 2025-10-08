@@ -11,9 +11,7 @@ type SerializedAboutContent = {
 
 export type AboutFormState = {
   headline: string;
-  aboutMeText1: string;
-  aboutMeText2: string;
-  aboutMeText3: string;
+  aboutMeText: string;
   profileImagePath: string;
   aboutProfileImagePath: string;
   satisfiedClients: string;
@@ -35,9 +33,7 @@ export function aboutContentToFormState(content: SerializedAboutContent): AboutF
 
   return {
     headline: content.headline ?? "",
-    aboutMeText1: content.aboutMeText1 ?? "",
-    aboutMeText2: content.aboutMeText2 ?? "",
-    aboutMeText3: content.aboutMeText3 ?? "",
+    aboutMeText: content.aboutMeText ?? "",
     profileImagePath: content.profileImagePath ?? "",
     aboutProfileImagePath: (content as any).aboutProfileImagePath ?? "",
     satisfiedClients: counters.satisfiedClients,
@@ -52,9 +48,7 @@ export function aboutContentToFormState(content: SerializedAboutContent): AboutF
 export function formStateToAboutContentInput(formState: AboutFormState): AboutContentUpdateInput {
   return {
     headline: formState.headline,
-    aboutMeText1: formState.aboutMeText1,
-    aboutMeText2: formState.aboutMeText2,
-    aboutMeText3: formState.aboutMeText3,
+    aboutMeText: formState.aboutMeText,
     profileImagePath: formState.profileImagePath,
     aboutProfileImagePath: formState.aboutProfileImagePath,
     satisfiedClients: formState.satisfiedClients,

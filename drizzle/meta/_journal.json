@@ -43,6 +43,13 @@
       "when": 1759912679209,
       "tag": "0005_regular_senator_kelly",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1759913000000,
+      "tag": "0009_remove_skills_x_y_positions",
+      "breakpoints": true
     }
   ]
 }

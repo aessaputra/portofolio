@@ -6,8 +6,6 @@ export type AboutContentRecord = InferModel<typeof aboutContent>;
 
 export type AboutSkill = {
   name: string;
-  x: string;
-  y: string;
 };
 
 export type AboutExperience = {
@@ -35,9 +33,7 @@ export type AboutCounters = {
 export type AboutContent = {
   id: number;
   headline: string;
-  aboutMeText1: string;
-  aboutMeText2: string;
-  aboutMeText3: string;
+  aboutMeText: string;
   profileImagePath: string;
   aboutProfileImagePath: string;
   counters: AboutCounters;
@@ -49,9 +45,7 @@ export type AboutContent = {
 
 export type AboutContentUpdateInput = {
   headline: string;
-  aboutMeText1: string;
-  aboutMeText2: string;
-  aboutMeText3: string;
+  aboutMeText: string;
   profileImagePath: string;
   aboutProfileImagePath: string;
   satisfiedClients: string;
