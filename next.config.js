@@ -15,6 +15,13 @@ const remotePatterns = [
     pathname: '/**',
     search: '',
   },
+  {
+    protocol: 'https',
+    hostname: 'aessaputra.net',
+    port: '',
+    pathname: '/**',
+    search: '',
+  },
   
 ];
 

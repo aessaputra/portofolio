@@ -122,6 +122,7 @@ const MovingImg = ({ title, img, link, imageAlt }: MovingImgProps) => {
           height={img.height}
           className="absolute z-20 hidden h-auto w-64 rounded-lg object-cover sm:w-80 md:w-96 lg:w-[20rem] xl:w-[22rem]"
           onError={() => setImgError(true)}
+          unoptimized={true}
         />
       ) : (
         <div
@@ -213,6 +214,7 @@ const FeaturedArticle = ({ article }: FeaturedArticleProps) => {
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.3 }}
               onError={() => setImgError(true)}
+              unoptimized={true}
             />
           ) : (
             <div className={styles.imageErrorFallback}>
