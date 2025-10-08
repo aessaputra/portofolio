@@ -81,7 +81,8 @@ const FeaturedProject = ({ type, title, summary, editableText, img, link, github
       </div>
     </div>
   </article>
-);
+  );
+};
 
 const ProjectCard = ({ title, type, img, link, github }: ProjectCardProps) => {
   const hasImage = img && img.trim() !== "";
@@ -127,7 +128,8 @@ const ProjectCard = ({ title, type, img, link, github }: ProjectCardProps) => {
       </div>
     </div>
   </article>
-);
+  );
+};
 
 export default function ProjectsContent({ projects }: ProjectsContentProps) {
   const featuredProjects = projects.filter((project) => project.featured);
