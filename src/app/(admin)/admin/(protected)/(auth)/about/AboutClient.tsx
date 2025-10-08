@@ -478,7 +478,7 @@ export default function AboutClient({
               </div>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {formState.skills.map((skill, index) => (
-                  <div key={`${skill.name}-${index}`} className="flex items-center gap-2">
+                  <div key={`skill-${index}`} className="flex items-center gap-2">
                     <input
                       type="text"
                       value={skill.name}
@@ -513,7 +513,7 @@ export default function AboutClient({
               </div>
               <div className="space-y-4">
                 {formState.experiences.map((experience, index) => (
-                  <div key={`${experience.company}-${index}`} className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
+                  <div key={`experience-${index}`} className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
                     <div className="flex justify-between items-start mb-2">
                       <h3 className="text-sm font-medium text-gray-900 dark:text-white">Experience #{index + 1}</h3>
                       <button
@@ -595,7 +595,7 @@ export default function AboutClient({
               </div>
               <div className="space-y-4">
                 {formState.education.map((education, index) => (
-                  <div key={`${education.place}-${index}`} className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
+                  <div key={`education-${index}`} className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
                     <div className="flex justify-between items-start mb-2">
                       <h3 className="text-sm font-medium text-gray-900 dark:text-white">Education #{index + 1}</h3>
                       <button
