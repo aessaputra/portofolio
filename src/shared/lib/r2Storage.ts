@@ -23,6 +23,8 @@ validateR2Config();
 const DEFAULT_CACHE_CONTROL = "public, max-age=31536000, immutable"; // 1 year
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
+const MAX_RETRIES = 3; // Maximum number of retries for failed operations
+const RETRY_DELAY = 1000; // Delay between retries in milliseconds
 
 // Types
 export type PutObjectOptions = {
@@ -40,6 +42,7 @@ export type UploadResult = {
   customDomainUrl?: string;
   error?: string;
   objectKey?: string;
+  retries?: number;
 };
 
 type UrlCheckResult = {
@@ -62,6 +65,46 @@ type UrlCheckResult = {
     error?: string;
   };
 };
+
+// Retry utility for R2 operations
+async function withRetry<T>(
+  operation: () => Promise<T>,
+  operationName: string,
+  maxRetries: number = MAX_RETRIES
+): Promise<T> {
+  let lastError: Error | undefined;
+  
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const result = await operation();
+      return result;
+    } catch (error: any) {
+      lastError = error;
+      
+      // Don't retry on certain errors
+      if (error.name === "NoSuchBucket" || 
+          error.name === "AccessDenied" || 
+          error.name === "InvalidAccessKeyId" || 
+          error.name === "SignatureDoesNotMatch") {
+        throw error;
+      }
+      
+      // If this is the last attempt, throw the error
+      if (attempt === maxRetries) {
+        break;
+      }
+      
+      // Wait before retrying
+      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * attempt));
+    }
+  }
+  
+  if (!lastError) {
+    throw new Error(`Unknown error during ${operationName}`);
+  }
+  
+  throw lastError;
+}
 
 // File validation utilities
 export function validateImageFile(file: File): { valid: boolean; error?: string } {
@@ -101,13 +144,15 @@ export function generateUniqueFilename(
 }
 
 /**
- * Upload an image to R2 with enhanced error handling and fallback URLs
+ * Upload an image to R2 with enhanced error handling, retry logic, and fallback URLs
+ * Optimized for Vercel serverless environment
  */
 export async function uploadImageToR2(
   file: Buffer | Uint8Array,
   contentType: string,
   objectKey: string,
-  options: PutObjectOptions = {}
+  options: PutObjectOptions = {},
+  retryCount: number = 0
 ): Promise<UploadResult> {
   try {
     // Validate input parameters
@@ -150,11 +195,13 @@ export async function uploadImageToR2(
         "upload-timestamp": new Date().toISOString(),
         "content-type": contentType,
         "environment": r2Config.isProduction ? "production" : "development",
+        "platform": r2Config.isVercel ? "vercel" : "other",
       },
       ContentDisposition: options.contentDisposition ?? "inline",
     });
 
-    const result = await r2ClientInstance.send(command);
+    // Use retry logic for the upload operation
+    const result = await withRetry(() => r2ClientInstance.send(command), "Upload to R2");
     
     if (result.$metadata.httpStatusCode && result.$metadata.httpStatusCode >= 400) {
       return { 
@@ -172,6 +219,7 @@ export async function uploadImageToR2(
       directUrl: urls.directR2,
       customDomainUrl: urls.customDomain,
       objectKey,
+      retries: retryCount,
     };
   } catch (error: any) {
     // Handle specific R2 errors
@@ -196,7 +244,7 @@ export async function uploadImageToR2(
 }
 
 /**
- * Check if an object exists in R2
+ * Check if an object exists in R2 with retry logic
  */
 export async function objectExistsInR2(objectKey: string): Promise<boolean> {
   if (!objectKey || !objectKey.trim()) {
@@ -204,21 +252,26 @@ export async function objectExistsInR2(objectKey: string): Promise<boolean> {
   }
 
   try {
-    await r2ClientInstance.send(new HeadObjectCommand({
-      Bucket: r2Config.bucket,
-      Key: objectKey
-    }));
+    await withRetry(
+      () => r2ClientInstance.send(new HeadObjectCommand({
+        Bucket: r2Config.bucket,
+        Key: objectKey
+      })),
+      "Check object existence"
+    );
+    
     return true;
   } catch (error: any) {
     if (error?.$metadata?.httpStatusCode === 404) {
       return false;
     }
+    
     throw new Error(`Failed to check if object exists in storage: ${error.message || "Unknown error"}`);
   }
 }
 
 /**
- * Delete an object from R2
+ * Delete an object from R2 with retry logic
  */
 export async function deleteImageFromR2(objectKey: string): Promise<void> {
   if (!objectKey || !objectKey.trim()) {
@@ -226,10 +279,13 @@ export async function deleteImageFromR2(objectKey: string): Promise<void> {
   }
 
   try {
-    await r2ClientInstance.send(new DeleteObjectCommand({
-      Bucket: r2Config.bucket,
-      Key: objectKey
-    }));
+    await withRetry(
+      () => r2ClientInstance.send(new DeleteObjectCommand({
+        Bucket: r2Config.bucket,
+        Key: objectKey
+      })),
+      "Delete object"
+    );
   } catch (error: any) {
     // Handle specific R2 errors
     if (error.name === "NoSuchKey") {
@@ -247,7 +303,7 @@ export async function deleteImageFromR2(objectKey: string): Promise<void> {
 }
 
 /**
- * Copy an object within R2
+ * Copy an object within R2 with retry logic
  */
 export async function copyObjectInR2(
   sourceObjectKey: string,
@@ -255,10 +311,13 @@ export async function copyObjectInR2(
   options: PutObjectOptions = {}
 ): Promise<UploadResult> {
   try {
-    const response = await r2ClientInstance.send(new GetObjectCommand({
-      Bucket: r2Config.bucket,
-      Key: sourceObjectKey
-    }));
+    const response = await withRetry(
+      () => r2ClientInstance.send(new GetObjectCommand({
+        Bucket: r2Config.bucket,
+        Key: sourceObjectKey
+      })),
+      "Get source object for copy"
+    );
     
     const bytes = await response.Body?.transformToByteArray();
     if (!bytes) {
@@ -277,14 +336,32 @@ export async function copyObjectInR2(
 }
 
 /**
- * Check URL accessibility for all possible URLs
+ * Check URL accessibility for all possible URLs with timeout
  */
 export async function checkUrlAccessibility(objectKey: string): Promise<UrlCheckResult> {
   const urls = getAllPossibleUrls(objectKey);
   
+  // Use a timeout for fetch operations to avoid hanging in serverless environments
+  const fetchWithTimeout = async (url: string, options: RequestInit = {}, timeout = 5000) => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+    
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+      return response;
+    } catch (error) {
+      clearTimeout(timeoutId);
+      throw error;
+    }
+  };
+  
   const checkUrl = async (url: string): Promise<{ accessible: boolean; status?: number; error?: string }> => {
     try {
-      const response = await fetch(url, { method: 'HEAD' });
+      const response = await fetchWithTimeout(url, { method: 'HEAD' });
       return {
         accessible: response.ok,
         status: response.status,

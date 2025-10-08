@@ -50,11 +50,6 @@ function validateEmailProviderConfiguration(): void {
 // Validate Cloudflare R2 environment variables
 function validateDatabaseConfiguration(): void {
   ensureEnvVar("DATABASE_URL");
-  
-  // Only log database configuration in development mode
-  if (process.env.NODE_ENV !== "production") {
-    console.log("[Environment Validation] Database URL configured successfully.");
-  }
 }
 
 function validateR2Credentials(): void {
@@ -66,19 +61,13 @@ function validateR2Credentials(): void {
     'CLOUDFLARE_R2_PUBLIC_URL'
   ];
 
+  // Check required variables
   for (const varName of requiredVars) {
     if (!process.env[varName] || process.env[varName]?.trim() === "") {
       throw new Error(
         `${varName} environment variable is required for Cloudflare R2 storage.`
       );
     }
-  }
-
-  // Only log R2 configuration in development mode
-  if (process.env.NODE_ENV !== "production") {
-    console.log("[Environment Validation] R2 credentials loaded successfully.");
-    console.log(`[Environment Validation] R2 Bucket: ${process.env.CLOUDFLARE_R2_BUCKET_NAME}`);
-    console.log(`[Environment Validation] R2 Account ID: ${process.env.CLOUDFLARE_ACCOUNT_ID}`);
   }
 }
 

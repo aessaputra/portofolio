@@ -1,20 +1,23 @@
 /**
- * Enhanced R2 URL management with custom domain support and fallback mechanisms
- * for production environments.
+ * Enhanced R2 URL management with Vercel-specific optimizations
+ * Consolidates functionality from the previous r2UrlManager.ts and r2PublicUrl.ts
  */
 
 const ABSOLUTE_URL_PATTERN = /^https?:\/\//i;
 
 type R2UrlConfig = {
   publicUrl: string;
+  nextPublicUrl: string;
   bucket: string;
+  nextPublicBucket: string;
   normalizedPublicUrl: string;
   normalizedBucket: string;
   publicUrlIncludesBucket: boolean;
-  includeBucketInPath: boolean;
   isR2DevDomain: boolean;
   accountId: string;
   isProduction: boolean;
+  isVercel: boolean;
+  effectivePublicUrl: string;
 };
 
 type BuildUrlOptions = {
@@ -43,37 +46,34 @@ function normalizeBucket(value: string): string {
 }
 
 function computeConfig(): R2UrlConfig {
-  const publicUrl =
-    readEnv("CLOUDFLARE_R2_PUBLIC_URL") ||
-    readEnv("NEXT_PUBLIC_CLOUDFLARE_R2_PUBLIC_URL");
-
-  const bucket =
-    readEnv("CLOUDFLARE_R2_BUCKET_NAME") ||
-    readEnv("NEXT_PUBLIC_CLOUDFLARE_R2_BUCKET_NAME");
-
+  // Read environment variables
+  const publicUrl = readEnv("CLOUDFLARE_R2_PUBLIC_URL");
+  const bucket = readEnv("CLOUDFLARE_R2_BUCKET_NAME");
   const accountId = readEnv("CLOUDFLARE_ACCOUNT_ID");
-  const isProduction = readEnv("NODE_ENV") === "production";
-  const includeBucketInPath = readEnv("CLOUDFLARE_R2_INCLUDE_BUCKET_IN_PATH") === "true";
+  const nodeEnv = readEnv("NODE_ENV");
+  const vercelEnv = readEnv("VERCEL_ENV");
+
+  const isProduction = nodeEnv === "production" || vercelEnv === "production";
+  const isVercel = !!vercelEnv;
+
+  const effectivePublicUrl = publicUrl;
+  const effectiveBucket = bucket;
 
   // Validate required environment variables
-  if (!publicUrl) {
-    throw new Error(
-      "CLOUDFLARE_R2_PUBLIC_URL or NEXT_PUBLIC_CLOUDFLARE_R2_PUBLIC_URL environment variable is required"
-    );
+  if (!effectivePublicUrl) {
+    throw new Error("CLOUDFLARE_R2_PUBLIC_URL environment variable is required");
   }
 
-  if (!bucket) {
-    throw new Error(
-      "CLOUDFLARE_R2_BUCKET_NAME or NEXT_PUBLIC_CLOUDFLARE_R2_BUCKET_NAME environment variable is required"
-    );
+  if (!effectiveBucket) {
+    throw new Error("CLOUDFLARE_R2_BUCKET_NAME environment variable is required");
   }
 
   if (!accountId) {
     throw new Error("CLOUDFLARE_ACCOUNT_ID environment variable is required");
   }
 
-  const normalizedBucket = normalizeBucket(bucket);
-  const normalizedPublicUrl = normalizePublicUrl(publicUrl);
+  const normalizedBucket = normalizeBucket(effectiveBucket);
+  const normalizedPublicUrl = normalizePublicUrl(effectivePublicUrl);
 
   if (!normalizedPublicUrl) {
     throw new Error("Invalid CLOUDFLARE_R2_PUBLIC_URL: URL cannot be empty");
@@ -88,14 +88,17 @@ function computeConfig(): R2UrlConfig {
 
   return {
     publicUrl,
+    nextPublicUrl: "",
     bucket,
+    nextPublicBucket: "",
     normalizedPublicUrl,
     normalizedBucket,
     publicUrlIncludesBucket,
-    includeBucketInPath,
     isR2DevDomain,
     accountId,
     isProduction,
+    isVercel,
+    effectivePublicUrl,
   };
 }
 
@@ -108,6 +111,7 @@ export function getR2UrlConfig(): R2UrlConfig {
 
 /**
  * Build a public URL for an R2 object with multiple fallback options
+ * Optimized for Vercel deployment
  */
 export function buildR2PublicUrl(
   objectKey: string,
@@ -127,32 +131,32 @@ export function buildR2PublicUrl(
     return fallbackToBase ? config.normalizedPublicUrl : "";
   }
 
-  // Priority order:
+  // Priority order optimized for Vercel:
   // 1. Direct R2 URL (if requested or in development)
   // 2. Custom domain (if available and requested)
   // 3. Fallback to base URL
 
   if (useDirectR2 || (config.isR2DevDomain && !config.isProduction)) {
     // Use direct R2 URL for development or when explicitly requested
-    return `https://${config.accountId}.r2.cloudflarestorage.com/${config.normalizedBucket}/${keyPart}`;
+    const directUrl = `https://${config.accountId}.r2.cloudflarestorage.com/${config.normalizedBucket}/${keyPart}`;
+    return directUrl;
   }
 
   if (useCustomDomain && !config.isR2DevDomain) {
-    // Use custom domain for production
-    // Check if the bucket name should be included in the path
-    if (config.includeBucketInPath) {
-      return `${config.normalizedPublicUrl}/${config.normalizedBucket}/${keyPart}`;
-    } else {
-      return `${config.normalizedPublicUrl}/${keyPart}`;
-    }
+    // Use custom domain for production - never include bucket in path
+    const customDomainUrl = `${config.normalizedPublicUrl}/${keyPart}`;
+    return customDomainUrl;
   }
 
   // Fallback to base URL
+  let fallbackUrl;
   if (config.publicUrlIncludesBucket) {
-    return `${config.normalizedPublicUrl}/${keyPart}`;
+    fallbackUrl = `${config.normalizedPublicUrl}/${keyPart}`;
   } else {
-    return `${config.normalizedPublicUrl}/${config.normalizedBucket}/${keyPart}`;
+    fallbackUrl = `${config.normalizedPublicUrl}/${config.normalizedBucket}/${keyPart}`;
   }
+  
+  return fallbackUrl;
 }
 
 /**
@@ -164,7 +168,8 @@ export function buildDirectR2Url(objectKey: string): string {
   
   if (!keyPart) return "";
   
-  return `https://${config.accountId}.r2.cloudflarestorage.com/${config.normalizedBucket}/${keyPart}`;
+  const directUrl = `https://${config.accountId}.r2.cloudflarestorage.com/${config.normalizedBucket}/${keyPart}`;
+  return directUrl;
 }
 
 /**
@@ -176,12 +181,9 @@ export function buildCustomDomainUrl(objectKey: string): string {
   
   if (!keyPart) return "";
   
-  // Check if the bucket name should be included in the path
-  if (config.includeBucketInPath) {
-    return `${config.normalizedPublicUrl}/${config.normalizedBucket}/${keyPart}`;
-  } else {
-    return `${config.normalizedPublicUrl}/${keyPart}`;
-  }
+  // Never include bucket in path
+  const customDomainUrl = `${config.normalizedPublicUrl}/${keyPart}`;
+  return customDomainUrl;
 }
 
 /**
@@ -200,7 +202,8 @@ export function resolveR2Url(value: string): string {
     return value;
   }
 
-  return buildR2PublicUrl(value, { fallbackToBase: true });
+  const resolvedUrl = buildR2PublicUrl(value, { fallbackToBase: true });
+  return resolvedUrl;
 }
 
 /**
@@ -209,8 +212,10 @@ export function resolveR2Url(value: string): string {
 export function isR2HostedUrl(url: string): boolean {
   if (!url) return false;
   const config = getR2UrlConfig();
-  return url.startsWith(config.normalizedPublicUrl) || 
-         url.includes(`${config.accountId}.r2.cloudflarestorage.com`);
+  const isHosted = url.startsWith(config.normalizedPublicUrl) || 
+                  url.includes(`${config.accountId}.r2.cloudflarestorage.com`);
+  
+  return isHosted;
 }
 
 /**
@@ -232,7 +237,8 @@ export function extractR2ObjectKey(url: string): string | null {
     if (config.normalizedBucket && !config.publicUrlIncludesBucket) {
       const bucketPrefix = `${config.normalizedBucket}/`;
       if (remainder.startsWith(bucketPrefix)) {
-        return remainder.slice(bucketPrefix.length);
+        const extractedKey = remainder.slice(bucketPrefix.length);
+        return extractedKey;
       }
       return null;
     }
@@ -269,11 +275,13 @@ export function getAllPossibleUrls(objectKey: string): {
     };
   }
 
-  return {
+  const urls = {
     customDomain: buildCustomDomainUrl(keyPart),
     directR2: buildDirectR2Url(keyPart),
     r2DevDomain: `https://${config.normalizedBucket}.${config.accountId}.r2.dev/${keyPart}`,
   };
+  
+  return urls;
 }
 
 /**

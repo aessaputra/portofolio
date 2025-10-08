@@ -1,174 +1,70 @@
 /**
  * Shared helpers for working with Cloudflare R2 public URLs.
- *
- * The logic lives outside of the server-only storage client so that it can be
- * consumed by both Server and Client Components without duplicating the
- * normalization rules. All configuration values fall back to the `NEXT_PUBLIC`
- * variants so that the helpers continue to work in the browser bundle.
+ * 
+ * This file now delegates to the consolidated r2UrlManager.ts
+ * to avoid code duplication and ensure consistent behavior.
  */
 
-const ABSOLUTE_URL_PATTERN = /^https?:\/\//i;
-
-type R2PublicConfig = {
-  publicUrl: string;
-  bucket: string;
-  normalizedPublicUrl: string;
-  normalizedBucket: string;
-  publicUrlIncludesBucket: boolean;
-};
-
-let cachedConfig: R2PublicConfig | null = null;
-
-function readEnv(name: string): string {
-  const value = process.env[name];
-  return typeof value === "string" ? value.trim() : "";
-}
-
-function normalizePublicUrl(value: string): string {
-  if (!value) return "";
-  const trimmed = value.trim();
-  if (!trimmed || trimmed === "/") return "";
-  return trimmed.replace(/\/$/, "");
-}
-
-function normalizeBucket(value: string): string {
-  if (!value) return "";
-  return value.trim().replace(/^\/+|\/+$/g, "");
-}
-
-function computeConfig(): R2PublicConfig {
-  const publicUrl =
-    readEnv("CLOUDFLARE_R2_PUBLIC_URL") ||
-    readEnv("NEXT_PUBLIC_CLOUDFLARE_R2_PUBLIC_URL");
-
-  const bucket =
-    readEnv("CLOUDFLARE_R2_BUCKET_NAME") ||
-    readEnv("NEXT_PUBLIC_CLOUDFLARE_R2_BUCKET_NAME");
-
-  // Validate required environment variables
-  if (!publicUrl) {
-    throw new Error(
-      "CLOUDFLARE_R2_PUBLIC_URL or NEXT_PUBLIC_CLOUDFLARE_R2_PUBLIC_URL environment variable is required"
-    );
-  }
-
-  if (!bucket) {
-    throw new Error(
-      "CLOUDFLARE_R2_BUCKET_NAME or NEXT_PUBLIC_CLOUDFLARE_R2_BUCKET_NAME environment variable is required"
-    );
-  }
-
-  const normalizedBucket = normalizeBucket(bucket);
-  const normalizedPublicUrl = normalizePublicUrl(publicUrl);
-
-  if (!normalizedPublicUrl) {
-    throw new Error("Invalid CLOUDFLARE_R2_PUBLIC_URL: URL cannot be empty");
-  }
-
-  const publicUrlIncludesBucket =
-    Boolean(normalizedPublicUrl) &&
-    Boolean(normalizedBucket) &&
-    normalizedPublicUrl.endsWith(`/${normalizedBucket}`);
-
-  return {
-    publicUrl,
-    bucket,
-    normalizedPublicUrl,
-    normalizedBucket,
-    publicUrlIncludesBucket,
-  };
-}
-
-export function getR2PublicConfig(): R2PublicConfig {
-  if (!cachedConfig) {
-    cachedConfig = computeConfig();
-  }
-  return cachedConfig;
-}
+import {
+  buildR2PublicUrl as buildR2PublicUrlFromManager,
+  resolveR2Url as resolveR2UrlFromManager,
+  isR2HostedUrl as isR2HostedUrlFromManager,
+  extractR2ObjectKey as extractR2ObjectKeyFromManager,
+  getR2UrlConfig,
+  resetR2UrlConfigCache,
+} from "@/shared/lib/r2UrlManager";
 
 type BuildUrlOptions = {
   fallbackToBase?: boolean;
 };
 
+/**
+ * Build a public URL for an R2 object
+ * @deprecated Use buildR2PublicUrl from r2UrlManager instead
+ */
 export function buildR2PublicUrlFromKey(
   objectKey: string,
   options: BuildUrlOptions = {}
 ): string {
-  const { fallbackToBase = false } = options;
-  const config = getR2PublicConfig();
-
-  const keyPart = objectKey.replace(/^\/+/, "");
-
-  if (!keyPart) {
-    return fallbackToBase ? config.normalizedPublicUrl : "";
-  }
-
-  // For R2.dev domains, don't include bucket name in path
-  if (config.normalizedPublicUrl.includes('.r2.dev')) {
-    return `${config.normalizedPublicUrl}/${keyPart}`;
-  }
-
-  if (!config.normalizedBucket) {
-    return `${config.normalizedPublicUrl}/${keyPart}`;
-  }
-
-  if (config.publicUrlIncludesBucket) {
-    return `${config.normalizedPublicUrl}/${keyPart}`;
-  }
-
-  return `${config.normalizedPublicUrl}/${config.normalizedBucket}/${keyPart}`;
+  return buildR2PublicUrlFromManager(objectKey, options);
 }
 
+/**
+ * Resolve an R2 URL with intelligent fallback
+ * @deprecated Use resolveR2Url from r2UrlManager instead
+ */
 export function resolveR2PublicUrl(value: string): string {
-  if (!value) {
-    return value;
-  }
-
-  if (ABSOLUTE_URL_PATTERN.test(value)) {
-    return value;
-  }
-
-  if (value.startsWith("/")) {
-    return value;
-  }
-
-  return buildR2PublicUrlFromKey(value, { fallbackToBase: true });
+  return resolveR2UrlFromManager(value);
 }
 
+/**
+ * Check if a URL is hosted on R2
+ * @deprecated Use isR2HostedUrl from r2UrlManager instead
+ */
 export function isR2HostedUrl(url: string): boolean {
-  if (!url) return false;
-  const config = getR2PublicConfig();
-  return url.startsWith(config.normalizedPublicUrl);
+  return isR2HostedUrlFromManager(url);
 }
 
+/**
+ * Extract object key from R2 URL
+ * @deprecated Use extractR2ObjectKey from r2UrlManager instead
+ */
 export function extractR2ObjectKey(url: string): string | null {
-  const config = getR2PublicConfig();
-  if (!url || !url.startsWith(config.normalizedPublicUrl)) {
-    return null;
-  }
-
-  let remainder = url.slice(config.normalizedPublicUrl.length);
-  if (remainder.startsWith("/")) {
-    remainder = remainder.slice(1);
-  }
-
-  if (!remainder) {
-    return null;
-  }
-
-  if (config.normalizedBucket && !config.publicUrlIncludesBucket) {
-    const bucketPrefix = `${config.normalizedBucket}/`;
-    if (remainder.startsWith(bucketPrefix)) {
-      remainder = remainder.slice(bucketPrefix.length);
-    } else {
-      return null;
-    }
-  }
-
-  return remainder || null;
+  return extractR2ObjectKeyFromManager(url);
 }
 
+/**
+ * Get R2 public configuration
+ * @deprecated Use getR2UrlConfig from r2UrlManager instead
+ */
+export function getR2PublicConfig() {
+  return getR2UrlConfig();
+}
+
+/**
+ * Reset the R2 public configuration cache
+ * @deprecated Use resetR2UrlConfigCache from r2UrlManager instead
+ */
 export function resetR2PublicConfigCache(): void {
-  cachedConfig = null;
+  resetR2UrlConfigCache();
 }
-

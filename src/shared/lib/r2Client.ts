@@ -2,7 +2,7 @@ import "server-only";
 
 import { S3Client } from "@aws-sdk/client-s3";
 
-// Environment variables with validation
+// Environment variables with validation - following Vercel best practices
 const {
   CLOUDFLARE_ACCOUNT_ID: ACCOUNT_ID = "",
   CLOUDFLARE_R2_ACCESS_KEY_ID: ACCESS_KEY_ID = "",
@@ -10,19 +10,29 @@ const {
   CLOUDFLARE_R2_BUCKET_NAME: BUCKET = "",
   CLOUDFLARE_R2_PUBLIC_URL: PUBLIC_URL = "",
   NODE_ENV: ENV = "development",
+  VERCEL_ENV: VERCEL_ENV = "",
 } = process.env;
+
+// Determine if we're in production (considering Vercel environments)
+const isProduction = ENV === "production" || VERCEL_ENV === "production";
+
+// Determine which public URL to use
+const effectivePublicUrl = PUBLIC_URL;
 
 // Validate required environment variables at module load
 if (!ACCOUNT_ID || !ACCESS_KEY_ID || !SECRET_ACCESS_KEY || !BUCKET) {
+  const errors = [];
+  if (!ACCOUNT_ID) errors.push("CLOUDFLARE_ACCOUNT_ID is missing");
+  if (!ACCESS_KEY_ID) errors.push("CLOUDFLARE_R2_ACCESS_KEY_ID is missing");
+  if (!SECRET_ACCESS_KEY) errors.push("CLOUDFLARE_R2_SECRET_ACCESS_KEY is missing");
+  if (!BUCKET) errors.push("CLOUDFLARE_R2_BUCKET_NAME is missing");
+  
   throw new Error(
-    "Missing required Cloudflare R2 environment variables. Please check your .env file."
+    `Missing required Cloudflare R2 environment variables: ${errors.join(", ")}. Please check your .env file or Vercel environment variables.`
   );
 }
 
-// Determine if we're in production
-const isProduction = ENV === "production";
-
-// Create R2 client configuration with best practices
+// Create R2 client configuration with best practices for Vercel
 const clientConfig = {
   region: "auto", // Required by AWS SDK, ignored by R2
   endpoint: `https://${ACCOUNT_ID}.r2.cloudflarestorage.com`,
@@ -31,10 +41,10 @@ const clientConfig = {
     secretAccessKey: SECRET_ACCESS_KEY 
   },
   forcePathStyle: true,
-  // Add retry configuration for better reliability
+  // Add retry configuration for better reliability in serverless environments
   maxAttempts: isProduction ? 5 : 3,
   retryMode: "adaptive",
-  // Add request timeout for production
+  // Add request timeout for production (important for Vercel serverless functions)
   requestTimeout: isProduction ? 30000 : 10000,
   // Add connection pooling for production
   connectionPool: isProduction ? {
@@ -68,7 +78,11 @@ export const r2Config = {
   accessKeyId: ACCESS_KEY_ID,
   bucket: BUCKET,
   publicUrl: PUBLIC_URL,
+  nextPublicUrl: "",
+  effectivePublicUrl,
   isProduction,
+  isVercel: !!VERCEL_ENV,
+  vercelEnv: VERCEL_ENV,
   endpoint: clientConfig.endpoint,
 };
 
@@ -82,7 +96,8 @@ export function validateR2Config() {
   if (!BUCKET) errors.push("CLOUDFLARE_R2_BUCKET_NAME is required");
   
   if (errors.length > 0) {
-    throw new Error(`Invalid R2 configuration: ${errors.join(", ")}`);
+    const errorMsg = `Invalid R2 configuration: ${errors.join(", ")}`;
+    throw new Error(errorMsg);
   }
   
   return true;
