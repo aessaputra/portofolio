@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 export default async function HomePage() {
   const content = await getHomeContent();
   const hasProfileImage = content.profileImagePath && content.profileImagePath.trim() !== "";
-  const shouldUnoptimize = hasProfileImage && !content.profileImagePath.endsWith(".png");
+  const shouldUnoptimize = hasProfileImage && !content.profileImagePath.endsWith(".png") ? true : undefined;
   const contactHref = normalizeMailto(content.contactEmail);
 
   return (
