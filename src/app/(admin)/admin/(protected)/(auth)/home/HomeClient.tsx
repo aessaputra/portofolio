@@ -208,23 +208,32 @@ export default function HomeClient({
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Profile Photo</label>
                 <div className="mt-2 flex items-center gap-4">
                   <div className="relative">
-                    <Image
-                      src={formState.profileImagePath || fallbackProfileImagePath}
-                      alt="Profile"
-                      width={80}
-                      height={80}
-                      className="h-20 w-20 rounded-full object-cover ring-2 ring-gray-200 dark:ring-gray-700"
-                      unoptimized
-                      onError={(e) => {
-                        console.error('[HomeClient] Failed to load profile image:', {
-                          src: formState.profileImagePath || fallbackProfileImagePath,
-                          error: e,
-                        });
-                      }}
-                      onLoad={() => {
-                        console.log('[HomeClient] Successfully loaded profile image:', formState.profileImagePath || fallbackProfileImagePath);
-                      }}
-                    />
+                    {(() => {
+                      const imageSrc = formState.profileImagePath || fallbackProfileImagePath;
+                      return imageSrc ? (
+                        <Image
+                          src={imageSrc}
+                          alt="Profile"
+                          width={80}
+                          height={80}
+                          className="h-20 w-20 rounded-full object-cover ring-2 ring-gray-200 dark:ring-gray-700"
+                          unoptimized
+                          onError={(e) => {
+                            console.error('[HomeClient] Failed to load profile image:', {
+                              src: imageSrc,
+                              error: e,
+                            });
+                          }}
+                          onLoad={() => {
+                            console.log('[HomeClient] Successfully loaded profile image:', imageSrc);
+                          }}
+                        />
+                      ) : (
+                        <div className="h-20 w-20 rounded-full bg-gray-200 ring-2 ring-gray-200 dark:bg-gray-700 dark:ring-gray-700 flex items-center justify-center">
+                          <span className="text-gray-500 dark:text-gray-400 text-sm">No Image</span>
+                        </div>
+                      );
+                    })()}
                   </div>
                   <div className="flex flex-col gap-2">
                     <button
