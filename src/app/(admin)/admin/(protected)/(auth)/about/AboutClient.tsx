@@ -56,7 +56,7 @@ export default function AboutClient({
         setFormState(initialState);
       }
     }
-  }, [initialState]); // Only depend on initialState
+  }, [initialState, formState]); // Include formState in dependencies as required by ESLint
 
   useEffect(() => {
     return () => {
