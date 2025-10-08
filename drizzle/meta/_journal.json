@@ -36,6 +36,13 @@
       "when": 1759787542893,
       "tag": "0004_free_menace",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1759912679209,
+      "tag": "0005_regular_senator_kelly",
+      "breakpoints": true
     }
   ]
 }
