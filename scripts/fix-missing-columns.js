@@ -19,39 +19,70 @@ async function fixMissingColumns() {
     await sql`SELECT 1`;
     console.log('✅ Database connection successful');
 
-    // Fix about_content table - add missing about_me_text column
+    // Fix about_content table - add all missing columns
     console.log('🔧 Checking about_content table...');
+    
     const aboutColumns = await sql`
       SELECT column_name 
       FROM information_schema.columns 
-      WHERE table_name = 'about_content' 
-      AND column_name = 'about_me_text'
+      WHERE table_name = 'about_content'
     `;
     
-    if (aboutColumns.length === 0) {
-      console.log('➕ Adding about_me_text column to about_content...');
-      await sql`ALTER TABLE about_content ADD COLUMN about_me_text TEXT DEFAULT ''`;
-      await sql`ALTER TABLE about_content ALTER COLUMN about_me_text SET NOT NULL`;
-      console.log('✅ about_me_text column added');
-    } else {
-      console.log('✅ about_me_text column already exists');
+    const existingAboutColumns = aboutColumns.map(c => c.column_name);
+    console.log('📋 Existing about_content columns:', existingAboutColumns);
+    
+    // Add missing columns
+    const requiredAboutColumns = [
+      { name: 'about_me_text', sql: 'ALTER TABLE about_content ADD COLUMN about_me_text TEXT DEFAULT \'\' NOT NULL' },
+      { name: 'about_profile_image_path', sql: 'ALTER TABLE about_content ADD COLUMN about_profile_image_path TEXT DEFAULT \'\' NOT NULL' },
+      { name: 'skills', sql: 'ALTER TABLE about_content ADD COLUMN skills JSONB NOT NULL DEFAULT \'[]\'' },
+      { name: 'experiences', sql: 'ALTER TABLE about_content ADD COLUMN experiences JSONB NOT NULL DEFAULT \'[]\'' },
+      { name: 'education', sql: 'ALTER TABLE about_content ADD COLUMN education JSONB NOT NULL DEFAULT \'[]\'' }
+    ];
+    
+    for (const col of requiredAboutColumns) {
+      if (!existingAboutColumns.includes(col.name)) {
+        console.log(`➕ Adding ${col.name} column to about_content...`);
+        try {
+          await sql.unsafe(col.sql);
+          console.log(`✅ ${col.name} column added`);
+        } catch (error) {
+          console.warn(`⚠️  Warning adding ${col.name}:`, error.message);
+        }
+      } else {
+        console.log(`✅ ${col.name} column already exists`);
+      }
     }
 
-    // Fix home_content table - add missing logo_text column
+    // Fix home_content table - add all missing columns
     console.log('🔧 Checking home_content table...');
+    
     const homeColumns = await sql`
       SELECT column_name 
       FROM information_schema.columns 
-      WHERE table_name = 'home_content' 
-      AND column_name = 'logo_text'
+      WHERE table_name = 'home_content'
     `;
     
-    if (homeColumns.length === 0) {
-      console.log('➕ Adding logo_text column to home_content...');
-      await sql`ALTER TABLE home_content ADD COLUMN logo_text TEXT DEFAULT 'AES' NOT NULL`;
-      console.log('✅ logo_text column added');
-    } else {
-      console.log('✅ logo_text column already exists');
+    const existingHomeColumns = homeColumns.map(c => c.column_name);
+    console.log('📋 Existing home_content columns:', existingHomeColumns);
+    
+    // Add missing columns
+    const requiredHomeColumns = [
+      { name: 'logo_text', sql: 'ALTER TABLE home_content ADD COLUMN logo_text TEXT DEFAULT \'AES\' NOT NULL' }
+    ];
+    
+    for (const col of requiredHomeColumns) {
+      if (!existingHomeColumns.includes(col.name)) {
+        console.log(`➕ Adding ${col.name} column to home_content...`);
+        try {
+          await sql.unsafe(col.sql);
+          console.log(`✅ ${col.name} column added`);
+        } catch (error) {
+          console.warn(`⚠️  Warning adding ${col.name}:`, error.message);
+        }
+      } else {
+        console.log(`✅ ${col.name} column already exists`);
+      }
     }
 
     // Verify all required columns exist
