@@ -94,5 +94,5 @@ export async function copyObjectInR2(
 }
 
 // Export new enhanced functions
-export { resolveR2UrlWithFallback };
+export { resolveR2UrlWithFallback, r2Client };
 export type { UploadResult, ImageType, PutObjectOptions };
