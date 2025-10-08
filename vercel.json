@@ -8,7 +8,7 @@
       "NODE_ENV": "production"
     }
   },
-  "buildCommand": "npm run db:run-migration && npm run build",
+  "buildCommand": "npm run db:vercel-migrate && npm run build",
   "routes": [
     {
       "src": "/(.*)",
