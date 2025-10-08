@@ -174,8 +174,6 @@ export async function uploadImageToR2(
       objectKey,
     };
   } catch (error: any) {
-    console.error("R2 upload error:", error);
-    
     // Handle specific R2 errors
     if (error.name === "NoSuchBucket") {
       return { success: false, error: `R2 bucket '${r2Config.bucket}' does not exist or is not accessible` };
@@ -274,7 +272,6 @@ export async function copyObjectInR2(
       options
     );
   } catch (error) {
-    console.error("Failed to copy object in R2", error);
     return { success: false, error: `Failed to copy object in storage: ${error instanceof Error ? error.message : "Unknown error"}` };
   }
 }

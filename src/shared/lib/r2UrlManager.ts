@@ -11,6 +11,7 @@ type R2UrlConfig = {
   normalizedPublicUrl: string;
   normalizedBucket: string;
   publicUrlIncludesBucket: boolean;
+  includeBucketInPath: boolean;
   isR2DevDomain: boolean;
   accountId: string;
   isProduction: boolean;
@@ -52,6 +53,7 @@ function computeConfig(): R2UrlConfig {
 
   const accountId = readEnv("CLOUDFLARE_ACCOUNT_ID");
   const isProduction = readEnv("NODE_ENV") === "production";
+  const includeBucketInPath = readEnv("CLOUDFLARE_R2_INCLUDE_BUCKET_IN_PATH") === "true";
 
   // Validate required environment variables
   if (!publicUrl) {
@@ -90,6 +92,7 @@ function computeConfig(): R2UrlConfig {
     normalizedPublicUrl,
     normalizedBucket,
     publicUrlIncludesBucket,
+    includeBucketInPath,
     isR2DevDomain,
     accountId,
     isProduction,
@@ -136,13 +139,11 @@ export function buildR2PublicUrl(
 
   if (useCustomDomain && !config.isR2DevDomain) {
     // Use custom domain for production
-    // For cdn.aes.my.id, the bucket name is not included in the path
-    if (config.normalizedPublicUrl === 'https://cdn.aes.my.id') {
-      return `${config.normalizedPublicUrl}/${keyPart}`;
-    } else if (config.publicUrlIncludesBucket) {
-      return `${config.normalizedPublicUrl}/${keyPart}`;
-    } else {
+    // Check if the bucket name should be included in the path
+    if (config.includeBucketInPath) {
       return `${config.normalizedPublicUrl}/${config.normalizedBucket}/${keyPart}`;
+    } else {
+      return `${config.normalizedPublicUrl}/${keyPart}`;
     }
   }
 
@@ -175,13 +176,11 @@ export function buildCustomDomainUrl(objectKey: string): string {
   
   if (!keyPart) return "";
   
-  // For cdn.aes.my.id, the bucket name is not included in the path
-  if (config.normalizedPublicUrl === 'https://cdn.aes.my.id') {
-    return `${config.normalizedPublicUrl}/${keyPart}`;
-  } else if (config.publicUrlIncludesBucket) {
-    return `${config.normalizedPublicUrl}/${keyPart}`;
-  } else {
+  // Check if the bucket name should be included in the path
+  if (config.includeBucketInPath) {
     return `${config.normalizedPublicUrl}/${config.normalizedBucket}/${keyPart}`;
+  } else {
+    return `${config.normalizedPublicUrl}/${keyPart}`;
   }
 }
 
