@@ -72,9 +72,12 @@ async function runDirectMigration() {
             try {
               await sql.unsafe(statement);
             } catch (error) {
-              // Ignore "already exists" errors
+              // Ignore "already exists" errors and transaction warnings
               if (!error.message.includes('already exists') && 
-                  !error.message.includes('does not exist')) {
+                  !error.message.includes('does not exist') &&
+                  !error.message.includes('there is no transaction in progress') &&
+                  !error.message.includes('relation') && 
+                  !error.message.includes('skipping')) {
                 console.warn(`⚠️  Warning in ${file}:`, error.message);
               }
             }
