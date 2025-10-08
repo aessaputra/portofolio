@@ -42,8 +42,15 @@ export default function AboutClient({
   const timeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
-    setFormState(initialState);
-  }, [initialState]);
+    // Only update the form state if the initialState has actually changed
+    // We'll use a deep comparison to avoid unnecessary updates
+    const currentStateString = JSON.stringify(formState);
+    const initialStateString = JSON.stringify(initialState);
+    
+    if (currentStateString !== initialStateString) {
+      setFormState(initialState);
+    }
+  }, [initialState, formState]);
 
   useEffect(() => {
     return () => {
