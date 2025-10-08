@@ -13,6 +13,9 @@
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "db:run-migration": "node scripts/run-migration.js",
+    "db:debug": "node scripts/debug-production.js",
+    "db:revalidate": "node scripts/force-revalidation.js",
+    "deploy": "node scripts/deploy-and-test.js",
     "db:setup": "npm run db:run-migration",
     "postinstall": "npm run db:generate"
   },

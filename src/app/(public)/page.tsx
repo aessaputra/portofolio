@@ -16,6 +16,10 @@ export const metadata: Metadata = {
   description: "Aes Saputra Portfolio",
 };
 
+// Force dynamic rendering to ensure fresh data
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function HomePage() {
   const content = await getHomeContent();
   const hasProfileImage = content.profileImagePath && content.profileImagePath.trim() !== "";
