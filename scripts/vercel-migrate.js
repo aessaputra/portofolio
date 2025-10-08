@@ -46,8 +46,11 @@ async function runVercelMigration() {
 
     // Run migrations
     console.log('🔄 Running migrations...');
+    const migrationsPath = path.join(process.cwd(), 'drizzle');
+    console.log('📁 Migrations path:', migrationsPath);
+    
     await migrate(db, { 
-      migrationsFolder: path.join(__dirname, '..', 'drizzle') 
+      migrationsFolder: migrationsPath 
     });
     
     console.log('✅ Migration completed successfully!');
