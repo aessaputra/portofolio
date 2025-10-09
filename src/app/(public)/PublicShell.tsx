@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 import type { HomeContent } from "@/entities/home";
 import { AnimatePresence } from "@/shared/ui/motion";
 import UmamiAnalytics from "@/shared/ui/umami-analytics";
-import UmamiDebugDev from "@/shared/ui/umami-debug-dev";
 import Footer from "@/features/site/public/components/Footer";
 import NavBar from "@/features/site/public/components/NavBar";
 
@@ -38,7 +37,6 @@ export default function PublicShell({ children, homeContent }: PublicShellProps)
         </div>
       </AnimatePresence>
       <Footer homeContent={homeContent} />
-      <UmamiDebugDev />
     </main>
   );
 }

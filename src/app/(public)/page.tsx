@@ -4,7 +4,8 @@ import Link from "next/link";
 
 import AnimatedText from "@/shared/ui/animated-text";
 import HireMe from "@/features/home/public/components/HireMe";
-import { LinkArrow } from "@/shared/ui/icons";
+import ResumeButton from "@/features/home/public/components/ResumeButton";
+import ContactButton from "@/features/home/public/components/ContactButton";
 import Layout from "@/shared/ui/layout";
 import TransitionEffect from "@/shared/ui/transition-effect";
 import { normalizeMailto } from "@/shared/lib/contact";
@@ -61,22 +62,15 @@ export default async function HomePage() {
                 {content.subheadline}
               </p>
               <div className="flex items-center self-start mt-2 lg:self-center">
-                <Link
-                  href={content.resumeUrl}
-                  target="_blank"
-                  download
+                <ResumeButton
+                  resumeUrl={content.resumeUrl}
                   className="flex items-center bg-dark text-light p-2.5 px-6 rounded-lg text-lg font-semibold hover:bg-light hover:text-dark border-2 
                   border-solid border-transparent hover:border-dark dark:bg-light dark:text-dark hover:dark:bg-dark hover:dark:text-light hover:dark:border-light md:p-2 md:px-4 md:text-base"
-                >
-                  Resume
-                  <LinkArrow className="w-6 ml-1" />
-                </Link>
-                <Link
-                  href={contactHref}
+                />
+                <ContactButton
+                  contactHref={contactHref}
                   className="ml-4 text-lg font-medium capitalize text-dark underline dark:text-light md:text-base"
-                >
-                  Contact
-                </Link>
+                />
               </div>
             </div>
           </div>

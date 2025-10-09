@@ -17,7 +17,7 @@ export default function Footer({ homeContent }: FooterProps) {
   const handleContactClick = () => {
     track("contact-click", { 
       location: "footer",
-      email: homeContent.contactEmail
+      type: "say-hello"
     });
   };
 
