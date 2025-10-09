@@ -6,6 +6,8 @@ import { usePathname } from "next/navigation";
 
 import type { HomeContent } from "@/entities/home";
 import { AnimatePresence } from "@/shared/ui/motion";
+import UmamiAnalytics from "@/shared/ui/umami-analytics";
+import UmamiDebugDev from "@/shared/ui/umami-debug-dev";
 import Footer from "@/features/site/public/components/Footer";
 import NavBar from "@/features/site/public/components/NavBar";
 
@@ -18,6 +20,10 @@ export default function PublicShell({ children, homeContent }: PublicShellProps)
 
   return (
     <main className="flex min-h-screen w-full flex-col">
+      {/* Umami Analytics - Hanya tracking halaman public, tidak admin */}
+      <UmamiAnalytics 
+        websiteId={process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID || ""} 
+      />
       <NavBar
         socialLinks={{
           github: homeContent.githubUrl,
@@ -32,6 +38,7 @@ export default function PublicShell({ children, homeContent }: PublicShellProps)
         </div>
       </AnimatePresence>
       <Footer homeContent={homeContent} />
+      <UmamiDebugDev />
     </main>
   );
 }

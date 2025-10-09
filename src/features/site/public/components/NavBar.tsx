@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 
 import { motion } from "@/shared/ui/motion";
+import { useUmamiTracker } from "@/shared/ui/umami-tracker";
 import {
   GithubIcon,
   LinkedInIcon,
@@ -27,6 +28,7 @@ type ThemeToggleButtonProps = {
 function ThemeToggleButton({ className }: ThemeToggleButtonProps) {
   const { theme, setTheme, systemTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const { track } = useUmamiTracker();
 
   useEffect(() => {
     setMounted(true);
@@ -57,6 +59,13 @@ function ThemeToggleButton({ className }: ThemeToggleButtonProps) {
   const toggleTheme = () => {
     const nextTheme = isDark ? "light" : "dark";
     setTheme(nextTheme);
+
+    // Track theme toggle event
+    track("theme-toggle", { 
+      from: effectiveTheme || "system", 
+      to: nextTheme,
+      location: "navbar"
+    });
 
     if (typeof window !== "undefined") {
       window.dispatchEvent(
@@ -102,9 +111,23 @@ interface CustomMobileLinkProps extends CustomLinkProps {
 
 const CustomLink = ({ href, title, className = "" }: CustomLinkProps) => {
   const pathname = usePathname();
+  const { track } = useUmamiTracker();
+
+  const handleClick = () => {
+    // Track navigation clicks
+    track("navigation-click", { 
+      link: title, 
+      href: href,
+      location: "navbar-desktop"
+    });
+  };
 
   return (
-    <Link href={href} className={cn(className, "relative group")}>
+    <Link 
+      href={href} 
+      className={cn(className, "relative group")}
+      onClick={handleClick}
+    >
       {title}
       <span
         aria-hidden="true"
@@ -122,8 +145,16 @@ const CustomLink = ({ href, title, className = "" }: CustomLinkProps) => {
 const CustomMobileLink = ({ href, title, className = "", toggle }: CustomMobileLinkProps) => {
   const pathname = usePathname();
   const router = useRouter();
+  const { track } = useUmamiTracker();
 
   const handleClick = () => {
+    // Track mobile navigation clicks
+    track("navigation-click", { 
+      link: title, 
+      href: href,
+      location: "navbar-mobile"
+    });
+    
     if (toggle) toggle();
     router.push(href);
   };
@@ -174,6 +205,7 @@ const socialLinkMotionProps = {
 
 export default function NavBar({ socialLinks, brandName = "Portfolio" }: NavBarProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const { track } = useUmamiTracker();
 
   const resolvedSocialLinks = useMemo(() => {
     const entries = [
@@ -189,7 +221,14 @@ export default function NavBar({ socialLinks, brandName = "Portfolio" }: NavBarP
   }, [socialLinks?.github, socialLinks?.linkedin, socialLinks?.x]);
 
   const handleToggleMenu = () => {
-    setIsOpen((prev) => !prev);
+    const newState = !isOpen;
+    setIsOpen(newState);
+    
+    // Track mobile menu toggle
+    track("mobile-menu-toggle", { 
+      action: newState ? "open" : "close",
+      location: "navbar"
+    });
   };
 
   return (
@@ -236,6 +275,11 @@ export default function NavBar({ socialLinks, brandName = "Portfolio" }: NavBarP
               rel="noreferrer"
               aria-label={label}
               className="w-6"
+              onClick={() => track("social-link-click", { 
+                platform: label, 
+                url: href,
+                location: "navbar-desktop"
+              })}
               {...socialLinkMotionProps}
             >
               <Icon />
@@ -289,6 +333,11 @@ export default function NavBar({ socialLinks, brandName = "Portfolio" }: NavBarP
                     ? "mr-3 sm:mr-2 rounded-full bg-light dark:bg-dark"
                     : "mx-3 sm:mx-2"
                 )}
+                onClick={() => track("social-link-click", { 
+                  platform: label, 
+                  url: href,
+                  location: "navbar-mobile"
+                })}
                 {...socialLinkMotionProps}
               >
                 <Icon />
