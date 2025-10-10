@@ -2,80 +2,112 @@
 
 import React from "react";
 import Link from "next/link";
+import Overview from "@/app/(admin)/dashboard/Overview";
 
 export default function AdminDashboard() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[70vh] p-6">
-      <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 text-center">
-        <div className="flex justify-center mb-6">
-          <div className="relative">
-            <svg
-              className="w-16 h-16 text-yellow-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
+    <div className="container mx-auto px-4 py-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
+        <p className="text-gray-600 dark:text-gray-400 mt-2">
+          Welcome to your admin dashboard. Here you can view analytics and manage your content.
+        </p>
+      </div>
+
+      {/* Analytics Overview Section */}
+      <div className="mb-12">
+        <Overview />
+      </div>
+
+      {/* Quick Actions Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border border-gray-200 dark:border-gray-700">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Actions</h3>
+          <div className="space-y-3">
+            <Link
+              href="/admin/home"
+              className="flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-              ></path>
-            </svg>
-            <div className="absolute -top-1 -right-1 bg-yellow-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">
-              !
+              <svg className="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+              Manage Home Page
+            </Link>
+            <Link
+              href="/admin/projects"
+              className="flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+            >
+              <svg className="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+              Manage Projects
+            </Link>
+            <Link
+              href="/admin/articles"
+              className="flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+            >
+              <svg className="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+              </svg>
+              Manage Articles
+            </Link>
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border border-gray-200 dark:border-gray-700">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Activity</h3>
+          <div className="space-y-4">
+            <div className="flex items-start">
+              <div className="flex-shrink-0">
+                <div className="h-2 w-2 rounded-full bg-green-500 mt-2"></div>
+              </div>
+              <div className="ml-3">
+                <p className="text-sm text-gray-900 dark:text-white">System updated successfully</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">2 hours ago</p>
+              </div>
+            </div>
+            <div className="flex items-start">
+              <div className="flex-shrink-0">
+                <div className="h-2 w-2 rounded-full bg-blue-500 mt-2"></div>
+              </div>
+              <div className="ml-3">
+                <p className="text-sm text-gray-900 dark:text-white">New visitor registered</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">5 hours ago</p>
+              </div>
+            </div>
+            <div className="flex items-start">
+              <div className="flex-shrink-0">
+                <div className="h-2 w-2 rounded-full bg-yellow-500 mt-2"></div>
+              </div>
+              <div className="ml-3">
+                <p className="text-sm text-gray-900 dark:text-white">Project published</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Yesterday</p>
+              </div>
             </div>
           </div>
         </div>
-        
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-          Under Construction
-        </h1>
-        
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
-          This dashboard is currently under development. Please check back later or manage your home page content instead.
-        </p>
-        
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link
-            href="/admin/home"
-            className="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            <svg
-              className="mr-2 -ml-1 h-5 w-5"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-            </svg>
-            Manage Home Page
-          </Link>
-          
-          <Link
-            href="/admin/dashboard"
-            className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700"
-          >
-            <svg
-              className="mr-2 -ml-1 h-5 w-5"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
-                clipRule="evenodd"
-              />
-            </svg>
-            Back to Admin
-          </Link>
+
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border border-gray-200 dark:border-gray-700">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">System Status</h3>
+          <div className="space-y-3">
+            <div className="flex justify-between">
+              <span className="text-sm text-gray-600 dark:text-gray-400">Server Status</span>
+              <span className="text-sm font-medium text-green-600 dark:text-green-400">Operational</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-sm text-gray-600 dark:text-gray-400">Database</span>
+              <span className="text-sm font-medium text-green-600 dark:text-green-400">Connected</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-sm text-gray-600 dark:text-gray-400">Analytics</span>
+              <span className="text-sm font-medium text-green-600 dark:text-green-400">Active</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-sm text-gray-600 dark:text-gray-400">Storage</span>
+              <span className="text-sm font-medium text-yellow-600 dark:text-yellow-400">78% Used</span>
+            </div>
+          </div>
         </div>
-      </div>
-      
-      <div className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
-        <p>Need help? Contact your system administrator.</p>
       </div>
     </div>
   );

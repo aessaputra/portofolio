@@ -52,6 +52,24 @@ function validateDatabaseConfiguration(): void {
   ensureEnvVar("DATABASE_URL");
 }
 
+// Validate Umami Analytics environment variables
+function validateUmamiConfiguration(): void {
+  const requiredVars = [
+    'NEXT_UMAMI_API_URL',
+    'NEXT_UMAMI_USERNAME',
+    'NEXT_UMAMI_PASSWORD',
+    'NEXT_PUBLIC_UMAMI_WEBSITE_ID'
+  ];
+
+  for (const varName of requiredVars) {
+    if (!process.env[varName] || process.env[varName]?.trim() === "") {
+      throw new Error(
+        `${varName} environment variable is required for Umami Analytics integration.`
+      );
+    }
+  }
+}
+
 function validateR2Credentials(): void {
   const requiredVars = [
     'CLOUDFLARE_ACCOUNT_ID',
@@ -79,6 +97,7 @@ export function validateEnvironment(): void {
     validateEmailProviderConfiguration();
     validateDatabaseConfiguration();
     validateR2Credentials();
+    validateUmamiConfiguration();
     if (process.env.NODE_ENV !== "production") {
       console.log("[Environment Validation] All environment variables are valid.");
     }
