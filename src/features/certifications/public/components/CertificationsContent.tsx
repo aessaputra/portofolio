@@ -8,6 +8,7 @@ import { resolveR2PublicUrl } from "@/shared/lib/r2PublicUrl";
 import { makeMotion } from "@/shared/ui/motion";
 import type { Certification } from "@/entities/certifications";
 import styles from "@/styles/Certifications.module.css";
+import { umamiEvents } from "@/shared/ui/umami-data-attributes";
 
 const MotionImage = makeMotion(Image);
 
@@ -33,7 +34,19 @@ function CertificationCard({ certification }: CertificationCardProps) {
   const hasImage = resolvedImageUrl && resolvedImageUrl.trim() !== "";
 
   return (
-    <Link href={credentialUrl} target="_blank" className="block">
+    <Link
+      href={credentialUrl}
+      target="_blank"
+      className="block"
+      {...umamiEvents.certificationLinkClick(
+        featured ? "featured-certification" : "regular-certification",
+        "card",
+        title,
+        issuer,
+        credentialUrl,
+        featured
+      )}
+    >
       <article
         className={`${styles.certificationCard} ${
           featured ? "md:col-span-2" : ""

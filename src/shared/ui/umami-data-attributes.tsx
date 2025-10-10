@@ -58,6 +58,13 @@ export const umamiEvents = {
     if (source) eventData.source = source;
     return createUmamiAttributes('article-link-click', eventData);
   },
+  
+  // Certification events
+  certificationLinkClick: (location: string, type: string, title: string, issuer: string, url: string, featured?: boolean) => {
+    const eventData: Record<string, string | number | boolean> = { location, type, title, issuer, url };
+    if (featured !== undefined) eventData.featured = featured;
+    return createUmamiAttributes('certification-link-click', eventData);
+  },
 } as const;
 
 // Type for Umami event data
@@ -74,4 +81,5 @@ export type UmamiEventName =
   | 'mobile-menu-toggle'
   | 'project-link-click'
   | 'github-link-click'
-  | 'article-link-click';
+  | 'article-link-click'
+  | 'certification-link-click';
