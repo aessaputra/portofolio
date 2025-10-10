@@ -3,7 +3,7 @@ import React from "react";
 
 const DemographicCard: React.FC = () => {
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-theme-sm dark:border-gray-800 dark:bg-gray-900">
+    <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-theme-sm dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
       <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
         Demographics
       </h3>

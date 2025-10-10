@@ -144,7 +144,7 @@ export default function AdminProjectsPage() {
                 {projects.map((project) => (
                   <div
                     key={project.id}
-                    className="rounded-lg border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden cursor-pointer dark:border-gray-700 dark:bg-gray-800"
+                    className="rounded-lg border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden cursor-pointer dark:border-gray-700 dark:bg-[var(--color-gray-dark)]"
                     onClick={() => handleProjectClick(project.id)}
                   >
                     {/* Project Image */}
@@ -203,7 +203,7 @@ export default function AdminProjectsPage() {
                         <div className="flex space-x-2">
                           <Link
                             href={`/admin/projects/${project.id}`}
-                            className="inline-flex items-center rounded-lg border border-gray-300 bg-white px-2 py-1 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                            className="inline-flex items-center rounded-lg border border-gray-300 bg-white px-2 py-1 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:border-gray-600 dark:bg-[var(--color-gray-dark)] dark:text-gray-300 dark:hover:bg-gray-700"
                             title="Edit project"
                             onClick={(e) => e.stopPropagation()}
                           >
@@ -216,7 +216,7 @@ export default function AdminProjectsPage() {
                               e.stopPropagation();
                               handleDeleteProject(project.id);
                             }}
-                            className="inline-flex items-center rounded-lg border border-red-300 bg-white px-2 py-1 text-sm font-medium text-red-700 shadow-sm hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:border-red-600 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-900/20"
+                            className="inline-flex items-center rounded-lg border border-red-300 bg-white px-2 py-1 text-sm font-medium text-red-700 shadow-sm hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:border-red-600 dark:bg-[var(--color-gray-dark)] dark:text-red-400 dark:hover:bg-red-900/20"
                             title="Delete project"
                           >
                             <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">

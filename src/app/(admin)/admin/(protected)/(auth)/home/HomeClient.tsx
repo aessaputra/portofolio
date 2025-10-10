@@ -147,7 +147,7 @@ export default function HomeClient({
 
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Profile Information Section */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
           <div className="mb-6">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Profile Information</h2>
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">This information will be displayed publicly so be careful what you share.</p>
@@ -260,7 +260,7 @@ export default function HomeClient({
         </div>
 
         {/* Contact Information Section */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
           <div className="mb-6">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Contact Information</h2>
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Provide your contact details and professional links.</p>
@@ -342,7 +342,7 @@ export default function HomeClient({
         </div>
 
         {/* Display Preferences Section */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
           <div className="mb-6">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Display Preferences</h2>
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Configure how your profile appears to visitors.</p>

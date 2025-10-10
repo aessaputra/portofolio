@@ -330,7 +330,7 @@ export default function AboutClient({
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Main About Content - Simplified */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
           <div className="mb-6">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">About Page Content</h2>
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage your about page content and profile image.</p>
@@ -463,7 +463,7 @@ Each paragraph will be displayed separately on the public about page."
         </div>
 
         {/* Professional Background - Simplified */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
           <div className="mb-6">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Professional Background</h2>
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage your skills, experience, and education in a simplified format.</p>

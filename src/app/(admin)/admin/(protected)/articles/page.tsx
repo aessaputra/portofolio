@@ -169,7 +169,7 @@ export default function AdminArticlesPage() {
       )}
 
       {/* Articles Management Card */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
         <div className="mb-6">
           <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
             <div>
@@ -192,7 +192,7 @@ export default function AdminArticlesPage() {
 
         {/* Add Form */}
         {showAddForm && (
-          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
             <div className="mb-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Add New Article Source</h3>
               <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Configure a new WordPress article source for your articles page.</p>
@@ -307,7 +307,7 @@ export default function AdminArticlesPage() {
 
         {/* Edit Form */}
         {editingSource && (
-          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
             <div className="mb-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Edit Article Source</h3>
               <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Update the configuration for this article source.</p>
@@ -426,7 +426,7 @@ export default function AdminArticlesPage() {
         )}
 
         {/* Article Sources List */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
           <div className="mb-6">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Article Sources</h2>
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage your WordPress article sources and their display order.</p>
