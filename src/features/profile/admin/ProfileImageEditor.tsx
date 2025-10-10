@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useTransition } from "react";
 import NextImage from "next/image";
 import { Button } from "@/shared/ui/button";
 import { uploadProfileImageAction } from "@/features/profile/admin/actions";
-import { resolveR2PublicUrl } from "@/shared/lib/r2PublicUrl";
+import { resolveR2Url } from "@/shared/lib/r2UrlManager";
 
 // Constants
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -33,7 +33,7 @@ export default function ProfileImageEditor({
 
   // Refs
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const normalizedCurrentImageUrl = resolveR2PublicUrl(currentImageUrl);
+  const normalizedCurrentImageUrl = resolveR2Url(currentImageUrl);
 
   // Debug logging
   useEffect(() => {
@@ -143,7 +143,7 @@ export default function ProfileImageEditor({
         try {
           const imageUrl = await uploadProfileImageAction(formData);
           setUploadProgress(100);
-          onImageSave(resolveR2PublicUrl(imageUrl));
+          onImageSave(resolveR2Url(imageUrl));
           clearSelection();
         } catch (error) {
           console.error("Error uploading image:", error);

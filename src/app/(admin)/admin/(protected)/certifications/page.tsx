@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import CertificateImageEditor from "@/features/certifications/admin/components/CertificateImageEditor";
-import { resolveR2PublicUrl } from "@/shared/lib/r2PublicUrl";
+import { resolveR2Url } from "@/shared/lib/r2UrlManager";
 import ConfirmationDialog from "@/shared/ui/ConfirmationDialog";
 import type { Certification } from "@/entities/certifications";
 import {
@@ -185,7 +185,7 @@ export default function AdminCertificationsPage() {
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {certifications.map((certification) => {
-                    const imageSrc = resolveR2PublicUrl(certification.imageUrl);
+                    const imageSrc = resolveR2Url(certification.imageUrl);
                     // Check if certification is expired or expiring soon
                     const isExpired = certification.expiryDate ? new Date(certification.expiryDate) < new Date() : false;
                     const isExpiringSoon = certification.expiryDate ?

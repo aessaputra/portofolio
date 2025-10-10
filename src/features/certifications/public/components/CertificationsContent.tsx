@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import AnimatedText from "@/shared/ui/animated-text";
-import { resolveR2PublicUrl } from "@/shared/lib/r2PublicUrl";
+import { resolveR2Url } from "@/shared/lib/r2UrlManager";
 import { makeMotion } from "@/shared/ui/motion";
 import type { Certification } from "@/entities/certifications";
 import styles from "@/styles/Certifications.module.css";
@@ -30,7 +30,7 @@ function CertificationCard({ certification }: CertificationCardProps) {
     featured,
   } = certification;
 
-  const resolvedImageUrl = resolveR2PublicUrl(imageUrl);
+  const resolvedImageUrl = resolveR2Url(imageUrl);
   const hasImage = resolvedImageUrl && resolvedImageUrl.trim() !== "";
 
   return (

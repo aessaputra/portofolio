@@ -7,7 +7,7 @@ import {
   deleteCertificationImageAction,
   uploadCertificationImageAction,
 } from "@/features/certifications/admin/actions";
-import { resolveR2PublicUrl } from "@/shared/lib/r2PublicUrl";
+import { resolveR2Url } from "@/shared/lib/r2UrlManager";
 
 // Constants
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB for certificates
@@ -49,7 +49,7 @@ export default function CertificateImageEditor({
   // Refs
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [, startTransition] = useTransition();
-  const normalizedCurrentImageUrl = resolveR2PublicUrl(currentImageUrl);
+  const normalizedCurrentImageUrl = resolveR2Url(currentImageUrl);
 
   // Clean up preview URL when component unmounts
   useEffect(() => {
@@ -274,10 +274,10 @@ export default function CertificateImageEditor({
               setWarning(result.warning);
             }
             setUploadProgress(100);
-            const resolvedUploadUrl = resolveR2PublicUrl(result.imageUrl);
+            const resolvedUploadUrl = resolveR2Url(result.imageUrl);
             onImageSave(resolvedUploadUrl);
 
-            const previousImageUrl = resolveR2PublicUrl(currentImageUrl);
+            const previousImageUrl = resolveR2Url(currentImageUrl);
             if (previousImageUrl && previousImageUrl !== resolvedUploadUrl) {
               const deleteFormData = new FormData();
               deleteFormData.append("imageUrl", previousImageUrl);
