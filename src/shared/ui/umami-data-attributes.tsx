@@ -51,6 +51,13 @@ export const umamiEvents = {
   
   // GitHub events
   githubLinkClick: (location: string, type: string, title: string, url: string) => createUmamiAttributes('github-link-click', { location, type, title, url }),
+  
+  // Article events
+  articleLinkClick: (location: string, type: string, title: string, url: string, source?: string) => {
+    const eventData: Record<string, string | number | boolean> = { location, type, title, url };
+    if (source) eventData.source = source;
+    return createUmamiAttributes('article-link-click', eventData);
+  },
 } as const;
 
 // Type for Umami event data
@@ -66,4 +73,5 @@ export type UmamiEventName =
   | 'theme-toggle'
   | 'mobile-menu-toggle'
   | 'project-link-click'
-  | 'github-link-click';
+  | 'github-link-click'
+  | 'article-link-click';

@@ -8,6 +8,7 @@ import AnimatedText from "@/shared/ui/animated-text";
 import { m, makeMotion, useMotionValue } from "@/shared/ui/motion";
 import type { Article } from "@/entities/articles";
 import styles from "@/styles/Articles.module.css";
+import { umamiEvents } from "@/shared/ui/umami-data-attributes";
 
 const MotionImage = makeMotion(Image);
 
@@ -108,7 +109,13 @@ const MovingImg = ({ title, img, link, imageAlt }: MovingImgProps) => {
   };
 
   return (
-    <Link href={link} target="_blank" onMouseMove={handleMouse} onMouseLeave={handleMouseLeave}>
+    <Link
+      href={link}
+      target="_blank"
+      onMouseMove={handleMouse}
+      onMouseLeave={handleMouseLeave}
+      {...umamiEvents.articleLinkClick("article-item", "title", title, link)}
+    >
       <h2 className={styles.articleTitle}>{title}</h2>
       {img && !imgError ? (
         <MotionImage
@@ -203,7 +210,12 @@ const FeaturedArticle = ({ article }: FeaturedArticleProps) => {
     <div
       className={styles.featuredCard}
     >
-      <Link href={article.link} target="_blank" className={styles.featuredImageLink}>
+      <Link
+        href={article.link}
+        target="_blank"
+        className={styles.featuredImageLink}
+        {...umamiEvents.articleLinkClick("featured-article", "image", article.title, article.link, article.source)}
+      >
         <div className={styles.featuredImageContainer}>
           {imageData && !imgError ? (
             <MotionImage
@@ -227,7 +239,12 @@ const FeaturedArticle = ({ article }: FeaturedArticleProps) => {
       <div className={styles.featuredContent}>
         <div>
           <span className={styles.featuredSource}>{formatAuthorName(article.source)}</span>
-          <Link href={article.link} target="_blank" className={styles.featuredTitleLink}>
+          <Link
+            href={article.link}
+            target="_blank"
+            className={styles.featuredTitleLink}
+            {...umamiEvents.articleLinkClick("featured-article", "title", article.title, article.link, article.source)}
+          >
             <h2 className={styles.featuredTitleText}>
               {article.title}
             </h2>
