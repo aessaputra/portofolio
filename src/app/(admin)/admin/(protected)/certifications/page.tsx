@@ -127,7 +127,7 @@ export default function AdminCertificationsPage() {
         )}
 
         {/* Certifications Management Card */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
           <div className="mb-6">
             <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
               <div>
@@ -195,7 +195,7 @@ export default function AdminCertificationsPage() {
                     return (
                       <div
                         key={certification.id}
-                        className={`rounded-lg border bg-white shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden cursor-pointer dark:bg-[var(--color-gray-dark)] ${
+                        className={`rounded-lg border bg-white shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden cursor-pointer dark:bg-[var(--color-gray-800)] ${
                           isExpired ? 'border-red-300 dark:border-red-700' :
                           isExpiringSoon ? 'border-yellow-300 dark:border-yellow-700' :
                           'border-gray-200 dark:border-gray-700'
@@ -277,7 +277,7 @@ export default function AdminCertificationsPage() {
                                   e.stopPropagation();
                                   handleImageEdit(certification);
                                 }}
-                                className="inline-flex items-center rounded-lg border border-gray-300 bg-white px-2 py-1 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:border-gray-600 dark:bg-[var(--color-gray-dark)] dark:text-gray-300 dark:hover:bg-gray-700"
+                                className="inline-flex items-center rounded-lg border border-gray-300 bg-white px-2 py-1 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:border-gray-600 dark:bg-[var(--color-gray-800)] dark:text-gray-300 dark:hover:bg-gray-700"
                                 title="Edit image"
                               >
                                 <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -289,7 +289,7 @@ export default function AdminCertificationsPage() {
                                   e.stopPropagation();
                                   handleDeleteCertification(certification.id);
                                 }}
-                                className="inline-flex items-center rounded-lg border border-red-300 bg-white px-2 py-1 text-sm font-medium text-red-700 shadow-sm hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:border-red-600 dark:bg-[var(--color-gray-dark)] dark:text-red-400 dark:hover:bg-red-900/20"
+                                className="inline-flex items-center rounded-lg border border-red-300 bg-white px-2 py-1 text-sm font-medium text-red-700 shadow-sm hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:border-red-600 dark:bg-[var(--color-gray-800)] dark:text-red-400 dark:hover:bg-red-900/20"
                                 title="Delete certification"
                               >
                                 <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">

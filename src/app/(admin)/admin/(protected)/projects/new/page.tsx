@@ -149,7 +149,7 @@ export default function NewProjectPage() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Project Information */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
           <div className="mb-6">
             <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Create New Project</h1>
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Add a new project to your portfolio</p>
@@ -306,7 +306,7 @@ export default function NewProjectPage() {
         </div>
 
         {/* Project Links & Metadata */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
           <div className="mb-6">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Links & Metadata</h2>
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Configure project links, tags, and display settings.</p>
