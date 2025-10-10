@@ -1,10 +1,35 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Overview from "@/app/(admin)/dashboard/Overview";
+import TopPagesTable from "@/app/(admin)/dashboard/TopPagesTable";
+import ReferrersTable from "@/app/(admin)/dashboard/ReferrersTable";
+import TopEventsTable from "@/app/(admin)/dashboard/TopEventsTable";
 
 export default function AdminDashboard() {
+  const [dateRange, setDateRange] = useState({
+    startAt: 0, // Will be set in useEffect
+    endAt: 0, // Will be set in useEffect
+  });
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    // Set initial date range only on client side to avoid hydration mismatch
+    setDateRange({
+      startAt: Date.now() - 7 * 24 * 60 * 60 * 1000, // 7 days ago
+      endAt: Date.now(), // now
+    });
+    setIsClient(true);
+  }, []);
+
+  const handleDateRangeChange = (days: number) => {
+    setDateRange({
+      startAt: Date.now() - days * 24 * 60 * 60 * 1000,
+      endAt: Date.now(),
+    });
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
@@ -12,11 +37,72 @@ export default function AdminDashboard() {
         <p className="text-gray-600 dark:text-gray-400 mt-2">
           Welcome to your admin dashboard. Here you can view analytics and manage your content.
         </p>
+        
+        {/* Date Range Selector */}
+        <div className="mt-4 flex flex-wrap gap-2">
+          <button
+            onClick={() => handleDateRangeChange(7)}
+            className={`px-3 py-1 text-sm rounded-md ${
+              dateRange.startAt === Date.now() - 7 * 24 * 60 * 60 * 1000
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+          >
+            Last 7 days
+          </button>
+          <button
+            onClick={() => handleDateRangeChange(30)}
+            className={`px-3 py-1 text-sm rounded-md ${
+              dateRange.startAt === Date.now() - 30 * 24 * 60 * 60 * 1000
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+          >
+            Last 30 days
+          </button>
+          <button
+            onClick={() => handleDateRangeChange(90)}
+            className={`px-3 py-1 text-sm rounded-md ${
+              dateRange.startAt === Date.now() - 90 * 24 * 60 * 60 * 1000
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+          >
+            Last 90 days
+          </button>
+        </div>
       </div>
 
       {/* Analytics Overview Section */}
       <div className="mb-12">
-        <Overview />
+        {isClient ? <Overview startAt={dateRange.startAt} endAt={dateRange.endAt} /> : <div className="h-64 animate-pulse bg-gray-200 dark:bg-gray-700 rounded-2xl" />}
+      </div>
+
+      {/* Analytics Breakdown Section */}
+      <div className="mb-12">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Analytics Breakdown</h2>
+        
+        {/* Top Pages and Referrers Tables */}
+        <div className="grid md:grid-cols-2 gap-4 mb-6">
+          {isClient ? (
+            <>
+              <TopPagesTable startAt={dateRange.startAt} endAt={dateRange.endAt} />
+              <ReferrersTable startAt={dateRange.startAt} endAt={dateRange.endAt} />
+            </>
+          ) : (
+            <>
+              <div className="h-64 animate-pulse bg-gray-200 dark:bg-gray-700 rounded-2xl" />
+              <div className="h-64 animate-pulse bg-gray-200 dark:bg-gray-700 rounded-2xl" />
+            </>
+          )}
+        </div>
+        
+        {/* Top Events Table */}
+        {isClient ? (
+          <TopEventsTable startAt={dateRange.startAt} endAt={dateRange.endAt} />
+        ) : (
+          <div className="h-64 animate-pulse bg-gray-200 dark:bg-gray-700 rounded-2xl mb-6" />
+        )}
       </div>
 
       {/* Quick Actions Section */}

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import ActiveNow from '@/app/(admin)/dashboard/ActiveNow';
+import MiniDonuts from '@/app/(admin)/dashboard/MiniDonuts';
 import {
   calculateBounceRate,
   calculateAverageVisitTime,
@@ -215,6 +216,11 @@ export default function Overview({
           <ActiveNow initialCount={data.active.visitors} />
         </div>
         <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Visitors currently on site</p>
+      </div>
+
+      {/* Audience Breakdown (Responsive Donut Charts) */}
+      <div className="mt-6">
+        <MiniDonuts startAt={data.startAt} endAt={data.endAt} />
       </div>
     </div>
   );
