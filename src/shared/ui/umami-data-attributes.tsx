@@ -45,17 +45,25 @@ export const umamiEvents = {
   
   // Mobile menu events
   mobileMenuToggle: (action: string, location: string) => createUmamiAttributes('mobile-menu-toggle', { action, location }),
+  
+  // Project events
+  projectLinkClick: (location: string, type: string, title: string, url: string) => createUmamiAttributes('project-link-click', { location, type, title, url }),
+  
+  // GitHub events
+  githubLinkClick: (location: string, type: string, title: string, url: string) => createUmamiAttributes('github-link-click', { location, type, title, url }),
 } as const;
 
 // Type for Umami event data
 export type UmamiEventData = Record<string, string | number | boolean>;
 
 // Type for event names (for type safety)
-export type UmamiEventName = 
+export type UmamiEventName =
   | 'resume-link-click'
   | 'contact-click'
   | 'hire-me-click'
   | 'social-link-click'
   | 'navigation-click'
   | 'theme-toggle'
-  | 'mobile-menu-toggle';
+  | 'mobile-menu-toggle'
+  | 'project-link-click'
+  | 'github-link-click';

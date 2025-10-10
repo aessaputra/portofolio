@@ -7,6 +7,8 @@ import AnimatedText from "@/shared/ui/animated-text";
 import { GithubIcon } from "@/shared/ui/icons";
 import { makeMotion } from "@/shared/ui/motion";
 import type { Project } from "@/entities/projects";
+import { umamiTrack } from "@/shared/ui/umami-tracker";
+import { umamiEvents } from "@/shared/ui/umami-data-attributes";
 
 const MotionImage = makeMotion(Image);
 
@@ -38,7 +40,12 @@ const FeaturedProject = ({ type, title, summary, editableText, img, link, github
   return (
     <article className="relative flex w-full items-center justify-between rounded-3xl rounded-br-2xl border border-solid border-dark bg-light p-8 shadow-2xl dark:border-light dark:bg-dark xl:flex-col xl:p-6 lg:flex-col lg:p-6 md:p-6 sm:rounded-2xl sm:rounded-br-3xl sm:p-4 xs:p-3">
       <div className="absolute top-0 -right-3 -z-10 h-[103%] w-full rounded-[2.5rem] rounded-br-3xl bg-dark dark:bg-light xl:-right-2 xl:h-[102%] xl:w-full xl:rounded-3xl lg:-right-2 lg:h-[102%] lg:w-full lg:rounded-3xl md:-right-2 md:h-[102%] md:w-full md:rounded-3xl sm:-right-2 sm:h-[102%] sm:w-full sm:rounded-3xl xs:-right-1 xs:h-[101%] xs:w-full xs:rounded-2xl" />
-      <Link href={link} target="_blank" className="w-1/2 cursor-pointer overflow-hidden rounded-lg xl:w-full xl:mb-6 lg:w-full lg:mb-6 md:w-full md:mb-4 sm:w-full sm:mb-4">
+      <Link
+        href={link}
+        target="_blank"
+        className="w-1/2 cursor-pointer overflow-hidden rounded-lg xl:w-full xl:mb-6 lg:w-full lg:mb-6 md:w-full md:mb-4 sm:w-full sm:mb-4"
+        {...umamiEvents.projectLinkClick("featured-project", "image", title, link)}
+      >
         {hasImage ? (
           <MotionImage
             src={img}
@@ -60,7 +67,12 @@ const FeaturedProject = ({ type, title, summary, editableText, img, link, github
       <div className="mb-2">
         <span className="text-xl font-medium text-primary dark:text-primaryDark xl:text-lg lg:text-lg md:text-base sm:text-sm xs:text-xs">{type}</span>
       </div>
-      <Link href={link} target="_blank" className="hover:underline underline-offset-2">
+      <Link
+        href={link}
+        target="_blank"
+        className="hover:underline underline-offset-2"
+        {...umamiEvents.projectLinkClick("featured-project", "title", title, link)}
+      >
         <h2 className="my-2 w-full text-left text-4xl font-bold dark:text-light xl:text-3xl lg:text-3xl md:text-2xl sm:text-xl xs:text-lg">{title}</h2>
       </Link>
       <div className="mb-4">
@@ -68,13 +80,19 @@ const FeaturedProject = ({ type, title, summary, editableText, img, link, github
         <p className="text-xl font-bold text-primary dark:text-primaryDark mt-2 xl:text-lg lg:text-lg md:text-base sm:text-sm xs:text-xs">{editableText}</p>
       </div>
       <div className="mt-2 flex items-center w-full gap-4 sm:gap-2 xs:gap-2">
-        <Link href={github} target="_blank" className="w-10 xl:w-8 lg:w-8 md:w-7 sm:w-6 xs:w-5 flex-shrink-0">
+        <Link
+          href={github}
+          target="_blank"
+          className="w-10 xl:w-8 lg:w-8 md:w-7 sm:w-6 xs:w-5 flex-shrink-0"
+          {...umamiEvents.githubLinkClick("featured-project", "icon", title, github)}
+        >
           <GithubIcon />
         </Link>
         <Link
           href={link}
           target="_blank"
           className="rounded-lg bg-dark p-2 px-6 text-lg font-semibold text-light dark:bg-light dark:text-dark xl:px-4 xl:text-base lg:px-4 lg:text-base md:px-3 md:text-sm sm:px-3 sm:text-sm xs:px-2 xs:text-xs flex-1 text-center"
+          {...umamiEvents.projectLinkClick("featured-project", "button", title, link)}
         >
           Visit Project
         </Link>
@@ -91,7 +109,11 @@ const ProjectCard = ({ title, type, img, link, github }: ProjectCardProps) => {
     <article className="relative flex w-full flex-col items-center justify-center rounded-2xl border border-solid border-dark bg-light p-6 dark:border-light dark:bg-dark xl:p-5 lg:p-5 md:p-4 sm:p-3 xs:p-3 transition-all duration-300 hover:shadow-lg">
       <div className="absolute top-0 -right-3 -z-10 h-[103%] w-full rounded-4xl rounded-br-3xl bg-dark dark:bg-light xl:-right-2 xl:w-[101%] xl:rounded-3xl lg:-right-2 lg:w-[101%] lg:rounded-3xl md:-right-2 md:w-[101%] md:rounded-3xl sm:-right-1 sm:h-[102%] sm:w-full sm:rounded-3xl xs:-right-1 xs:h-[101%] xs:w-full xs:rounded-2xl" />
       <div className="w-full cursor-pointer overflow-hidden rounded-lg mb-4">
-        <Link href={link} target="_blank">
+        <Link
+          href={link}
+          target="_blank"
+          {...umamiEvents.projectLinkClick("project-card", "image", title, link)}
+        >
           {hasImage ? (
             <MotionImage
               src={img}
@@ -114,15 +136,30 @@ const ProjectCard = ({ title, type, img, link, github }: ProjectCardProps) => {
       <div className="mb-2">
         <span className="text-lg font-medium text-primary dark:text-primaryDark xl:text-base lg:text-base md:text-sm sm:text-xs xs:text-xs">{type}</span>
       </div>
-      <Link href={link} target="_blank" className="hover:underline underline-offset-2 w-full">
+      <Link
+        href={link}
+        target="_blank"
+        className="hover:underline underline-offset-2 w-full"
+        {...umamiEvents.projectLinkClick("project-card", "title", title, link)}
+      >
         <h2 className="my-1 w-full text-left text-2xl font-bold dark:text-light xl:text-xl lg:text-xl md:text-lg sm:text-base xs:text-sm line-clamp-1">{title}</h2>
       </Link>
 
       <div className="mt-3 flex w-full items-center justify-between gap-2">
-        <Link href={link} target="_blank" className="text-base font-semibold text-primary dark:text-primaryDark hover:underline xl:text-sm lg:text-sm md:text-xs sm:text-xs xs:text-xs flex-1">
+        <Link
+          href={link}
+          target="_blank"
+          className="text-base font-semibold text-primary dark:text-primaryDark hover:underline xl:text-sm lg:text-sm md:text-xs sm:text-xs xs:text-xs flex-1"
+          {...umamiEvents.projectLinkClick("project-card", "button", title, link)}
+        >
           Visit Project
         </Link>
-        <Link href={github} target="_blank" className="w-8 xl:w-7 lg:w-7 md:w-6 sm:w-5 xs:w-5 flex-shrink-0">
+        <Link
+          href={github}
+          target="_blank"
+          className="w-8 xl:w-7 lg:w-7 md:w-6 sm:w-5 xs:w-5 flex-shrink-0"
+          {...umamiEvents.githubLinkClick("project-card", "icon", title, github)}
+        >
           <GithubIcon />
         </Link>
       </div>
