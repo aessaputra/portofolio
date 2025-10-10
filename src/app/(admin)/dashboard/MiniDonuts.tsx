@@ -53,7 +53,7 @@ const processChartData = (data: MetricData[]): ChartData[] => {
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white dark:bg-gray-800 p-3 border border-gray-200 dark:border-gray-700 rounded-lg shadow-md z-10">
+      <div className="bg-white dark:bg-[var(--color-gray-dark)] p-3 border border-gray-200 dark:border-gray-700 rounded-lg shadow-md z-10">
         <p className="font-medium text-gray-900 dark:text-white">{payload[0].name}</p>
         <p className="text-sm text-gray-600 dark:text-gray-300">{payload[0].value} visitors</p>
       </div>
@@ -93,7 +93,7 @@ const DonutChartCard = ({
 }) => {
   if (loading) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm h-full flex flex-col">
+      <div className="bg-white dark:bg-[var(--color-gray-dark)] rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm h-full flex flex-col">
         <div className="flex justify-between items-center mb-3">
           <h3 className="text-sm font-medium text-gray-900 dark:text-white">{title}</h3>
         </div>
@@ -109,7 +109,7 @@ const DonutChartCard = ({
 
   if (data.length === 0) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm h-full flex flex-col">
+      <div className="bg-white dark:bg-[var(--color-gray-dark)] rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm h-full flex flex-col">
         <div className="flex justify-between items-center mb-3">
           <h3 className="text-sm font-medium text-gray-900 dark:text-white">{title}</h3>
         </div>
@@ -121,7 +121,7 @@ const DonutChartCard = ({
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm h-full flex flex-col">
+    <div className="bg-white dark:bg-[var(--color-gray-dark)] rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm h-full flex flex-col">
       <div className="flex justify-between items-center mb-3">
         <h3 className="text-sm font-medium text-gray-900 dark:text-white">{title}</h3>
       </div>
@@ -199,7 +199,7 @@ export default function MiniDonuts({ startAt, endAt }: MiniDonutsProps) {
 
   if (error) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
+      <div className="bg-white dark:bg-[var(--color-gray-dark)] rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
         <div className="flex flex-col items-center justify-center py-8">
           <div className="text-red-500 mb-2">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">

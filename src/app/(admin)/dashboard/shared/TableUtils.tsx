@@ -23,7 +23,7 @@ export const formatNumber = (value: number): string => {
 
 // Loading skeleton component
 export const TableSkeleton = ({ title }: { title: string }) => (
-  <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm">
+  <div className="bg-white dark:bg-[var(--color-gray-dark)] rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm">
     <div className="flex justify-between items-center mb-4">
       <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{title}</h2>
     </div>
@@ -41,7 +41,7 @@ export const TableSkeleton = ({ title }: { title: string }) => (
 
 // Error state component
 export const TableError = ({ title, error }: { title: string; error: string }) => (
-  <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm">
+  <div className="bg-white dark:bg-[var(--color-gray-dark)] rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm">
     <div className="flex justify-between items-center mb-4">
       <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{title}</h2>
     </div>
@@ -59,7 +59,7 @@ export const TableError = ({ title, error }: { title: string; error: string }) =
 
 // Empty state component
 export const TableEmpty = ({ title }: { title: string }) => (
-  <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm">
+  <div className="bg-white dark:bg-[var(--color-gray-dark)] rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm">
     <div className="flex justify-between items-center mb-4">
       <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{title}</h2>
     </div>
@@ -118,7 +118,7 @@ export const TableContainer = ({
   children: ReactNode; 
   className?: string; 
 }) => (
-  <div className={`bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm ${className}`}>
+  <div className={`bg-white dark:bg-[var(--color-gray-dark)] rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm ${className}`}>
     <TableHeader title={title} />
     {children}
   </div>

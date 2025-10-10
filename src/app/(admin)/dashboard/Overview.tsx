@@ -45,7 +45,7 @@ function KPICard({ title, value, delta, description, colorClass, icon }: KPICard
   const trend = delta !== undefined ? getTrendIndicator(delta) : null;
   
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-all hover:shadow-md dark:border-gray-800 dark:bg-gray-900">
+    <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-all hover:shadow-md dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">{title}</h3>
         {icon && <div className={colorClass}>{icon}</div>}
@@ -70,7 +70,7 @@ function OverviewSkeleton() {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {Array.from({ length: 5 }).map((_, i) => (
-        <div key={i} className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div key={i} className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
           <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700"></div>
           <div className="mt-2 h-8 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700"></div>
           <div className="mt-2 h-3 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700"></div>
@@ -208,7 +208,7 @@ export default function Overview({
       </div>
 
       {/* Active Now Card (Full Width) */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-all hover:shadow-md dark:border-gray-800 dark:bg-gray-900">
+      <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-all hover:shadow-md dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Active Now</h3>
         </div>
