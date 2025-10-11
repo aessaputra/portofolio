@@ -5,12 +5,12 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useSidebar } from "@/features/site/admin/ui/context/SidebarContext";
-import { GridIcon } from "@/features/site/admin/ui/icons";
-import { PageIcon } from "@/features/site/admin/ui/icons";
-import { InfoIcon } from "@/features/site/admin/ui/icons";
-import { BoxIcon } from "@/features/site/admin/ui/icons";
-import { DocsIcon } from "@/features/site/admin/ui/icons";
-import { CheckCircleIcon } from "@/features/site/admin/ui/icons";
+import { DashboardIcon } from "@/features/site/admin/ui/icons";
+import { HomeIcon } from "@/features/site/admin/ui/icons";
+import { AboutIcon } from "@/features/site/admin/ui/icons";
+import { ProjectsIcon } from "@/features/site/admin/ui/icons";
+import { ArticlesIcon } from "@/features/site/admin/ui/icons";
+import { CertificationsIcon } from "@/features/site/admin/ui/icons";
 
 type NavItem = {
   name: string;
@@ -21,32 +21,32 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   {
-    icon: GridIcon,
+    icon: DashboardIcon,
     name: "Dashboard",
     path: "/admin/dashboard",
   },
   {
-    icon: PageIcon,
+    icon: HomeIcon,
     name: "Home",
     path: "/admin/home",
   },
   {
-    icon: InfoIcon,
+    icon: AboutIcon,
     name: "About",
     path: "/admin/about",
   },
   {
-    icon: BoxIcon,
+    icon: ProjectsIcon,
     name: "Projects",
     path: "/admin/projects",
   },
   {
-    icon: DocsIcon,
+    icon: ArticlesIcon,
     name: "Articles",
     path: "/admin/articles",
   },
   {
-    icon: CheckCircleIcon,
+    icon: CertificationsIcon,
     name: "Certifications",
     path: "/admin/certifications",
   },
