@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useTheme } from "next-themes";
 import { useSidebar } from "@/features/site/admin/ui/context/SidebarContext";
 import { DashboardIcon } from "@/features/site/admin/ui/icons";
 import { HomeIcon } from "@/features/site/admin/ui/icons";
@@ -55,14 +54,7 @@ const navItems: NavItem[] = [
 
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
-  const { theme, resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
-
-  // Prevent hydration mismatch by only rendering theme-dependent content after mount
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const renderMenuItems = (navItems: NavItem[]) => (
     <ul className="flex flex-col gap-2">
@@ -94,7 +86,7 @@ const AppSidebar: React.FC = () => {
                   className="w-5 h-5 transition-all duration-200"
                 />
               </span>
-              {mounted && (isExpanded || isHovered || isMobileOpen) && (
+              {(isExpanded || isHovered || isMobileOpen) && (
                 <span className={`menu-item-text transition-all duration-200`}>{nav.name}</span>
               )}
             </button>
@@ -119,13 +111,13 @@ const AppSidebar: React.FC = () => {
                     className="w-5 h-5 transition-all duration-200"
                   />
                 </span>
-                {mounted && (isExpanded || isHovered || isMobileOpen) && (
+                {(isExpanded || isHovered || isMobileOpen) && (
                   <span className={`menu-item-text transition-all duration-200`}>{nav.name}</span>
                 )}
               </Link>
             )
           )}
-          {nav.subItems && mounted && (isExpanded || isHovered || isMobileOpen) && (
+          {nav.subItems && (isExpanded || isHovered || isMobileOpen) && (
             <div
               ref={(el) => {
                 subMenuRefs.current[`main-${index}`] = el;
@@ -250,13 +242,13 @@ const AppSidebar: React.FC = () => {
     <aside
       className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-40 border-r border-gray-200 shadow-lg
         ${
-          mounted && (isExpanded || isMobileOpen)
+          (isExpanded || isMobileOpen)
             ? "w-[290px]"
-            : mounted && isHovered
+            : isHovered
             ? "w-[290px]"
             : "w-[90px]"
         }
-        ${mounted && isMobileOpen ? "translate-x-0" : "-translate-x-full"}
+        ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0`}
       onMouseEnter={() => !isExpanded && setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -267,14 +259,20 @@ const AppSidebar: React.FC = () => {
         }`}
       >
         <Link href="/">
-          {mounted ? (
-            <Image 
-              src={resolvedTheme === "dark" ? "/admin/images/logo/logo-icon-dark.svg" : "/admin/images/logo/logo-icon-light.svg"} 
-              alt="Logo" 
-              width={150} 
-              height={30}
-            />
-          ) : null}
+          <Image 
+            src="/admin/images/logo/logo-icon-light.svg" 
+            alt="Logo" 
+            width={150} 
+            height={30}
+            className="dark:hidden"
+          />
+          <Image 
+            src="/admin/images/logo/logo-icon-dark.svg" 
+            alt="Logo" 
+            width={150} 
+            height={30}
+            className="hidden dark:block"
+          />
         </Link>
       </div>
       <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar flex-1">
@@ -288,7 +286,7 @@ const AppSidebar: React.FC = () => {
                     : "justify-start"
                 }`}
               >
-                {mounted && (isExpanded || isHovered || isMobileOpen) ? (
+                {(isExpanded || isHovered || isMobileOpen) ? (
                   "Menu"
                 ) : (
                   "..."

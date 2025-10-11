@@ -89,13 +89,13 @@ export default function TopEventsTable({
             {events.map((event, index) => (
               <tr 
                 key={event.x} 
-                className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
+                className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
               >
-                <td className="py-3 px-4 text-gray-700 dark:text-gray-300 font-medium">
+                <td className="py-3 px-4 text-gray-700 dark:text-gray-300 dark:hover:text-white font-medium">
                   {index + 1}
                 </td>
                 <td className="py-3 px-4">
-                  <div className="font-medium text-gray-900 dark:text-white truncate max-w-[150px] md:max-w-[200px] lg:max-w-[250px]" title={event.x}>
+                  <div className="font-medium text-gray-900 dark:text-white dark:hover:text-white truncate max-w-[150px] md:max-w-[200px] lg:max-w-[250px]" title={event.x}>
                     {event.x}
                   </div>
                 </td>

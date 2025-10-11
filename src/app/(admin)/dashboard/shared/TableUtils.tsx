@@ -88,7 +88,7 @@ export const ProgressBar = ({
   
   return (
     <div className="flex items-center gap-3">
-      <span className="text-gray-700 dark:text-gray-300 font-medium text-sm min-w-[40px] text-right">
+      <span className="text-gray-700 dark:text-gray-300 dark:hover:text-white font-medium text-sm min-w-[40px] text-right">
         {formatNumber(value)}
       </span>
       <div className="relative h-2 rounded bg-gray-200 dark:bg-gray-700 flex-1 min-w-[50px] overflow-hidden">

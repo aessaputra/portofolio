@@ -74,15 +74,15 @@ export default function ReferrersTable({ startAt, endAt, limit = 10 }: TableProp
             {referrers.map((referrer) => (
               <tr 
                 key={referrer.x} 
-                className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
+                className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
               >
                 <td className="py-3 px-4">
-                  <div className="font-medium text-gray-900 dark:text-white truncate max-w-[150px] md:max-w-[200px] lg:max-w-[250px]" title={referrer.x}>
+                  <div className="font-medium text-gray-900 dark:text-white dark:hover:text-white truncate max-w-[150px] md:max-w-[200px] lg:max-w-[250px]" title={referrer.x}>
                     {referrer.x === '(direct)' ? 'Direct' : referrer.x}
                   </div>
                 </td>
                 <td className="py-3 px-4 text-right">
-                  <span className="font-medium text-gray-900 dark:text-white">
+                  <span className="font-medium text-gray-900 dark:text-white dark:hover:text-white">
                     {formatNumber(referrer.y)}
                   </span>
                 </td>
