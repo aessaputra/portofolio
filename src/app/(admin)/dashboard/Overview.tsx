@@ -40,40 +40,40 @@ interface KPICardProps {
   icon?: React.ReactNode;
 }
 
-// KPI Card component
+// KPI Card component - Mobile Responsive
 function KPICard({ title, value, delta, description, colorClass, icon }: KPICardProps) {
   const trend = delta !== undefined ? getTrendIndicator(delta) : null;
   
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-all hover:shadow-md dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
+    <div className="rounded-xl sm:rounded-2xl border border-gray-200 bg-white p-3 sm:p-4 shadow-sm transition-all hover:shadow-md dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">{title}</h3>
-        {icon && <div className={colorClass}>{icon}</div>}
+        <h3 className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400">{title}</h3>
+        {icon && <div className={`${colorClass} scale-75 sm:scale-100`}>{icon}</div>}
       </div>
-      <div className="mt-2 flex items-baseline gap-2">
-        <p className={`text-2xl font-semibold ${colorClass}`}>
+      <div className="mt-2 flex items-baseline gap-1 sm:gap-2">
+        <p className={`text-lg sm:text-2xl font-semibold ${colorClass}`}>
           {value}
         </p>
         {trend && delta !== undefined && (
-          <span className={`flex items-center text-sm ${trend.colorClass}`}>
+          <span className={`flex items-center text-xs sm:text-sm ${trend.colorClass}`}>
             {trend.icon} {Math.abs(delta).toFixed(1)}%
           </span>
         )}
       </div>
-      <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{description}</p>
+      <p className="mt-1 text-xs text-gray-500 dark:text-gray-400 leading-tight">{description}</p>
     </div>
   );
 }
 
-// Loading skeleton component
+// Loading skeleton component - Mobile Responsive
 function OverviewSkeleton() {
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
       {Array.from({ length: 5 }).map((_, i) => (
-        <div key={i} className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
-          <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700"></div>
-          <div className="mt-2 h-8 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700"></div>
-          <div className="mt-2 h-3 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700"></div>
+        <div key={i} className="rounded-xl sm:rounded-2xl border border-gray-200 bg-white p-3 sm:p-4 shadow-sm dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
+          <div className="h-3 sm:h-4 w-20 sm:w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700"></div>
+          <div className="mt-2 h-6 sm:h-8 w-12 sm:w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700"></div>
+          <div className="mt-2 h-2 sm:h-3 w-24 sm:w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700"></div>
         </div>
       ))}
     </div>
@@ -161,15 +161,15 @@ export default function Overview({
   const dateRange = `${formatDate(data.startAt)} - ${formatDate(data.endAt)}`;
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col justify-between gap-2 sm:gap-4 md:flex-row md:items-center">
         <div>
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white">Overview</h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400">{dateRange}</p>
+          <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">Overview</h2>
+          <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">{dateRange}</p>
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {/* Visitors Card */}
         <KPICard
           title="Visitors"
@@ -207,10 +207,10 @@ export default function Overview({
         />
       </div>
 
-      {/* Active Now Card (Full Width) */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-all hover:shadow-md dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
+      {/* Active Now Card (Full Width) - Mobile Responsive */}
+      <div className="rounded-xl sm:rounded-2xl border border-gray-200 bg-white p-3 sm:p-4 shadow-sm transition-all hover:shadow-md dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Active Now</h3>
+          <h3 className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400">Active Now</h3>
         </div>
         <div className="mt-2">
           <ActiveNow initialCount={data.active.visitors} />
@@ -219,7 +219,7 @@ export default function Overview({
       </div>
 
       {/* Audience Breakdown (Responsive Donut Charts) */}
-      <div className="mt-6">
+      <div className="mt-4 sm:mt-6">
         <MiniDonuts startAt={data.startAt} endAt={data.endAt} />
       </div>
     </div>

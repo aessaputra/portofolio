@@ -38,7 +38,8 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     setMounted(true);
     const handleResize = () => {
-      const mobile = window.innerWidth < 768;
+      // Menggunakan breakpoint md (768px) sesuai dengan TailAdmin asli
+      const mobile = window.innerWidth < 768; // md breakpoint
       setIsMobile(mobile);
       if (!mobile) {
         setIsMobileOpen(false);
@@ -68,7 +69,7 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({
   return (
     <SidebarContext.Provider
       value={{
-        isExpanded: mounted && isMobile ? false : isExpanded,
+        isExpanded: isMobile ? false : isExpanded,
         isMobileOpen,
         isHovered,
         activeItem,

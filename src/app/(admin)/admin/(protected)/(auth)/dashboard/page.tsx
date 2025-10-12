@@ -31,41 +31,41 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
-        <p className="text-gray-600 dark:text-gray-400 mt-2">
+    <div className="w-full px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
+        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-2">
           Welcome to your admin dashboard. Here you can view analytics and manage your content.
         </p>
         
-        {/* Date Range Selector */}
-        <div className="mt-4 flex flex-wrap gap-2">
+        {/* Date Range Selector - Mobile Responsive */}
+        <div className="mt-4 flex flex-col sm:flex-row gap-2 sm:gap-3">
           <button
             onClick={() => handleDateRangeChange(7)}
-            className={`px-3 py-1 text-sm rounded-md ${
+            className={`px-3 py-2 text-sm rounded-md transition-colors ${
               dateRange.startAt === Date.now() - 7 * 24 * 60 * 60 * 1000
                 ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
             }`}
           >
             Last 7 days
           </button>
           <button
             onClick={() => handleDateRangeChange(30)}
-            className={`px-3 py-1 text-sm rounded-md ${
+            className={`px-3 py-2 text-sm rounded-md transition-colors ${
               dateRange.startAt === Date.now() - 30 * 24 * 60 * 60 * 1000
                 ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
             }`}
           >
             Last 30 days
           </button>
           <button
             onClick={() => handleDateRangeChange(90)}
-            className={`px-3 py-1 text-sm rounded-md ${
+            className={`px-3 py-2 text-sm rounded-md transition-colors ${
               dateRange.startAt === Date.now() - 90 * 24 * 60 * 60 * 1000
                 ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
             }`}
           >
             Last 90 days
@@ -79,11 +79,11 @@ export default function AdminDashboard() {
       </div>
 
       {/* Analytics Breakdown Section */}
-      <div className="mb-12">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Analytics Breakdown</h2>
+      <div className="mb-8 sm:mb-12">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">Analytics Breakdown</h2>
         
-        {/* Top Pages and Referrers Tables */}
-        <div className="grid md:grid-cols-2 gap-4 mb-6">
+        {/* Top Pages and Referrers Tables - Mobile Responsive */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6">
           {isClient ? (
             <>
               <TopPagesTable startAt={dateRange.startAt} endAt={dateRange.endAt} />
@@ -105,50 +105,50 @@ export default function AdminDashboard() {
         )}
       </div>
 
-      {/* Quick Actions Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-        <div className="bg-white dark:bg-[var(--color-gray-dark)] rounded-xl shadow-md p-6 border border-gray-200 dark:border-gray-700">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Actions</h3>
-          <div className="space-y-3">
+      {/* Quick Actions Section - Mobile Responsive */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
+        <div className="bg-white dark:bg-[var(--color-gray-dark)] rounded-xl shadow-md p-4 sm:p-6 border border-gray-200 dark:border-gray-700">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4">Quick Actions</h3>
+          <div className="space-y-2 sm:space-y-3">
             <Link
               href="/admin/home"
-              className="flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+              className="flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm sm:text-base transition-colors"
             >
-              <svg className="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="mr-2 h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
               </svg>
-              Manage Home Page
+              <span className="truncate">Manage Home Page</span>
             </Link>
             <Link
               href="/admin/projects"
-              className="flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+              className="flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm sm:text-base transition-colors"
             >
-              <svg className="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="mr-2 h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
               </svg>
-              Manage Projects
+              <span className="truncate">Manage Projects</span>
             </Link>
             <Link
               href="/admin/articles"
-              className="flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+              className="flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm sm:text-base transition-colors"
             >
-              <svg className="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="mr-2 h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
               </svg>
-              Manage Articles
+              <span className="truncate">Manage Articles</span>
             </Link>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-[var(--color-gray-dark)] rounded-xl shadow-md p-6 border border-gray-200 dark:border-gray-700">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Activity</h3>
-          <div className="space-y-4">
+        <div className="bg-white dark:bg-[var(--color-gray-dark)] rounded-xl shadow-md p-4 sm:p-6 border border-gray-200 dark:border-gray-700">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4">Recent Activity</h3>
+          <div className="space-y-3 sm:space-y-4">
             <div className="flex items-start">
               <div className="flex-shrink-0">
                 <div className="h-2 w-2 rounded-full bg-green-500 mt-2"></div>
               </div>
-              <div className="ml-3">
-                <p className="text-sm text-gray-900 dark:text-white">System updated successfully</p>
+              <div className="ml-3 min-w-0 flex-1">
+                <p className="text-sm text-gray-900 dark:text-white truncate">System updated successfully</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">2 hours ago</p>
               </div>
             </div>
@@ -156,8 +156,8 @@ export default function AdminDashboard() {
               <div className="flex-shrink-0">
                 <div className="h-2 w-2 rounded-full bg-blue-500 mt-2"></div>
               </div>
-              <div className="ml-3">
-                <p className="text-sm text-gray-900 dark:text-white">New visitor registered</p>
+              <div className="ml-3 min-w-0 flex-1">
+                <p className="text-sm text-gray-900 dark:text-white truncate">New visitor registered</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">5 hours ago</p>
               </div>
             </div>
@@ -165,30 +165,30 @@ export default function AdminDashboard() {
               <div className="flex-shrink-0">
                 <div className="h-2 w-2 rounded-full bg-yellow-500 mt-2"></div>
               </div>
-              <div className="ml-3">
-                <p className="text-sm text-gray-900 dark:text-white">Project published</p>
+              <div className="ml-3 min-w-0 flex-1">
+                <p className="text-sm text-gray-900 dark:text-white truncate">Project published</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">Yesterday</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-[var(--color-gray-dark)] rounded-xl shadow-md p-6 border border-gray-200 dark:border-gray-700">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">System Status</h3>
-          <div className="space-y-3">
-            <div className="flex justify-between">
+        <div className="bg-white dark:bg-[var(--color-gray-dark)] rounded-xl shadow-md p-4 sm:p-6 border border-gray-200 dark:border-gray-700">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4">System Status</h3>
+          <div className="space-y-2 sm:space-y-3">
+            <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600 dark:text-gray-400">Server Status</span>
               <span className="text-sm font-medium text-green-600 dark:text-green-400">Operational</span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600 dark:text-gray-400">Database</span>
               <span className="text-sm font-medium text-green-600 dark:text-green-400">Connected</span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600 dark:text-gray-400">Analytics</span>
               <span className="text-sm font-medium text-green-600 dark:text-green-400">Active</span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600 dark:text-gray-400">Storage</span>
               <span className="text-sm font-medium text-yellow-600 dark:text-yellow-400">78% Used</span>
             </div>

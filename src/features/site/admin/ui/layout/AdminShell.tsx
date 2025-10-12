@@ -17,16 +17,18 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
     : "lg:ml-[90px]";
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 xl:flex">
+    <div className="min-h-screen xl:flex admin-layout" style={{ margin: 0, padding: 0 }}>
+      {/* Sidebar and Backdrop */}
       <AppSidebar />
       <Backdrop />
+      {/* Main Content Area */}
       <div
-        className={`flex-1 transition-all duration-300 ease-in-out ${mainContentMargin}`}
+        className={`flex-1 transition-all duration-300 ease-in-out admin-content ${mainContentMargin}`}
       >
+        {/* Header */}
         <AppHeader />
-        <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
-          {children}
-        </div>
+        {/* Page Content */}
+        <div className="p-4 mx-auto max-w-7xl md:p-6">{children}</div>
       </div>
     </div>
   );

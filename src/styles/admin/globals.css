@@ -190,18 +190,94 @@
   body {
     @apply relative font-normal font-outfit z-1 bg-gray-50;
   }
+  
+  /* Prevent horizontal scroll on mobile */
+  html, body {
+    overflow-x: hidden;
+  }
+  
+  /* Reset body margin and padding for admin */
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* Reset html margin and padding */
+  html {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* Reset all elements that might cause spacing issues */
+  * {
+    box-sizing: border-box;
+  }
+  
+  /* Ensure proper mobile layout */
+  @media (max-width: 1023px) {
+    body {
+      position: relative;
+    }
+    
+    /* Force mobile layout */
+    .admin-layout {
+      display: block !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      width: 100% !important;
+    }
+    
+    .admin-content {
+      margin: 0 !important;
+      padding: 0 !important;
+      width: 100% !important;
+    }
+    
+    /* Force header full width on mobile */
+    .admin-header {
+      width: 100vw !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      position: fixed !important;
+      top: 0 !important;
+      transform: translateX(0) !important;
+    }
+    
+    /* Ensure header content is full width */
+    .admin-header > div {
+      width: 100% !important;
+      max-width: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    
+    /* Ensure header content div is full width */
+    .admin-header-content {
+      width: 100% !important;
+      max-width: none !important;
+      margin: 0 !important;
+      padding: 12px 16px !important;
+    }
+    
+    /* Add top margin to content to account for fixed header */
+    .admin-content {
+      padding-top: 64px !important;
+    }
+  }
 }
 
 @utility menu-item {
-  @apply relative flex items-center w-full gap-3 px-3 py-2.5 font-medium rounded-lg text-theme-sm transition-all duration-200 ease-in-out;
+  @apply relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-theme-sm;
 }
 
 @utility menu-item-active {
-  @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400 shadow-sm;
+  @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400;
 }
 
 @utility menu-item-inactive {
-  @apply text-gray-700 hover:bg-gray-100 hover:shadow-sm group-hover:text-gray-700 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-300 dark:hover:shadow-sm;
+  @apply text-gray-700 hover:bg-gray-100 group-hover:text-gray-700 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-300;
 }
 
 @utility menu-item-icon {
@@ -209,11 +285,11 @@
 }
 
 @utility menu-item-icon-active {
-  @apply text-brand-500 dark:text-brand-400 transform scale-105;
+  @apply text-brand-500 dark:text-brand-400;
 }
 
 @utility menu-item-icon-inactive {
-  @apply text-gray-500 group-hover:text-gray-700 group-hover:scale-105 dark:text-gray-400 dark:group-hover:text-gray-300 transition-all duration-200 ease-in-out;
+  @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300;
 }
 
 @utility menu-item-arrow {
@@ -229,15 +305,15 @@
 }
 
 @utility menu-dropdown-item {
-  @apply relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-theme-sm font-medium transition-all duration-200 ease-in-out;
+  @apply relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-theme-sm font-medium;
 }
 
 @utility menu-dropdown-item-active {
-  @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400 shadow-sm;
+  @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400;
 }
 
 @utility menu-dropdown-item-inactive {
-  @apply text-gray-700 hover:bg-gray-100 hover:shadow-sm dark:text-gray-300 dark:hover:bg-white/5 dark:hover:shadow-sm;
+  @apply text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/5;
 }
 
 @utility menu-dropdown-badge {
@@ -259,6 +335,31 @@
   }
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+}
+
+/* Responsive sidebar utilities */
+@utility sidebar-mobile {
+  @apply fixed top-0 left-0 z-50 h-screen w-[290px] transform transition-transform duration-300 ease-in-out;
+}
+
+@utility sidebar-desktop {
+  @apply fixed top-0 left-0 z-40 h-screen transform transition-all duration-300 ease-in-out;
+}
+
+@utility sidebar-collapsed {
+  @apply w-[90px];
+}
+
+@utility sidebar-expanded {
+  @apply w-[290px];
+}
+
+@utility sidebar-hidden {
+  @apply -translate-x-full;
+}
+
+@utility sidebar-visible {
+  @apply translate-x-0;
 }
 
 @utility custom-scrollbar {
