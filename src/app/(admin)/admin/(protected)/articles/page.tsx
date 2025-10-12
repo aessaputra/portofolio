@@ -154,11 +154,11 @@ export default function AdminArticlesPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Notification */}
       {notification && (
         <div
-          className={`rounded-md p-4 ${
+          className={`rounded-md p-3 sm:p-4 ${
             notification.type === "success"
               ? "bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-300"
               : "bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-300"
@@ -169,22 +169,23 @@ export default function AdminArticlesPage() {
       )}
 
       {/* Articles Management Card */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
-        <div className="mb-6">
-          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Article Sources Management</h1>
+      <div className="rounded-lg border border-gray-200 bg-white p-4 sm:p-6 shadow-sm dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
+        <div className="mb-4 lg:mb-6">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <div className="min-w-0 flex-1">
+              <h1 className="text-lg lg:text-xl font-semibold text-gray-900 dark:text-white truncate">Article Sources Management</h1>
               <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage WordPress article sources for your articles page</p>
             </div>
-            <div className="mt-4 sm:mt-0">
+            <div className="flex-shrink-0">
               <button
                 onClick={() => setShowAddForm(!showAddForm)}
-                className="inline-flex items-center rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
+                className="inline-flex items-center rounded-lg bg-brand-600 px-3 py-2 lg:px-4 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 w-full lg:w-auto justify-center"
               >
-                <svg className="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <svg className="-ml-1 mr-2 h-4 w-4 lg:h-5 lg:w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
                 </svg>
-                Add Source
+                <span className="hidden lg:inline">Add Source</span>
+                <span className="lg:hidden">Add</span>
               </button>
             </div>
           </div>
@@ -192,14 +193,14 @@ export default function AdminArticlesPage() {
 
         {/* Add Form */}
         {showAddForm && (
-          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
-            <div className="mb-6">
+          <div className="rounded-lg border border-gray-200 bg-white p-4 lg:p-6 shadow-sm dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
+            <div className="mb-4 lg:mb-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Add New Article Source</h3>
               <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Configure a new WordPress article source for your articles page.</p>
             </div>
             
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div className="space-y-4 lg:space-y-6">
+              <div className="grid grid-cols-1 gap-4 lg:gap-6 xl:grid-cols-2">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Source Name
@@ -260,7 +261,7 @@ export default function AdminArticlesPage() {
                     placeholder="https://example.com/wp-json/wp/v2/posts?per_page=5"
                   />
                 </div>
-                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400 break-words">
                   Example: https://wordpress.org/news/wp-json/wp/v2/posts?per_page=5
                 </p>
               </div>
@@ -283,21 +284,21 @@ export default function AdminArticlesPage() {
               </div>
             </div>
             
-            <div className="mt-6 flex items-center justify-end gap-3">
+            <div className="mt-4 lg:mt-6 flex flex-col-reverse lg:flex-row lg:items-center lg:justify-end gap-3">
               <button
                 type="button"
                 onClick={() => {
                   setShowAddForm(false);
                   setNewSource(createEmptyArticleSourceFormState());
                 }}
-                className="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 w-full lg:w-auto"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleAddSource}
-                className="inline-flex items-center rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50"
+                className="inline-flex items-center justify-center rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 w-full lg:w-auto"
               >
                 Add Source
               </button>
@@ -307,14 +308,14 @@ export default function AdminArticlesPage() {
 
         {/* Edit Form */}
         {editingSource && (
-          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
-            <div className="mb-6">
+          <div className="rounded-lg border border-gray-200 bg-white p-4 sm:p-6 shadow-sm dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
+            <div className="mb-4 sm:mb-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Edit Article Source</h3>
               <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Update the configuration for this article source.</p>
             </div>
             
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div className="space-y-4 sm:space-y-6">
+              <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-2">
                 <div>
                   <label htmlFor="edit-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Source Name
@@ -381,7 +382,7 @@ export default function AdminArticlesPage() {
                     placeholder="https://example.com/wp-json/wp/v2/posts?per_page=5"
                   />
                 </div>
-                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400 break-words">
                   Example: https://wordpress.org/news/wp-json/wp/v2/posts?per_page=5
                 </p>
               </div>
@@ -406,18 +407,18 @@ export default function AdminArticlesPage() {
               </div>
             </div>
             
-            <div className="mt-6 flex items-center justify-end gap-3">
+            <div className="mt-4 lg:mt-6 flex flex-col-reverse lg:flex-row lg:items-center lg:justify-end gap-3">
               <button
                 type="button"
                 onClick={() => setEditingSource(null)}
-                className="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 w-full lg:w-auto"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleUpdateSource}
-                className="inline-flex items-center rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50"
+                className="inline-flex items-center justify-center rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 w-full lg:w-auto"
               >
                 Update Source
               </button>
@@ -426,24 +427,24 @@ export default function AdminArticlesPage() {
         )}
 
         {/* Article Sources List */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
-          <div className="mb-6">
+        <div className="rounded-lg border border-gray-200 bg-white p-4 lg:p-6 shadow-sm dark:border-gray-800 dark:bg-[var(--color-gray-dark)]">
+          <div className="mb-4 lg:mb-6">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Article Sources</h2>
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage your WordPress article sources and their display order.</p>
           </div>
 
           {loading ? (
-            <div className="flex items-center justify-center h-64">
+            <div className="flex items-center justify-center h-48 lg:h-64">
               <div className="flex flex-col items-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-500 mb-4"></div>
-                <div className="text-lg text-gray-700 dark:text-gray-300">
+                <div className="animate-spin rounded-full h-8 w-8 lg:h-12 lg:w-12 border-t-2 border-b-2 border-brand-500 mb-3 lg:mb-4"></div>
+                <div className="text-sm lg:text-lg text-gray-700 dark:text-gray-300 text-center">
                   Loading article sources...
                 </div>
               </div>
             </div>
           ) : error ? (
-            <div className="flex flex-col items-center justify-center h-64">
-              <div className="text-red-500 mb-4">Error: {error}</div>
+            <div className="flex flex-col items-center justify-center h-48 lg:h-64">
+              <div className="text-red-500 mb-4 text-center px-4">Error: {error}</div>
               <button
                 onClick={loadArticleSources}
                 className="inline-flex items-center rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
@@ -454,7 +455,7 @@ export default function AdminArticlesPage() {
           ) : (
             <div>
               {articleSources.length === 0 ? (
-                <div className="text-center py-12">
+                <div className="text-center py-8 lg:py-12">
                   <div className="text-gray-500 dark:text-gray-400 mb-4">
                     No article sources found.
                   </div>
@@ -466,78 +467,90 @@ export default function AdminArticlesPage() {
                   </button>
                 </div>
               ) : (
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                    <thead className="bg-gray-50 dark:bg-gray-700">
-                      <tr>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                          Name
-                        </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                          URL
-                        </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                          Status
-                        </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                          Order
-                        </th>
-                        <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                          Actions
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                      {articleSources.map((source) => (
-                        <tr key={source.id}>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm font-medium text-gray-900 dark:text-white">{source.name}</div>
-                          </td>
-                          <td className="px-6 py-4">
-                            <div className="text-sm text-gray-500 dark:text-gray-400 truncate max-w-xs">
-                              {source.url}
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span
-                              className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                source.enabled
-                                  ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
-                                  : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300"
-                              }`}
-                            >
-                              {source.enabled ? "Enabled" : "Disabled"}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                            {source.displayOrder}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <div className="flex items-center justify-end space-x-2">
-                              <button
-                                onClick={() => handleToggleEnabled(source)}
-                                className="inline-flex items-center rounded-lg border border-gray-300 bg-white px-2 py-1 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-                              >
-                                {source.enabled ? "Disable" : "Enable"}
-                              </button>
-                              <button
-                                onClick={() => setEditingSource(articleSourceToFormState(source))}
-                                className="inline-flex items-center rounded-lg border border-gray-300 bg-white px-2 py-1 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-                              >
-                                Edit
-                              </button>
-                              <button
-                                onClick={() => handleDeleteSource(source.id)}
-                                className="inline-flex items-center rounded-lg border border-red-300 bg-white px-2 py-1 text-sm font-medium text-red-700 shadow-sm hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:border-red-600 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-900/20"
-                              >
-                                Delete
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                <div className="overflow-x-auto -mx-4 sm:mx-0">
+                  <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                    <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+                      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <thead className="bg-gray-50 dark:bg-gray-700">
+                          <tr>
+                            <th scope="col" className="px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-32">
+                              Name
+                            </th>
+                            <th scope="col" className="hidden lg:table-cell px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-80">
+                              URL
+                            </th>
+                            <th scope="col" className="px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-20">
+                              Status
+                            </th>
+                            <th scope="col" className="hidden xl:table-cell px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-16">
+                              Order
+                            </th>
+                            <th scope="col" className="px-2 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-32">
+                              Actions
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                          {articleSources.map((source) => (
+                            <tr key={source.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                              <td className="px-2 py-4 whitespace-nowrap">
+                                <div className="text-sm font-medium text-gray-900 dark:text-white truncate max-w-[120px]">
+                                  {source.name}
+                                </div>
+                                <div className="lg:hidden text-xs text-gray-500 dark:text-gray-400 truncate max-w-[120px] mt-1">
+                                  {source.url}
+                                </div>
+                              </td>
+                              <td className="hidden lg:table-cell px-2 py-4">
+                                <div className="text-sm text-gray-500 dark:text-gray-400 truncate max-w-[300px]">
+                                  {source.url}
+                                </div>
+                              </td>
+                              <td className="px-2 py-4 whitespace-nowrap">
+                                <span
+                                  className={`px-1.5 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                    source.enabled
+                                      ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
+                                      : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300"
+                                  }`}
+                                >
+                                  {source.enabled ? "On" : "Off"}
+                                </span>
+                              </td>
+                              <td className="hidden xl:table-cell px-2 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                                {source.displayOrder}
+                              </td>
+                              <td className="px-2 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <div className="flex items-center justify-end space-x-0.5">
+                                  <button
+                                    onClick={() => handleToggleEnabled(source)}
+                                    className="inline-flex items-center rounded border border-gray-300 bg-white px-1.5 py-1 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-1 focus:ring-brand-500 focus:ring-offset-1 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                                    title={source.enabled ? "Disable" : "Enable"}
+                                  >
+                                    {source.enabled ? "Off" : "On"}
+                                  </button>
+                                  <button
+                                    onClick={() => setEditingSource(articleSourceToFormState(source))}
+                                    className="inline-flex items-center rounded border border-gray-300 bg-white px-1.5 py-1 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-1 focus:ring-brand-500 focus:ring-offset-1 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                                    title="Edit"
+                                  >
+                                    Edit
+                                  </button>
+                                  <button
+                                    onClick={() => handleDeleteSource(source.id)}
+                                    className="inline-flex items-center rounded border border-red-300 bg-white px-1.5 py-1 text-xs font-medium text-red-700 shadow-sm hover:bg-red-50 focus:outline-none focus:ring-1 focus:ring-red-500 focus:ring-offset-1 dark:border-red-600 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-900/20"
+                                    title="Delete"
+                                  >
+                                    Del
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
