@@ -17,7 +17,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
     : "lg:ml-[90px]";
 
   return (
-    <div className="min-h-screen xl:flex admin-layout" style={{ margin: 0, padding: 0 }}>
+    <div className="min-h-screen xl:flex admin-layout bg-gray-50 dark:bg-gray-900" style={{ margin: 0, padding: 0 }}>
       {/* Sidebar and Backdrop */}
       <AppSidebar />
       <Backdrop />
