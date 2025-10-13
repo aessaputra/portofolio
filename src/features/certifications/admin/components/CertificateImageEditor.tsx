@@ -566,7 +566,7 @@ export default function CertificateImageEditor({
   );
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden w-full max-w-6xl max-h-[90vh] flex flex-col border border-gray-200 dark:border-gray-700" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         {/* Modal Header */}
         <div className="border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-4 bg-gray-50 dark:bg-[var(--color-gray-dark)]/50">
