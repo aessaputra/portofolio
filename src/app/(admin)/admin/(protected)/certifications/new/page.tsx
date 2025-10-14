@@ -312,12 +312,15 @@ export default function NewCertificationPage() {
                 {newCertification.imageUrl && (
                   <div className="mt-2">
                     <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Preview:</p>
-                    <div className="h-32 w-32 relative">
+                    <div
+                      className="relative w-48 overflow-hidden rounded-md"
+                      style={{ aspectRatio: "3 / 2" }}
+                    >
                       <Image
                         src={resolveR2Url(newCertification.imageUrl)}
                         alt="Preview"
                         fill
-                        className="object-cover rounded-md"
+                        className="object-cover"
                         unoptimized
                         onError={(e) => {
                           e.currentTarget.style.display = "none";
